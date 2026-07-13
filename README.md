@@ -52,6 +52,7 @@ Writes an updated snapshot to `src/data/bartley-2024-25.json`.
 
 - Primary public page: Compare school performance for URN 116338
 - Machine-readable source: [Explore education statistics API](https://api.education.gov.uk/statistics/docs)
+- Institution-level history currently available for **2022/23, 2023/24 and 2024/25**
 - KS2 progress measures are limited for 2024–25 cohorts (no KS1 baseline due to COVID-19 disruption)
 - GitHub Pages hosts a static UI; it does not run a server-side API
 
