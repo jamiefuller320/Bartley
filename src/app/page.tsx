@@ -202,8 +202,9 @@ export default function HomePage() {
           <p className="muted">
             This tool reads institution-level KS2 attainment via the DfE
             Explore education statistics API — the open data behind the Compare
-            school performance service. Live refresh endpoint:{" "}
-            <code>/api/school/116338</code>
+            school performance service. The published site uses a curated
+            snapshot in <code>src/data/bartley-2024-25.json</code>; refresh it
+            with <code>npm run refresh-data</code>.
           </p>
         </div>
       </section>
