@@ -104,12 +104,16 @@ export interface EquityHistoryRow {
 }
 
 export interface SchoolMonitorData {
-  source: DataSource;
+  source: DataSource & {
+    compareDownloads?: string;
+    historyCoverage?: unknown;
+  };
   profile: SchoolProfile;
   period: string;
   periods?: string[];
   subjects: SubjectComparison[];
   progress: ProgressRow[];
+  progressHistory?: ProgressRow[];
   equity: EquityRow[];
   history?: HistoryRow[];
   equityHistory?: EquityHistoryRow[];

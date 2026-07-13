@@ -48,13 +48,21 @@ npm run refresh-data
 
 Writes an updated snapshot to `src/data/bartley-2024-25.json`.
 
-## Data notes
+## Historical data
 
-- Primary public page: Compare school performance for URN 116338
-- Machine-readable source: [Explore education statistics API](https://api.education.gov.uk/statistics/docs)
-- Institution-level history currently available for **2022/23, 2023/24 and 2024/25**
-- KS2 progress measures are limited for 2024–25 cohorts (no KS1 baseline due to COVID-19 disruption)
-- GitHub Pages hosts a static UI; it does not run a server-side API
+Rich multi-year subject comparisons use the official **Compare school performance KS2 CSV downloads**:
+
+- Available in-app: **2015/16–2018/19** and **2022/23–2024/25**
+- Not available in performance tables: **2019/20–2021/22** (COVID cancellation / not published)
+- 2014/15 and earlier use a different assessment framework, so they are excluded for like-for-like comparison
+
+Refresh the CSP extract:
+
+```bash
+python3 scripts/extract-csp-history.py
+```
+
+The Explore Education Statistics API institution dataset only goes back to 2022/23 and leaves many subject expected-standard fields blank (`z`) for earlier years in that pack — the CSP downloads are the fuller source for subject-level history.
 
 ## Stack
 

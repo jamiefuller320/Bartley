@@ -7,8 +7,7 @@ import { EquityChart } from "@/components/EquityChart";
 import { ProgressChart } from "@/components/ProgressChart";
 import { ComparisonTable } from "@/components/ComparisonTable";
 import { CohortProfile } from "@/components/CohortProfile";
-import { HistoryTrendChart } from "@/components/HistoryTrendChart";
-import { HistoryTable } from "@/components/HistoryTable";
+import { HistoryExplorer } from "@/components/HistoryExplorer";
 
 export default function HomePage() {
   const data = getBartleyMonitorData();
@@ -17,6 +16,7 @@ export default function HomePage() {
     (s) => s.subject === "Reading, writing and maths",
   );
   const history = data.history ?? [];
+  const progressHistory = data.progressHistory ?? [];
 
   return (
     <main>
@@ -109,40 +109,12 @@ export default function HomePage() {
           <div className="section-intro">
             <h2>Historical comparison</h2>
             <p>
-              Combined reading, writing and maths expected standard for Bartley,
-              Hampshire and England across the last three published academic
-              years (2022/23–2024/25).
+              Rich subject-level history from Compare school performance KS2
+              downloads for 2015/16–2018/19 and 2022/23–2024/25. Performance-table
+              KS2 files were not published for 2019/20–2021/22.
             </p>
           </div>
-          <HistoryTrendChart history={history} metric="expected" />
-          <HistoryTable history={history} />
-
-          <div className="section-intro stacked">
-            <h3>Average scaled scores</h3>
-            <p>
-              Reading and maths scaled scores where published. Individual subject
-              expected-standard percentages are only fully published for the
-              latest year for this school.
-            </p>
-          </div>
-          <div className="split">
-            <div>
-              <p className="chart-note">Reading</p>
-              <HistoryTrendChart
-                history={history}
-                subject="Reading"
-                metric="scaled"
-              />
-            </div>
-            <div>
-              <p className="chart-note">Maths</p>
-              <HistoryTrendChart
-                history={history}
-                subject="Maths"
-                metric="scaled"
-              />
-            </div>
-          </div>
+          <HistoryExplorer history={history} progressHistory={progressHistory} />
         </div>
       </section>
 
