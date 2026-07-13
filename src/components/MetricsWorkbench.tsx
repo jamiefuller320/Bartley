@@ -38,6 +38,8 @@ export function MetricsWorkbench({
   const [subject, setSubject] =
     useState<(typeof SUBJECTS)[number]>("Reading, writing and maths");
   const [metric, setMetric] = useState<"expected" | "higher">("expected");
+  const [showHampshire, setShowHampshire] = useState(true);
+  const [showEngland, setShowEngland] = useState(true);
 
   const subjectHistory = useMemo(
     () => history.filter((row) => row.subject === subject),
@@ -54,7 +56,7 @@ export function MetricsWorkbench({
           <p>
             {mode === "compare"
               ? `Latest year (${period.replace("/", "–")}) — Bartley against Hampshire and England. Axis ranges zoom to the data band so small gaps are easier to see.`
-              : "Bartley only across published years. Use the floating slider to return to the Hampshire / England comparison."}
+              : "Bartley year-on-year history. Optionally overlay Hampshire and England with the checkboxes below."}
           </p>
         </div>
 
@@ -103,11 +105,32 @@ export function MetricsWorkbench({
           </>
         ) : (
           <>
+            <div className="overlay-toggles" role="group" aria-label="Overlay benchmarks">
+              <label className="overlay-check">
+                <input
+                  type="checkbox"
+                  checked={showHampshire}
+                  onChange={(event) => setShowHampshire(event.target.checked)}
+                />
+                <span>Overlay Hampshire</span>
+              </label>
+              <label className="overlay-check">
+                <input
+                  type="checkbox"
+                  checked={showEngland}
+                  onChange={(event) => setShowEngland(event.target.checked)}
+                />
+                <span>Overlay England</span>
+              </label>
+            </div>
+
             <HistoryTrendChart
               history={history}
               subject={subject}
               metric={metric === "higher" ? "higher" : "expected"}
               seriesMode="bartley"
+              showHampshire={showHampshire}
+              showEngland={showEngland}
             />
             <HistoryTable history={history} subject={subject} />
 
@@ -115,13 +138,21 @@ export function MetricsWorkbench({
               <>
                 <div className="section-intro stacked">
                   <h3>Average scaled score</h3>
-                  <p>Bartley scaled scores over time for {shortSubject(subject)}.</p>
+                  <p>
+                    Bartley scaled scores over time for {shortSubject(subject)}
+                    {showHampshire || showEngland
+                      ? ", with selected overlays"
+                      : ""}
+                    .
+                  </p>
                 </div>
                 <HistoryTrendChart
                   history={history}
                   subject={subject}
                   metric="scaled"
                   seriesMode="bartley"
+                  showHampshire={showHampshire}
+                  showEngland={showEngland}
                 />
               </>
             ) : null}
