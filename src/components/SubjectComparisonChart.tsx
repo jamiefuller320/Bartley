@@ -12,13 +12,16 @@ import {
 } from "recharts";
 import type { SubjectComparison } from "@/lib/types";
 import { shortSubject } from "@/lib/format";
+import { domainValues, focusedDomain } from "@/lib/chart-scale";
 
 export function SubjectComparisonChart({
   subjects,
   metric = "expected",
+  focused = true,
 }: {
   subjects: SubjectComparison[];
   metric?: "expected" | "higher";
+  focused?: boolean;
 }) {
   const data = subjects
     .filter((s) =>
@@ -28,16 +31,21 @@ export function SubjectComparisonChart({
     )
     .map((s) => ({
       subject: shortSubject(s.subject),
-      School:
-        metric === "expected" ? s.schoolExpected : s.schoolHigher,
+      Bartley: metric === "expected" ? s.schoolExpected : s.schoolHigher,
       Hampshire:
         metric === "expected" ? s.hampshireExpected : s.hampshireHigher,
-      England:
-        metric === "expected" ? s.englandExpected : s.englandHigher,
+      England: metric === "expected" ? s.englandExpected : s.englandHigher,
     }));
+
+  const domain = focused
+    ? focusedDomain(domainValues(data, ["Bartley", "Hampshire", "England"]), "percent")
+    : ([0, 100] as [number, number]);
 
   return (
     <div className="chart-frame">
+      <p className="chart-note">
+        Axis range {domain[0]}–{domain[1]}% (zoomed to the values on display).
+      </p>
       <ResponsiveContainer width="100%" height={340}>
         <BarChart
           data={data}
@@ -55,8 +63,9 @@ export function SubjectComparisonChart({
             tick={{ fill: "#3d5248", fontSize: 12 }}
             axisLine={false}
             tickLine={false}
-            domain={[0, 100]}
+            domain={domain}
             tickFormatter={(v) => `${v}%`}
+            allowDataOverflow
           />
           <Tooltip
             formatter={(value) =>
@@ -70,7 +79,7 @@ export function SubjectComparisonChart({
             }}
           />
           <Legend />
-          <Bar dataKey="School" fill="#1b4332" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="Bartley" fill="#1b4332" radius={[4, 4, 0, 0]} />
           <Bar dataKey="Hampshire" fill="#52796f" radius={[4, 4, 0, 0]} />
           <Bar dataKey="England" fill="#c9a227" radius={[4, 4, 0, 0]} />
         </BarChart>

@@ -11,9 +11,9 @@ import {
   YAxis,
 } from "recharts";
 import type { HistoryRow } from "@/lib/types";
+import { domainValues, focusedDomain } from "@/lib/chart-scale";
 
 function periodLabel(period: string): string {
-  // 2024/2025 -> 2024/25
   const [a, b] = period.split("/");
   return b && b.length === 4 ? `${a}/${b.slice(2)}` : period;
 }
@@ -22,17 +22,19 @@ export function HistoryTrendChart({
   history,
   subject = "Reading, writing and maths",
   metric = "expected",
+  seriesMode = "compare",
 }: {
   history: HistoryRow[];
   subject?: string;
   metric?: "expected" | "scaled" | "higher";
+  seriesMode?: "compare" | "bartley";
 }) {
   const rows = history
     .filter((h) => h.subject === subject)
     .sort((a, b) => a.period.localeCompare(b.period))
     .map((h) => ({
       year: periodLabel(h.period),
-      School:
+      Bartley:
         metric === "expected"
           ? h.schoolExpected
           : metric === "higher"
@@ -51,9 +53,10 @@ export function HistoryTrendChart({
             ? h.englandHigher
             : h.englandScaled,
     }))
-    .filter(
-      (r) =>
-        r.School !== null || r.Hampshire !== null || r.England !== null,
+    .filter((r) =>
+      seriesMode === "bartley"
+        ? r.Bartley !== null
+        : r.Bartley !== null || r.Hampshire !== null || r.England !== null,
     );
 
   if (!rows.length) {
@@ -64,10 +67,19 @@ export function HistoryTrendChart({
     );
   }
 
+  const kind = metric === "scaled" ? "scaled" : "percent";
+  const keys =
+    seriesMode === "bartley" ? ["Bartley"] : ["Bartley", "Hampshire", "England"];
+  const domain = focusedDomain(domainValues(rows, keys), kind);
   const isPct = metric !== "scaled";
 
   return (
     <div className="chart-frame">
+      <p className="chart-note">
+        Axis range {domain[0]}
+        {isPct ? "%" : ""}–{domain[1]}
+        {isPct ? "%" : ""} (zoomed to the values on display).
+      </p>
       <ResponsiveContainer width="100%" height={320}>
         <LineChart data={rows} margin={{ top: 8, right: 12, left: -8, bottom: 8 }}>
           <CartesianGrid stroke="rgba(27, 67, 50, 0.08)" vertical={false} />
@@ -81,7 +93,8 @@ export function HistoryTrendChart({
             tick={{ fill: "#3d5248", fontSize: 12 }}
             axisLine={false}
             tickLine={false}
-            domain={isPct ? [0, 100] : ["auto", "auto"]}
+            domain={domain}
+            allowDataOverflow
             tickFormatter={(v) => (isPct ? `${v}%` : String(v))}
           />
           <Tooltip
@@ -101,29 +114,33 @@ export function HistoryTrendChart({
           <Legend />
           <Line
             type="monotone"
-            dataKey="School"
+            dataKey="Bartley"
             stroke="#1b4332"
             strokeWidth={3}
             dot={{ r: 4, fill: "#1b4332" }}
             connectNulls
           />
-          <Line
-            type="monotone"
-            dataKey="Hampshire"
-            stroke="#52796f"
-            strokeWidth={2}
-            strokeDasharray="4 4"
-            dot={{ r: 3, fill: "#52796f" }}
-            connectNulls
-          />
-          <Line
-            type="monotone"
-            dataKey="England"
-            stroke="#c9a227"
-            strokeWidth={2}
-            dot={{ r: 3, fill: "#c9a227" }}
-            connectNulls
-          />
+          {seriesMode === "compare" ? (
+            <>
+              <Line
+                type="monotone"
+                dataKey="Hampshire"
+                stroke="#52796f"
+                strokeWidth={2}
+                strokeDasharray="4 4"
+                dot={{ r: 3, fill: "#52796f" }}
+                connectNulls
+              />
+              <Line
+                type="monotone"
+                dataKey="England"
+                stroke="#c9a227"
+                strokeWidth={2}
+                dot={{ r: 3, fill: "#c9a227" }}
+                connectNulls
+              />
+            </>
+          ) : null}
         </LineChart>
       </ResponsiveContainer>
     </div>

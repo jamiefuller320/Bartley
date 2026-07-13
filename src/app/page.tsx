@@ -2,12 +2,10 @@ import { getBartleyMonitorData } from "@/lib/data";
 import { scorecard } from "@/lib/evaluate";
 import { fmtPct, fmtPp } from "@/lib/format";
 import { FindingsList } from "@/components/FindingsList";
-import { SubjectComparisonChart } from "@/components/SubjectComparisonChart";
 import { EquityChart } from "@/components/EquityChart";
 import { ProgressChart } from "@/components/ProgressChart";
-import { ComparisonTable } from "@/components/ComparisonTable";
 import { CohortProfile } from "@/components/CohortProfile";
-import { HistoryExplorer } from "@/components/HistoryExplorer";
+import { MetricsWorkbench } from "@/components/MetricsWorkbench";
 
 export default function HomePage() {
   const data = getBartleyMonitorData();
@@ -25,8 +23,7 @@ export default function HomePage() {
           <p className="tool-mark">Bartley Insight</p>
           <nav className="header-nav" aria-label="Sections">
             <a href="#evaluation">Evaluation</a>
-            <a href="#history">History</a>
-            <a href="#attainment">Attainment</a>
+            <a href="#charts">Charts</a>
             <a href="#equity">Equity</a>
             <a href="#progress">Progress</a>
             <a href="#source">Source</a>
@@ -45,8 +42,8 @@ export default function HomePage() {
             performance.
           </p>
           <div className="hero-actions">
-            <a className="btn-primary" href="#evaluation">
-              View evaluation
+            <a className="btn-primary" href="#charts">
+              Open charts
             </a>
             <a
               className="btn-ghost"
@@ -104,51 +101,21 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section section-alt" id="history">
-        <div className="shell">
-          <div className="section-intro">
-            <h2>Historical comparison</h2>
-            <p>
-              Rich subject-level history from Compare school performance KS2
-              downloads for 2015/16–2018/19 and 2022/23–2024/25. Performance-table
-              KS2 files were not published for 2019/20–2021/22.
-            </p>
-          </div>
-          <HistoryExplorer history={history} progressHistory={progressHistory} />
-        </div>
-      </section>
+      <MetricsWorkbench
+        subjects={data.subjects}
+        history={history}
+        progressHistory={progressHistory}
+        period={data.period}
+      />
 
-      <section className="section" id="attainment">
-        <div className="shell">
-          <div className="section-intro">
-            <h2>Attainment by subject</h2>
-            <p>
-              Percentage of pupils meeting the expected standard, compared with
-              Hampshire and England averages for state-funded schools.
-            </p>
-          </div>
-          <SubjectComparisonChart subjects={data.subjects} metric="expected" />
-          <ComparisonTable subjects={data.subjects} />
-
-          <div className="section-intro stacked">
-            <h3>Higher standard</h3>
-            <p>
-              Share of pupils working at greater depth / higher standard where
-              published.
-            </p>
-          </div>
-          <SubjectComparisonChart subjects={data.subjects} metric="higher" />
-        </div>
-      </section>
-
-      <section className="section section-alt" id="equity">
+      <section className="section" id="equity">
         <div className="shell split">
           <div>
             <div className="section-intro">
               <h2>Pupil group gaps</h2>
               <p>
                 Combined reading, writing and maths expected standard for key
-                pupil groups at Bartley.
+                pupil groups at Bartley. The axis is zoomed to the group range.
               </p>
             </div>
             <EquityChart equity={data.equity} />
@@ -218,11 +185,8 @@ export default function HomePage() {
             </li>
           </ul>
           <p className="muted">
-            This tool reads institution-level KS2 attainment via the DfE
-            Explore education statistics API — the open data behind the Compare
-            school performance service. The published site uses a curated
-            snapshot in <code>src/data/bartley-2024-25.json</code>; refresh it
-            with <code>npm run refresh-data</code>.
+            Use the floating slider on the charts to switch between Bartley /
+            Hampshire / England and Bartley year-on-year history.
           </p>
         </div>
       </section>
