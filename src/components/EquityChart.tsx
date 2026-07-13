@@ -10,6 +10,7 @@ import {
   YAxis,
 } from "recharts";
 import type { EquityRow } from "@/lib/types";
+import { domainValues, focusedDomain } from "@/lib/chart-scale";
 
 export function EquityChart({ equity }: { equity: EquityRow[] }) {
   const data = equity
@@ -20,8 +21,13 @@ export function EquityChart({ equity }: { equity: EquityRow[] }) {
       higher: e.higher,
     }));
 
+  const domain = focusedDomain(domainValues(data, ["expected"]), "percent");
+
   return (
     <div className="chart-frame">
+      <p className="chart-note">
+        Axis range {domain[0]}–{domain[1]}% (zoomed to group differences).
+      </p>
       <ResponsiveContainer width="100%" height={320}>
         <BarChart
           data={data}
@@ -31,7 +37,8 @@ export function EquityChart({ equity }: { equity: EquityRow[] }) {
           <CartesianGrid stroke="rgba(27, 67, 50, 0.08)" horizontal={false} />
           <XAxis
             type="number"
-            domain={[0, 100]}
+            domain={domain}
+            allowDataOverflow
             tickFormatter={(v) => `${v}%`}
             tick={{ fill: "#3d5248", fontSize: 12 }}
             axisLine={false}

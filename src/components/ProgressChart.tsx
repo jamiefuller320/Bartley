@@ -12,6 +12,7 @@ import {
   ReferenceLine,
 } from "recharts";
 import type { ProgressRow } from "@/lib/types";
+import { focusedDomain } from "@/lib/chart-scale";
 
 export function ProgressChart({ progress }: { progress: ProgressRow[] }) {
   if (!progress.length) {
@@ -33,8 +34,16 @@ export function ProgressChart({ progress }: { progress: ProgressRow[] }) {
     period: p.period,
   }));
 
+  const domain = focusedDomain(
+    progress.flatMap((p) => [p.score, p.lower, p.upper]),
+    "progress",
+  );
+
   return (
     <div className="chart-frame">
+      <p className="chart-note">
+        Axis range {domain[0]} to {domain[1]} (zoomed around published scores).
+      </p>
       <ResponsiveContainer width="100%" height={280}>
         <ScatterChart margin={{ top: 16, right: 16, left: 8, bottom: 8 }}>
           <CartesianGrid stroke="rgba(27, 67, 50, 0.08)" />
@@ -49,7 +58,8 @@ export function ProgressChart({ progress }: { progress: ProgressRow[] }) {
           <YAxis
             type="number"
             dataKey="score"
-            domain={[-3, 3]}
+            domain={domain}
+            allowDataOverflow
             tick={{ fill: "#3d5248", fontSize: 12 }}
             axisLine={false}
             tickLine={false}
