@@ -8,7 +8,22 @@
       "laPerformance": "019afee5-4791-7467-a788-c163fd9b57de"
     },
     "release": "Key stage 2 attainment 2024/25 (Explore Education Statistics)",
-    "note": "School-level figures mirror Compare school and college performance via the DfE Explore education statistics API. Institution-level history currently covers 2022/23 to 2024/25."
+    "note": "Latest-year figures align with Compare school and college performance / DfE EES. Rich multi-year subject history (2015/16\u20132018/19 and 2022/23\u20132024/25) is taken from the official Compare school performance KS2 CSV downloads. No KS2 performance-table files for 2019/20\u20132021/22 (COVID cancellation / not published in tables).",
+    "compareDownloads": "https://www.compare-school-performance.service.gov.uk/download-data",
+    "historyCoverage": {
+      "name": "Compare school and college performance \u2014 KS2 downloadable data",
+      "url": "https://www.compare-school-performance.service.gov.uk/download-data",
+      "note": "School-level KS2 performance tables extracts (RECTYPE 1 school, 3 LA, 4/5 England). No KS2 performance-table files for 2019/20\u20132021/22 (COVID cancellation / not published in tables). 2014/15 uses the pre-2016 assessment framework and is excluded for comparability.",
+      "years": [
+        "2015-2016",
+        "2016-2017",
+        "2017-2018",
+        "2018-2019",
+        "2022-2023",
+        "2023-2024",
+        "2024-2025"
+      ]
+    }
   },
   "profile": {
     "name": "Bartley Church of England Junior School",
@@ -133,8 +148,6 @@
       "score": -0.2,
       "lower": -1.5,
       "upper": 1.1,
-      "breakdown": "Total",
-      "topic": "All pupils",
       "period": "2022/2023"
     },
     {
@@ -142,8 +155,6 @@
       "score": -0.1,
       "lower": -1.3,
       "upper": 1.2,
-      "breakdown": "Total",
-      "topic": "All pupils",
       "period": "2022/2023"
     },
     {
@@ -151,8 +162,6 @@
       "score": -1.0,
       "lower": -2.2,
       "upper": 0.2,
-      "breakdown": "Total",
-      "topic": "All pupils",
       "period": "2022/2023"
     }
   ],
@@ -246,6 +255,11 @@
       "detail": "Combined expected standard is 62.0% versus England 62.0% (+0 pp) and Hampshire 63.0%."
     },
     {
+      "severity": "positive",
+      "title": "Long-run RWM trend",
+      "detail": "Combined expected standard moved from 60% in 2015/16 to 62% in 2024/25 (+2 pp). England moved from 53% to 62% over the published years (gap years 2019/20\u20132021/22 have no performance-table KS2 files)."
+    },
+    {
       "severity": "priority",
       "title": "Gender gap in combined RWM",
       "detail": "Girls 77.0% vs boys 45.0% at expected standard (gap 32 pp)."
@@ -262,16 +276,380 @@
     },
     {
       "severity": "watch",
-      "title": "Three-year RWM trend",
-      "detail": "Combined expected standard moved from 63% in 2022/23 to 62% in 2024/25 (-1 pp). England moved from 60% to 62% over the same period."
+      "title": "Below recent peak",
+      "detail": "Latest combined RWM (62% in 2024/25) is below the school\u2019s published peak of 77% in 2017/18."
     }
   ],
   "periods": [
+    "2015/2016",
+    "2016/2017",
+    "2017/2018",
+    "2018/2019",
     "2022/2023",
     "2023/2024",
     "2024/2025"
   ],
   "history": [
+    {
+      "period": "2015/2016",
+      "label": "2015/16",
+      "subject": "Reading, writing and maths",
+      "schoolExpected": 60.0,
+      "hampshireExpected": 59.0,
+      "englandExpected": 53.0,
+      "schoolHigher": 8.0,
+      "hampshireHigher": 7.0,
+      "englandHigher": 5.0,
+      "schoolScaled": null,
+      "hampshireScaled": null,
+      "englandScaled": null,
+      "schoolProgress": null
+    },
+    {
+      "period": "2015/2016",
+      "label": "2015/16",
+      "subject": "Reading",
+      "schoolExpected": 73.0,
+      "hampshireExpected": 71.0,
+      "englandExpected": 66.0,
+      "schoolHigher": 26.0,
+      "hampshireHigher": 23.0,
+      "englandHigher": 19.0,
+      "schoolScaled": 104.0,
+      "hampshireScaled": 104.0,
+      "englandScaled": 103.0,
+      "schoolProgress": -0.5
+    },
+    {
+      "period": "2015/2016",
+      "label": "2015/16",
+      "subject": "Writing",
+      "schoolExpected": 86.0,
+      "hampshireExpected": 80.0,
+      "englandExpected": 74.0,
+      "schoolHigher": 23.0,
+      "hampshireHigher": 20.0,
+      "englandHigher": 15.0,
+      "schoolScaled": null,
+      "hampshireScaled": null,
+      "englandScaled": null,
+      "schoolProgress": 0.7
+    },
+    {
+      "period": "2015/2016",
+      "label": "2015/16",
+      "subject": "Maths",
+      "schoolExpected": 73.0,
+      "hampshireExpected": 72.0,
+      "englandExpected": 70.0,
+      "schoolHigher": 14.0,
+      "hampshireHigher": 17.0,
+      "englandHigher": 17.0,
+      "schoolScaled": 103.0,
+      "hampshireScaled": 103.0,
+      "englandScaled": 103.0,
+      "schoolProgress": -1.7
+    },
+    {
+      "period": "2015/2016",
+      "label": "2015/16",
+      "subject": "Grammar, punctuation and spelling",
+      "schoolExpected": 70.0,
+      "hampshireExpected": 74.0,
+      "englandExpected": 73.0,
+      "schoolHigher": 12.0,
+      "hampshireHigher": 23.0,
+      "englandHigher": 23.0,
+      "schoolScaled": 103.0,
+      "hampshireScaled": 104.0,
+      "englandScaled": 104.0,
+      "schoolProgress": null
+    },
+    {
+      "period": "2015/2016",
+      "label": "2015/16",
+      "subject": "Science",
+      "schoolExpected": 91.0,
+      "hampshireExpected": 86.0,
+      "englandExpected": 81.0,
+      "schoolHigher": null,
+      "hampshireHigher": null,
+      "englandHigher": null,
+      "schoolScaled": null,
+      "hampshireScaled": null,
+      "englandScaled": null,
+      "schoolProgress": null
+    },
+    {
+      "period": "2016/2017",
+      "label": "2016/17",
+      "subject": "Reading, writing and maths",
+      "schoolExpected": 64.0,
+      "hampshireExpected": 66.0,
+      "englandExpected": 61.0,
+      "schoolHigher": 11.0,
+      "hampshireHigher": 11.0,
+      "englandHigher": 9.0,
+      "schoolScaled": null,
+      "hampshireScaled": null,
+      "englandScaled": null,
+      "schoolProgress": null
+    },
+    {
+      "period": "2016/2017",
+      "label": "2016/17",
+      "subject": "Reading",
+      "schoolExpected": 76.0,
+      "hampshireExpected": 76.0,
+      "englandExpected": 72.0,
+      "schoolHigher": 33.0,
+      "hampshireHigher": 29.0,
+      "englandHigher": 25.0,
+      "schoolScaled": 104.0,
+      "hampshireScaled": 105.0,
+      "englandScaled": 104.0,
+      "schoolProgress": -1.7
+    },
+    {
+      "period": "2016/2017",
+      "label": "2016/17",
+      "subject": "Writing",
+      "schoolExpected": 80.0,
+      "hampshireExpected": 81.0,
+      "englandExpected": 76.0,
+      "schoolHigher": 27.0,
+      "hampshireHigher": 23.0,
+      "englandHigher": 18.0,
+      "schoolScaled": null,
+      "hampshireScaled": null,
+      "englandScaled": null,
+      "schoolProgress": -0.3
+    },
+    {
+      "period": "2016/2017",
+      "label": "2016/17",
+      "subject": "Maths",
+      "schoolExpected": 67.0,
+      "hampshireExpected": 77.0,
+      "englandExpected": 75.0,
+      "schoolHigher": 17.0,
+      "hampshireHigher": 23.0,
+      "englandHigher": 23.0,
+      "schoolScaled": 102.0,
+      "hampshireScaled": 104.0,
+      "englandScaled": 104.0,
+      "schoolProgress": -4.0
+    },
+    {
+      "period": "2016/2017",
+      "label": "2016/17",
+      "subject": "Grammar, punctuation and spelling",
+      "schoolExpected": 60.0,
+      "hampshireExpected": 78.0,
+      "englandExpected": 77.0,
+      "schoolHigher": 17.0,
+      "hampshireHigher": 30.0,
+      "englandHigher": 31.0,
+      "schoolScaled": 102.0,
+      "hampshireScaled": 106.0,
+      "englandScaled": 106.0,
+      "schoolProgress": null
+    },
+    {
+      "period": "2016/2017",
+      "label": "2016/17",
+      "subject": "Science",
+      "schoolExpected": 85.0,
+      "hampshireExpected": 85.0,
+      "englandExpected": 82.0,
+      "schoolHigher": null,
+      "hampshireHigher": null,
+      "englandHigher": null,
+      "schoolScaled": null,
+      "hampshireScaled": null,
+      "englandScaled": null,
+      "schoolProgress": null
+    },
+    {
+      "period": "2017/2018",
+      "label": "2017/18",
+      "subject": "Reading, writing and maths",
+      "schoolExpected": 77.0,
+      "hampshireExpected": 68.0,
+      "englandExpected": 64.0,
+      "schoolHigher": 13.0,
+      "hampshireHigher": 12.0,
+      "englandHigher": 10.0,
+      "schoolScaled": null,
+      "hampshireScaled": null,
+      "englandScaled": null,
+      "schoolProgress": null
+    },
+    {
+      "period": "2017/2018",
+      "label": "2017/18",
+      "subject": "Reading",
+      "schoolExpected": 86.0,
+      "hampshireExpected": 79.0,
+      "englandExpected": 75.0,
+      "schoolHigher": 42.0,
+      "hampshireHigher": 32.0,
+      "englandHigher": 28.0,
+      "schoolScaled": 108.0,
+      "hampshireScaled": 106.0,
+      "englandScaled": 105.0,
+      "schoolProgress": 1.0
+    },
+    {
+      "period": "2017/2018",
+      "label": "2017/18",
+      "subject": "Writing",
+      "schoolExpected": 87.0,
+      "hampshireExpected": 82.0,
+      "englandExpected": 78.0,
+      "schoolHigher": 29.0,
+      "hampshireHigher": 24.0,
+      "englandHigher": 20.0,
+      "schoolScaled": null,
+      "hampshireScaled": null,
+      "englandScaled": null,
+      "schoolProgress": 0.4
+    },
+    {
+      "period": "2017/2018",
+      "label": "2017/18",
+      "subject": "Maths",
+      "schoolExpected": 84.0,
+      "hampshireExpected": 78.0,
+      "englandExpected": 75.0,
+      "schoolHigher": 24.0,
+      "hampshireHigher": 25.0,
+      "englandHigher": 24.0,
+      "schoolScaled": 106.0,
+      "hampshireScaled": 105.0,
+      "englandScaled": 104.0,
+      "schoolProgress": -0.3
+    },
+    {
+      "period": "2017/2018",
+      "label": "2017/18",
+      "subject": "Grammar, punctuation and spelling",
+      "schoolExpected": 91.0,
+      "hampshireExpected": 79.0,
+      "englandExpected": 78.0,
+      "schoolHigher": 34.0,
+      "hampshireHigher": 33.0,
+      "englandHigher": 34.0,
+      "schoolScaled": 107.0,
+      "hampshireScaled": 106.0,
+      "englandScaled": 106.0,
+      "schoolProgress": null
+    },
+    {
+      "period": "2017/2018",
+      "label": "2017/18",
+      "subject": "Science",
+      "schoolExpected": 89.0,
+      "hampshireExpected": 86.0,
+      "englandExpected": 82.0,
+      "schoolHigher": null,
+      "hampshireHigher": null,
+      "englandHigher": null,
+      "schoolScaled": null,
+      "hampshireScaled": null,
+      "englandScaled": null,
+      "schoolProgress": null
+    },
+    {
+      "period": "2018/2019",
+      "label": "2018/19",
+      "subject": "Reading, writing and maths",
+      "schoolExpected": 70.0,
+      "hampshireExpected": 68.0,
+      "englandExpected": 65.0,
+      "schoolHigher": 12.0,
+      "hampshireHigher": 13.0,
+      "englandHigher": 11.0,
+      "schoolScaled": null,
+      "hampshireScaled": null,
+      "englandScaled": null,
+      "schoolProgress": null
+    },
+    {
+      "period": "2018/2019",
+      "label": "2018/19",
+      "subject": "Reading",
+      "schoolExpected": 78.0,
+      "hampshireExpected": 76.0,
+      "englandExpected": 73.0,
+      "schoolHigher": 30.0,
+      "hampshireHigher": 30.0,
+      "englandHigher": 27.0,
+      "schoolScaled": 105.0,
+      "hampshireScaled": 105.0,
+      "englandScaled": 104.0,
+      "schoolProgress": -1.3
+    },
+    {
+      "period": "2018/2019",
+      "label": "2018/19",
+      "subject": "Writing",
+      "schoolExpected": 90.0,
+      "hampshireExpected": 81.0,
+      "englandExpected": 78.0,
+      "schoolHigher": 32.0,
+      "hampshireHigher": 25.0,
+      "englandHigher": 20.0,
+      "schoolScaled": null,
+      "hampshireScaled": null,
+      "englandScaled": null,
+      "schoolProgress": 1.1
+    },
+    {
+      "period": "2018/2019",
+      "label": "2018/19",
+      "subject": "Maths",
+      "schoolExpected": 83.0,
+      "hampshireExpected": 80.0,
+      "englandExpected": 79.0,
+      "schoolHigher": 32.0,
+      "hampshireHigher": 27.0,
+      "englandHigher": 27.0,
+      "schoolScaled": 106.0,
+      "hampshireScaled": 105.0,
+      "englandScaled": 105.0,
+      "schoolProgress": -0.4
+    },
+    {
+      "period": "2018/2019",
+      "label": "2018/19",
+      "subject": "Grammar, punctuation and spelling",
+      "schoolExpected": 84.0,
+      "hampshireExpected": 79.0,
+      "englandExpected": 78.0,
+      "schoolHigher": 26.0,
+      "hampshireHigher": 35.0,
+      "englandHigher": 36.0,
+      "schoolScaled": 105.0,
+      "hampshireScaled": 106.0,
+      "englandScaled": 106.0,
+      "schoolProgress": null
+    },
+    {
+      "period": "2018/2019",
+      "label": "2018/19",
+      "subject": "Science",
+      "schoolExpected": 97.0,
+      "hampshireExpected": 85.0,
+      "englandExpected": 83.0,
+      "schoolHigher": null,
+      "hampshireHigher": null,
+      "englandHigher": null,
+      "schoolScaled": null,
+      "hampshireScaled": null,
+      "englandScaled": null,
+      "schoolProgress": null
+    },
     {
       "period": "2022/2023",
       "label": "2022/23",
@@ -291,12 +669,12 @@
       "period": "2022/2023",
       "label": "2022/23",
       "subject": "Reading",
-      "schoolExpected": null,
-      "hampshireExpected": null,
-      "englandExpected": null,
-      "schoolHigher": null,
-      "hampshireHigher": null,
-      "englandHigher": null,
+      "schoolExpected": 78.0,
+      "hampshireExpected": 75.0,
+      "englandExpected": 73.0,
+      "schoolHigher": 33.0,
+      "hampshireHigher": 31.0,
+      "englandHigher": 29.0,
       "schoolScaled": 106.0,
       "hampshireScaled": 105.0,
       "englandScaled": 105.0,
@@ -306,12 +684,12 @@
       "period": "2022/2023",
       "label": "2022/23",
       "subject": "Writing",
-      "schoolExpected": null,
-      "hampshireExpected": null,
-      "englandExpected": null,
-      "schoolHigher": null,
-      "hampshireHigher": null,
-      "englandHigher": null,
+      "schoolExpected": 79.0,
+      "hampshireExpected": 73.0,
+      "englandExpected": 71.0,
+      "schoolHigher": 16.0,
+      "hampshireHigher": 15.0,
+      "englandHigher": 13.0,
       "schoolScaled": null,
       "hampshireScaled": null,
       "englandScaled": null,
@@ -321,16 +699,46 @@
       "period": "2022/2023",
       "label": "2022/23",
       "subject": "Maths",
-      "schoolExpected": null,
-      "hampshireExpected": null,
-      "englandExpected": null,
-      "schoolHigher": null,
-      "hampshireHigher": null,
-      "englandHigher": null,
+      "schoolExpected": 75.0,
+      "hampshireExpected": 73.0,
+      "englandExpected": 73.0,
+      "schoolHigher": 26.0,
+      "hampshireHigher": 23.0,
+      "englandHigher": 24.0,
       "schoolScaled": 105.0,
       "hampshireScaled": 104.0,
       "englandScaled": 104.0,
       "schoolProgress": -1.0
+    },
+    {
+      "period": "2022/2023",
+      "label": "2022/23",
+      "subject": "Grammar, punctuation and spelling",
+      "schoolExpected": 69.0,
+      "hampshireExpected": 72.0,
+      "englandExpected": 72.0,
+      "schoolHigher": 27.0,
+      "hampshireHigher": 29.0,
+      "englandHigher": 30.0,
+      "schoolScaled": 103.0,
+      "hampshireScaled": 105.0,
+      "englandScaled": 105.0,
+      "schoolProgress": null
+    },
+    {
+      "period": "2022/2023",
+      "label": "2022/23",
+      "subject": "Science",
+      "schoolExpected": 89.0,
+      "hampshireExpected": 82.0,
+      "englandExpected": 80.0,
+      "schoolHigher": null,
+      "hampshireHigher": null,
+      "englandHigher": null,
+      "schoolScaled": null,
+      "hampshireScaled": null,
+      "englandScaled": null,
+      "schoolProgress": null
     },
     {
       "period": "2023/2024",
@@ -351,12 +759,12 @@
       "period": "2023/2024",
       "label": "2023/24",
       "subject": "Reading",
-      "schoolExpected": null,
-      "hampshireExpected": null,
-      "englandExpected": null,
-      "schoolHigher": null,
-      "hampshireHigher": null,
-      "englandHigher": null,
+      "schoolExpected": 77.0,
+      "hampshireExpected": 75.0,
+      "englandExpected": 74.0,
+      "schoolHigher": 35.0,
+      "hampshireHigher": 29.0,
+      "englandHigher": 29.0,
       "schoolScaled": 106.0,
       "hampshireScaled": 105.0,
       "englandScaled": 105.0,
@@ -366,12 +774,12 @@
       "period": "2023/2024",
       "label": "2023/24",
       "subject": "Writing",
-      "schoolExpected": null,
-      "hampshireExpected": null,
-      "englandExpected": null,
-      "schoolHigher": null,
-      "hampshireHigher": null,
-      "englandHigher": null,
+      "schoolExpected": 70.0,
+      "hampshireExpected": 73.0,
+      "englandExpected": 72.0,
+      "schoolHigher": 12.0,
+      "hampshireHigher": 14.0,
+      "englandHigher": 13.0,
       "schoolScaled": null,
       "hampshireScaled": null,
       "englandScaled": null,
@@ -381,15 +789,45 @@
       "period": "2023/2024",
       "label": "2023/24",
       "subject": "Maths",
-      "schoolExpected": null,
-      "hampshireExpected": null,
-      "englandExpected": null,
-      "schoolHigher": null,
-      "hampshireHigher": null,
-      "englandHigher": null,
+      "schoolExpected": 74.0,
+      "hampshireExpected": 72.0,
+      "englandExpected": 73.0,
+      "schoolHigher": 24.0,
+      "hampshireHigher": 22.0,
+      "englandHigher": 24.0,
       "schoolScaled": 104.0,
       "hampshireScaled": 104.0,
       "englandScaled": 104.0,
+      "schoolProgress": null
+    },
+    {
+      "period": "2023/2024",
+      "label": "2023/24",
+      "subject": "Grammar, punctuation and spelling",
+      "schoolExpected": 67.0,
+      "hampshireExpected": 70.0,
+      "englandExpected": 72.0,
+      "schoolHigher": 23.0,
+      "hampshireHigher": 29.0,
+      "englandHigher": 32.0,
+      "schoolScaled": 104.0,
+      "hampshireScaled": 105.0,
+      "englandScaled": 105.0,
+      "schoolProgress": null
+    },
+    {
+      "period": "2023/2024",
+      "label": "2023/24",
+      "subject": "Science",
+      "schoolExpected": 80.0,
+      "hampshireExpected": 82.0,
+      "englandExpected": 81.0,
+      "schoolHigher": null,
+      "hampshireHigher": null,
+      "englandHigher": null,
+      "schoolScaled": null,
+      "hampshireScaled": null,
+      "englandScaled": null,
       "schoolProgress": null
     },
     {
@@ -485,70 +923,321 @@
   ],
   "equityHistory": [
     {
+      "period": "2015/2016",
+      "group": "All pupils",
+      "expected": 60.0,
+      "higher": null
+    },
+    {
+      "period": "2015/2016",
+      "group": "Boys",
+      "expected": 59.0,
+      "higher": null
+    },
+    {
+      "period": "2015/2016",
+      "group": "Girls",
+      "expected": 64.0,
+      "higher": null
+    },
+    {
+      "period": "2015/2016",
+      "group": "Disadvantaged",
+      "expected": 44.0,
+      "higher": null
+    },
+    {
+      "period": "2015/2016",
+      "group": "Not disadvantaged",
+      "expected": 64.0,
+      "higher": null
+    },
+    {
+      "period": "2016/2017",
+      "group": "All pupils",
+      "expected": 64.0,
+      "higher": null
+    },
+    {
+      "period": "2016/2017",
+      "group": "Boys",
+      "expected": 64.0,
+      "higher": null
+    },
+    {
+      "period": "2016/2017",
+      "group": "Girls",
+      "expected": 63.0,
+      "higher": null
+    },
+    {
+      "period": "2016/2017",
+      "group": "Disadvantaged",
+      "expected": 40.0,
+      "higher": null
+    },
+    {
+      "period": "2016/2017",
+      "group": "Not disadvantaged",
+      "expected": 68.0,
+      "higher": null
+    },
+    {
+      "period": "2017/2018",
+      "group": "All pupils",
+      "expected": 77.0,
+      "higher": null
+    },
+    {
+      "period": "2017/2018",
+      "group": "Boys",
+      "expected": 67.0,
+      "higher": null
+    },
+    {
+      "period": "2017/2018",
+      "group": "Girls",
+      "expected": 87.0,
+      "higher": null
+    },
+    {
+      "period": "2017/2018",
+      "group": "Disadvantaged",
+      "expected": 67.0,
+      "higher": null
+    },
+    {
+      "period": "2017/2018",
+      "group": "Not disadvantaged",
+      "expected": 78.0,
+      "higher": null
+    },
+    {
+      "period": "2018/2019",
+      "group": "All pupils",
+      "expected": 70.0,
+      "higher": null
+    },
+    {
+      "period": "2018/2019",
+      "group": "Boys",
+      "expected": 70.0,
+      "higher": null
+    },
+    {
+      "period": "2018/2019",
+      "group": "Girls",
+      "expected": 70.0,
+      "higher": null
+    },
+    {
+      "period": "2018/2019",
+      "group": "Disadvantaged",
+      "expected": 77.0,
+      "higher": null
+    },
+    {
+      "period": "2018/2019",
+      "group": "Not disadvantaged",
+      "expected": 69.0,
+      "higher": null
+    },
+    {
       "period": "2022/2023",
       "group": "All pupils",
       "expected": 63.0,
-      "higher": 9.0
+      "higher": null
+    },
+    {
+      "period": "2022/2023",
+      "group": "Boys",
+      "expected": 59.0,
+      "higher": null
+    },
+    {
+      "period": "2022/2023",
+      "group": "Girls",
+      "expected": 68.0,
+      "higher": null
     },
     {
       "period": "2022/2023",
       "group": "Disadvantaged",
       "expected": 31.0,
-      "higher": 0.0
+      "higher": null
     },
     {
       "period": "2022/2023",
       "group": "Not disadvantaged",
       "expected": 68.0,
-      "higher": 11.0
+      "higher": null
     },
     {
       "period": "2023/2024",
       "group": "All pupils",
       "expected": 60.0,
-      "higher": 5.0
+      "higher": null
+    },
+    {
+      "period": "2023/2024",
+      "group": "Boys",
+      "expected": 57.0,
+      "higher": null
+    },
+    {
+      "period": "2023/2024",
+      "group": "Girls",
+      "expected": 62.0,
+      "higher": null
     },
     {
       "period": "2023/2024",
       "group": "Disadvantaged",
       "expected": 8.0,
-      "higher": 0.0
+      "higher": null
     },
     {
       "period": "2023/2024",
       "group": "Not disadvantaged",
       "expected": 68.0,
-      "higher": 6.0
+      "higher": null
     },
     {
       "period": "2024/2025",
       "group": "All pupils",
       "expected": 62.0,
-      "higher": 10.0
+      "higher": null
     },
     {
       "period": "2024/2025",
       "group": "Boys",
       "expected": 45.0,
-      "higher": 5.0
+      "higher": null
     },
     {
       "period": "2024/2025",
       "group": "Girls",
       "expected": 77.0,
-      "higher": 14.0
+      "higher": null
     },
     {
       "period": "2024/2025",
       "group": "Disadvantaged",
       "expected": 39.0,
-      "higher": 0.0
+      "higher": null
     },
     {
       "period": "2024/2025",
       "group": "Not disadvantaged",
       "expected": 68.0,
-      "higher": 13.0
+      "higher": null
+    }
+  ],
+  "progressHistory": [
+    {
+      "subject": "Reading",
+      "score": -0.5,
+      "lower": -1.8,
+      "upper": 0.8,
+      "period": "2015/2016"
+    },
+    {
+      "subject": "Writing",
+      "score": 0.7,
+      "lower": -0.6,
+      "upper": 2.0,
+      "period": "2015/2016"
+    },
+    {
+      "subject": "Maths",
+      "score": -1.7,
+      "lower": -2.8,
+      "upper": -0.6,
+      "period": "2015/2016"
+    },
+    {
+      "subject": "Reading",
+      "score": -1.7,
+      "lower": -3.0,
+      "upper": -0.4,
+      "period": "2016/2017"
+    },
+    {
+      "subject": "Writing",
+      "score": -0.3,
+      "lower": -1.6,
+      "upper": 1.0,
+      "period": "2016/2017"
+    },
+    {
+      "subject": "Maths",
+      "score": -4.0,
+      "lower": -5.2,
+      "upper": -2.8,
+      "period": "2016/2017"
+    },
+    {
+      "subject": "Reading",
+      "score": 1.0,
+      "lower": -0.2,
+      "upper": 2.2,
+      "period": "2017/2018"
+    },
+    {
+      "subject": "Writing",
+      "score": 0.4,
+      "lower": -0.8,
+      "upper": 1.6,
+      "period": "2017/2018"
+    },
+    {
+      "subject": "Maths",
+      "score": -0.3,
+      "lower": -1.4,
+      "upper": 0.8,
+      "period": "2017/2018"
+    },
+    {
+      "subject": "Reading",
+      "score": -1.3,
+      "lower": -2.5,
+      "upper": 0.0,
+      "period": "2018/2019"
+    },
+    {
+      "subject": "Writing",
+      "score": 1.1,
+      "lower": -0.1,
+      "upper": 2.3,
+      "period": "2018/2019"
+    },
+    {
+      "subject": "Maths",
+      "score": -0.4,
+      "lower": -1.6,
+      "upper": 0.7,
+      "period": "2018/2019"
+    },
+    {
+      "subject": "Reading",
+      "score": -0.2,
+      "lower": -1.5,
+      "upper": 1.1,
+      "period": "2022/2023"
+    },
+    {
+      "subject": "Writing",
+      "score": -0.1,
+      "lower": -1.3,
+      "upper": 1.2,
+      "period": "2022/2023"
+    },
+    {
+      "subject": "Maths",
+      "score": -1.0,
+      "lower": -2.2,
+      "upper": 0.2,
+      "period": "2022/2023"
     }
   ]
 }

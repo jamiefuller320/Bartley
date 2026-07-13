@@ -111,8 +111,8 @@ function trendFinding(history: HistoryRow[] | undefined): Finding | null {
   const delta = (last.schoolExpected ?? 0) - (first.schoolExpected ?? 0);
   return {
     severity: delta >= 0 ? "positive" : "watch",
-    title: "Three-year RWM trend",
-    detail: `Combined expected standard moved from ${first.schoolExpected}% in ${periodShort(first.period)} to ${last.schoolExpected}% in ${periodShort(last.period)} (${delta >= 0 ? "+" : ""}${delta} pp). England moved from ${first.englandExpected}% to ${last.englandExpected}% over the same period.`,
+    title: "Long-run RWM trend",
+    detail: `Combined expected standard moved from ${first.schoolExpected}% in ${periodShort(first.period)} to ${last.schoolExpected}% in ${periodShort(last.period)} (${delta >= 0 ? "+" : ""}${delta} pp). England moved from ${first.englandExpected}% to ${last.englandExpected}% over the published years.`,
   };
 }
 

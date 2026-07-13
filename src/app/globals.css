@@ -337,10 +337,38 @@ a:hover {
   max-width: 52rem;
 }
 
-.chart-frame {
-  width: 100%;
-  min-height: 280px;
+.history-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 0 0 1.25rem;
 }
+
+.history-tab {
+  appearance: none;
+  border: 1px solid rgba(27, 67, 50, 0.18);
+  background: rgba(255, 255, 255, 0.55);
+  color: var(--ink-soft);
+  border-radius: 999px;
+  padding: 0.45rem 0.85rem;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+.history-tab:hover {
+  border-color: rgba(27, 67, 50, 0.35);
+  color: var(--ink);
+}
+
+.history-tab.active {
+  background: var(--forest);
+  border-color: var(--forest);
+  color: #f4faf6;
+}
+
 
 .chart-note,
 .muted,
