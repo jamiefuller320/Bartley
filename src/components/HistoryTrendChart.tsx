@@ -23,12 +23,19 @@ export function HistoryTrendChart({
   subject = "Reading, writing and maths",
   metric = "expected",
   seriesMode = "compare",
+  showHampshire = true,
+  showEngland = true,
 }: {
   history: HistoryRow[];
   subject?: string;
   metric?: "expected" | "scaled" | "higher";
   seriesMode?: "compare" | "bartley";
+  showHampshire?: boolean;
+  showEngland?: boolean;
 }) {
+  const overlayHampshire = seriesMode === "compare" || showHampshire;
+  const overlayEngland = seriesMode === "compare" || showEngland;
+
   const rows = history
     .filter((h) => h.subject === subject)
     .sort((a, b) => a.period.localeCompare(b.period))
@@ -53,11 +60,12 @@ export function HistoryTrendChart({
             ? h.englandHigher
             : h.englandScaled,
     }))
-    .filter((r) =>
-      seriesMode === "bartley"
-        ? r.Bartley !== null
-        : r.Bartley !== null || r.Hampshire !== null || r.England !== null,
-    );
+    .filter((r) => {
+      if (r.Bartley !== null) return true;
+      if (overlayHampshire && r.Hampshire !== null) return true;
+      if (overlayEngland && r.England !== null) return true;
+      return false;
+    });
 
   if (!rows.length) {
     return (
@@ -68,8 +76,11 @@ export function HistoryTrendChart({
   }
 
   const kind = metric === "scaled" ? "scaled" : "percent";
-  const keys =
-    seriesMode === "bartley" ? ["Bartley"] : ["Bartley", "Hampshire", "England"];
+  const keys = [
+    "Bartley",
+    ...(overlayHampshire ? ["Hampshire"] : []),
+    ...(overlayEngland ? ["England"] : []),
+  ];
   const domain = focusedDomain(domainValues(rows, keys), kind);
   const isPct = metric !== "scaled";
 
@@ -120,26 +131,26 @@ export function HistoryTrendChart({
             dot={{ r: 4, fill: "#1b4332" }}
             connectNulls
           />
-          {seriesMode === "compare" ? (
-            <>
-              <Line
-                type="monotone"
-                dataKey="Hampshire"
-                stroke="#52796f"
-                strokeWidth={2}
-                strokeDasharray="4 4"
-                dot={{ r: 3, fill: "#52796f" }}
-                connectNulls
-              />
-              <Line
-                type="monotone"
-                dataKey="England"
-                stroke="#c9a227"
-                strokeWidth={2}
-                dot={{ r: 3, fill: "#c9a227" }}
-                connectNulls
-              />
-            </>
+          {overlayHampshire ? (
+            <Line
+              type="monotone"
+              dataKey="Hampshire"
+              stroke="#52796f"
+              strokeWidth={2}
+              strokeDasharray="4 4"
+              dot={{ r: 3, fill: "#52796f" }}
+              connectNulls
+            />
+          ) : null}
+          {overlayEngland ? (
+            <Line
+              type="monotone"
+              dataKey="England"
+              stroke="#c9a227"
+              strokeWidth={2}
+              dot={{ r: 3, fill: "#c9a227" }}
+              connectNulls
+            />
           ) : null}
         </LineChart>
       </ResponsiveContainer>
