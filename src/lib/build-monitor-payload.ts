@@ -1,7 +1,9 @@
 import { fetchSchoolBundle, parseMetric, BARTLEY } from "@/lib/dfe-api";
 import { buildFindings } from "@/lib/evaluate";
 import type {
+  EquityHistoryRow,
   EquityRow,
+  HistoryRow,
   SchoolMonitorData,
   SubjectComparison,
 } from "@/lib/types";
@@ -14,6 +16,8 @@ const SUBJECTS = [
   "Grammar, punctuation and spelling",
   "Science",
 ] as const;
+
+const PERIODS = ["2022/2023", "2023/2024", "2024/2025"] as const;
 
 type Decoded = {
   period: string;
@@ -63,6 +67,92 @@ function pickAny(
     }
   }
   return {} as Record<string, number | null>;
+}
+
+function pickBench(
+  rows: Decoded[],
+  subject: string,
+  period: string,
+): Record<string, number | null> {
+  let values = pick(rows, subject, "Total", period, "All state funded");
+  if (values.expected_standard_pupil_percent == null) {
+    values = pick(rows, subject, "Total", period, "All schools");
+  }
+  return values;
+}
+
+function buildHistory(
+  school: Decoded[],
+  hampshire: Decoded[],
+  england: Decoded[],
+): HistoryRow[] {
+  const history: HistoryRow[] = [];
+  for (const period of PERIODS) {
+    for (const subject of SUBJECTS) {
+      const s = pick(school, subject, "Total", period);
+      const h = pickBench(hampshire, subject, period);
+      const e = pickBench(england, subject, period);
+      if (
+        s.expected_standard_pupil_percent == null &&
+        s.higher_standard_pupil_percent == null &&
+        s.average_scaled_score == null &&
+        h.expected_standard_pupil_percent == null &&
+        e.expected_standard_pupil_percent == null
+      ) {
+        continue;
+      }
+      history.push({
+        period,
+        label: period.replace("/20", "/"),
+        subject,
+        schoolExpected: s.expected_standard_pupil_percent ?? null,
+        hampshireExpected: h.expected_standard_pupil_percent ?? null,
+        englandExpected: e.expected_standard_pupil_percent ?? null,
+        schoolHigher: s.higher_standard_pupil_percent ?? null,
+        hampshireHigher: h.higher_standard_pupil_percent ?? null,
+        englandHigher: e.higher_standard_pupil_percent ?? null,
+        schoolScaled: s.average_scaled_score ?? null,
+        hampshireScaled: h.average_scaled_score ?? null,
+        englandScaled: e.average_scaled_score ?? null,
+        schoolProgress: s.progress_measure_score ?? null,
+      });
+    }
+  }
+  return history;
+}
+
+function buildEquityHistory(school: Decoded[]): EquityHistoryRow[] {
+  const groups: Array<[string, string]> = [
+    ["Total", "All pupils"],
+    ["Boys", "Boys"],
+    ["Girls", "Girls"],
+    ["Disadvantaged", "Disadvantaged"],
+    ["Not known to be disadvantaged", "Not disadvantaged"],
+  ];
+  const rows: EquityHistoryRow[] = [];
+  for (const period of PERIODS) {
+    for (const [breakdown, group] of groups) {
+      const values = pickAny(
+        school,
+        "Reading, writing and maths",
+        breakdown,
+        period,
+      );
+      if (
+        values.expected_standard_pupil_percent == null &&
+        values.higher_standard_pupil_percent == null
+      ) {
+        continue;
+      }
+      rows.push({
+        period,
+        group,
+        expected: values.expected_standard_pupil_percent ?? null,
+        higher: values.higher_standard_pupil_percent ?? null,
+      });
+    }
+  }
+  return rows;
 }
 
 export async function buildMonitorPayload(
@@ -200,6 +290,9 @@ export async function buildMonitorPayload(
     ];
   });
 
+  const history = buildHistory(bundle.perf, bundle.hampshire, bundle.england);
+  const equityHistory = buildEquityHistory(bundle.perf);
+
   const info = bundle.info[0];
   const nft: Record<string, string> = {
     VC: "Voluntary controlled school",
@@ -207,8 +300,8 @@ export async function buildMonitorPayload(
     CY: "Community school",
   };
 
-  const boys = parseMetric(info?.values.belig);
-  const girls = parseMetric(info?.values.gelig);
+  const boysCount = parseMetric(info?.values.belig);
+  const girlsCount = parseMetric(info?.values.gelig);
 
   return {
     source: {
@@ -220,7 +313,7 @@ export async function buildMonitorPayload(
         laPerformance: "019afee5-4791-7467-a788-c163fd9b57de",
       },
       release: "Key stage 2 attainment (Explore Education Statistics)",
-      note: "School-level figures mirror Compare school and college performance via the DfE Explore education statistics API.",
+      note: "School-level figures mirror Compare school and college performance via the DfE Explore education statistics API. Institution-level history currently covers 2022/23 to 2024/25.",
     },
     profile: {
       name: BARTLEY.name,
@@ -242,16 +335,21 @@ export async function buildMonitorPayload(
       nonMobilePercent: parseMetric(info?.values.ptmobn),
       boysPercent: parseMetric(info?.values.pbelig),
       girlsPercent: parseMetric(info?.values.pgelig),
-      boysCount: boys,
-      girlsCount: girls,
+      boysCount,
+      girlsCount,
       eligiblePupils:
-        boys !== null || girls !== null ? (boys ?? 0) + (girls ?? 0) : null,
+        boysCount !== null || girlsCount !== null
+          ? (boysCount ?? 0) + (girlsCount ?? 0)
+          : null,
       period: info?.period,
     },
     period,
+    periods: [...PERIODS],
     subjects,
     progress,
     equity,
-    findings: buildFindings({ subjects, equity }),
+    history,
+    equityHistory,
+    findings: buildFindings({ subjects, equity, history }),
   };
 }

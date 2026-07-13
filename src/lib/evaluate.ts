@@ -1,4 +1,9 @@
-import type { Finding, SchoolMonitorData, SubjectComparison } from "./types";
+import type {
+  Finding,
+  HistoryRow,
+  SchoolMonitorData,
+  SubjectComparison,
+} from "./types";
 
 function gap(
   a: number | null | undefined,
@@ -8,7 +13,14 @@ function gap(
   return a - b;
 }
 
-export function buildFindings(data: Pick<SchoolMonitorData, "subjects" | "equity">): Finding[] {
+function periodShort(period: string): string {
+  const [a, b] = period.split("/");
+  return b && b.length === 4 ? `${a}/${b.slice(2)}` : period;
+}
+
+export function buildFindings(
+  data: Pick<SchoolMonitorData, "subjects" | "equity" | "history">,
+): Finding[] {
   const findings: Finding[] = [];
   const rwm = data.subjects.find((s) => s.subject === "Reading, writing and maths");
   if (rwm?.vsEngland !== null && rwm?.vsEngland !== undefined) {
@@ -32,6 +44,9 @@ export function buildFindings(data: Pick<SchoolMonitorData, "subjects" | "equity
       });
     }
   }
+
+  const trend = trendFinding(data.history);
+  if (trend) findings.push(trend);
 
   const boys = data.equity.find((e) => e.group === "Boys");
   const girls = data.equity.find((e) => e.group === "Girls");
@@ -57,14 +72,22 @@ export function buildFindings(data: Pick<SchoolMonitorData, "subjects" | "equity
 
   for (const subject of ["Writing", "Maths", "Reading", "Science"] as const) {
     const row = data.subjects.find((s) => s.subject === subject);
-    if (row?.vsHampshire !== null && row?.vsHampshire !== undefined && row.vsHampshire >= 2) {
+    if (
+      row?.vsHampshire !== null &&
+      row?.vsHampshire !== undefined &&
+      row.vsHampshire >= 2
+    ) {
       findings.push({
         severity: "positive",
         title: `${subject} above Hampshire`,
         detail: `${subject} expected standard ${row.schoolExpected}% vs Hampshire ${row.hampshireExpected}% (+${row.vsHampshire} pp).`,
       });
     }
-    if (row?.vsEngland !== null && row?.vsEngland !== undefined && row.vsEngland <= -5) {
+    if (
+      row?.vsEngland !== null &&
+      row?.vsEngland !== undefined &&
+      row.vsEngland <= -5
+    ) {
       findings.push({
         severity: "watch",
         title: `${subject} below England`,
@@ -74,6 +97,23 @@ export function buildFindings(data: Pick<SchoolMonitorData, "subjects" | "equity
   }
 
   return findings;
+}
+
+function trendFinding(history: HistoryRow[] | undefined): Finding | null {
+  if (!history?.length) return null;
+  const rwm = history
+    .filter((h) => h.subject === "Reading, writing and maths")
+    .filter((h) => h.schoolExpected !== null)
+    .sort((a, b) => a.period.localeCompare(b.period));
+  if (rwm.length < 2) return null;
+  const first = rwm[0];
+  const last = rwm[rwm.length - 1];
+  const delta = (last.schoolExpected ?? 0) - (first.schoolExpected ?? 0);
+  return {
+    severity: delta >= 0 ? "positive" : "watch",
+    title: "Three-year RWM trend",
+    detail: `Combined expected standard moved from ${first.schoolExpected}% in ${periodShort(first.period)} to ${last.schoolExpected}% in ${periodShort(last.period)} (${delta >= 0 ? "+" : ""}${delta} pp). England moved from ${first.englandExpected}% to ${last.englandExpected}% over the same period.`,
+  };
 }
 
 export function scorecard(subjects: SubjectComparison[]) {

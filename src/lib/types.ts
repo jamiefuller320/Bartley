@@ -80,13 +80,39 @@ export interface DataSource {
   note: string;
 }
 
+export interface HistoryRow {
+  period: string;
+  label?: string;
+  subject: string;
+  schoolExpected: number | null;
+  hampshireExpected: number | null;
+  englandExpected: number | null;
+  schoolHigher: number | null;
+  hampshireHigher?: number | null;
+  englandHigher?: number | null;
+  schoolScaled: number | null;
+  hampshireScaled?: number | null;
+  englandScaled?: number | null;
+  schoolProgress?: number | null;
+}
+
+export interface EquityHistoryRow {
+  period: string;
+  group: string;
+  expected: number | null;
+  higher: number | null;
+}
+
 export interface SchoolMonitorData {
   source: DataSource;
   profile: SchoolProfile;
   period: string;
+  periods?: string[];
   subjects: SubjectComparison[];
   progress: ProgressRow[];
   equity: EquityRow[];
+  history?: HistoryRow[];
+  equityHistory?: EquityHistoryRow[];
   findings: Finding[];
   threeYear?: unknown[];
 }

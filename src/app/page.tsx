@@ -7,6 +7,8 @@ import { EquityChart } from "@/components/EquityChart";
 import { ProgressChart } from "@/components/ProgressChart";
 import { ComparisonTable } from "@/components/ComparisonTable";
 import { CohortProfile } from "@/components/CohortProfile";
+import { HistoryTrendChart } from "@/components/HistoryTrendChart";
+import { HistoryTable } from "@/components/HistoryTable";
 
 export default function HomePage() {
   const data = getBartleyMonitorData();
@@ -14,6 +16,7 @@ export default function HomePage() {
   const rwm = data.subjects.find(
     (s) => s.subject === "Reading, writing and maths",
   );
+  const history = data.history ?? [];
 
   return (
     <main>
@@ -22,6 +25,7 @@ export default function HomePage() {
           <p className="tool-mark">Bartley Insight</p>
           <nav className="header-nav" aria-label="Sections">
             <a href="#evaluation">Evaluation</a>
+            <a href="#history">History</a>
             <a href="#attainment">Attainment</a>
             <a href="#equity">Equity</a>
             <a href="#progress">Progress</a>
@@ -100,7 +104,49 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section section-alt" id="attainment">
+      <section className="section section-alt" id="history">
+        <div className="shell">
+          <div className="section-intro">
+            <h2>Historical comparison</h2>
+            <p>
+              Combined reading, writing and maths expected standard for Bartley,
+              Hampshire and England across the last three published academic
+              years (2022/23–2024/25).
+            </p>
+          </div>
+          <HistoryTrendChart history={history} metric="expected" />
+          <HistoryTable history={history} />
+
+          <div className="section-intro stacked">
+            <h3>Average scaled scores</h3>
+            <p>
+              Reading and maths scaled scores where published. Individual subject
+              expected-standard percentages are only fully published for the
+              latest year for this school.
+            </p>
+          </div>
+          <div className="split">
+            <div>
+              <p className="chart-note">Reading</p>
+              <HistoryTrendChart
+                history={history}
+                subject="Reading"
+                metric="scaled"
+              />
+            </div>
+            <div>
+              <p className="chart-note">Maths</p>
+              <HistoryTrendChart
+                history={history}
+                subject="Maths"
+                metric="scaled"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section" id="attainment">
         <div className="shell">
           <div className="section-intro">
             <h2>Attainment by subject</h2>
@@ -123,7 +169,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section" id="equity">
+      <section className="section section-alt" id="equity">
         <div className="shell split">
           <div>
             <div className="section-intro">
