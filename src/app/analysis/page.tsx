@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getBartleyMonitorData, getPeerSchoolsData } from "@/lib/data";
 import { buildAnalysis } from "@/lib/analysis";
+import { buildExecutiveSummary } from "@/lib/board";
 import { SiteHeader } from "@/components/SiteHeader";
+import { PrintButton } from "@/components/PrintButton";
 
 export const metadata: Metadata = {
   title: "Analysis & governor questions · Bartley Insight",
@@ -14,13 +16,14 @@ export default function AnalysisPage() {
   const data = getBartleyMonitorData();
   const peers = getPeerSchoolsData();
   const analysis = buildAnalysis(data, peers);
+  const summary = buildExecutiveSummary(data, peers);
 
   const themes = Array.from(
     new Set(analysis.questions.map((q) => q.theme)),
   );
 
   return (
-    <main>
+    <main className="analysis-print-root">
       <SiteHeader active="analysis" />
 
       <section className="analysis-hero">
@@ -30,15 +33,61 @@ export default function AnalysisPage() {
           <p className="analysis-lede">{analysis.summary}</p>
           <p className="analysis-meta">
             Based on published Compare school performance / DfE statistics for{" "}
-            {data.period.replace("/", "–")}. For charts and source detail, see
-            the <Link href="/">dashboard</Link>.
+            {data.period.replace("/", "–")}
+            {data.source.refreshedAt
+              ? ` (dataset refreshed ${data.source.refreshedAt})`
+              : ""}
+            . For charts and source detail, see the{" "}
+            <Link href="/">dashboard</Link>.
           </p>
+          <div className="hero-actions analysis-actions no-print">
+            <PrintButton />
+            <Link className="btn-primary" href="/#summary">
+              One-page summary
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="section print-pack-summary">
+        <div className="shell">
+          <div className="section-intro">
+            <h2>Meeting pack snapshot</h2>
+            <p>Print this page for a paper pack; the snapshot below leads the briefing.</p>
+          </div>
+          <div className="snapshot-row" role="list">
+            {summary.headlineMetrics.map((metric) => (
+              <div key={metric.label} className="snapshot-metric" role="listitem">
+                <span className="snapshot-label">{metric.label}</span>
+                <strong>{metric.value}</strong>
+                <span className="snapshot-sub">{metric.detail}</span>
+              </div>
+            ))}
+          </div>
+          <div className="exec-grid">
+            <div className="exec-panel">
+              <h3>Top risks</h3>
+              <ol className="exec-list">
+                {summary.risks.map((risk) => (
+                  <li key={risk}>{risk}</li>
+                ))}
+              </ol>
+            </div>
+            <div className="exec-panel">
+              <h3>Ask first</h3>
+              <ol className="exec-list">
+                {summary.questions.map((question) => (
+                  <li key={question}>{question}</li>
+                ))}
+              </ol>
+            </div>
+          </div>
         </div>
       </section>
 
       <section className="section">
         <div className="shell analysis-layout">
-          <aside className="analysis-toc" aria-label="On this page">
+          <aside className="analysis-toc no-print" aria-label="On this page">
             <p className="analysis-toc-title">On this page</p>
             <ol>
               {analysis.sections.map((section) => (
@@ -92,6 +141,11 @@ export default function AnalysisPage() {
                           <p className="question-why">
                             <span>Why ask this:</span> {q.why}
                           </p>
+                          {q.chartHref ? (
+                            <p className="question-chart-link no-print">
+                              <Link href={q.chartHref}>Open related chart</Link>
+                            </p>
+                          ) : null}
                         </li>
                       ))}
                   </ol>
@@ -118,7 +172,7 @@ export default function AnalysisPage() {
       <footer className="site-footer">
         <div className="shell footer-inner">
           <p>Bartley Insight · governor analysis</p>
-          <p>
+          <p className="no-print">
             <Link href="/">Back to dashboard</Link>
           </p>
         </div>

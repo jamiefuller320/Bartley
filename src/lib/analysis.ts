@@ -18,6 +18,7 @@ export type StrategicQuestion = {
   theme: string;
   question: string;
   why: string;
+  chartHref?: string;
 };
 
 function periodShort(period: string): string {
@@ -254,30 +255,35 @@ export function buildAnalysis(
       question:
         "What forensic analysis has leadership completed on the boys who did not meet combined RWM in 2024/25, and which barriers (attendance, behaviour, reading fluency, writing stamina, SEND) appear most causal?",
       why: `Boys’ combined expected standard is ${fmtPct(boys?.expected)} versus ${fmtPct(girls?.expected)} for girls.`,
+      chartHref: "/#equity",
     },
     {
       theme: "Boys’ achievement",
       question:
         "Which current Year 5/6 boy-specific interventions are in place, how is impact measured within the year, and what will stop if they are not working?",
       why: "The gender gap widened sharply versus 2023/24 and versus several pre-pandemic years.",
+      chartHref: "/#equity",
     },
     {
       theme: "Disadvantaged pupils",
       question:
         "How is pupil premium funding mapped line-by-line to the disadvantaged pupils currently below expected standard, and what attainment/progress checkpoints will be reported to governors each term?",
       why: `Disadvantaged combined RWM is ${fmtPct(dis?.expected)} against ${fmtPct(notDis?.expected)} for other pupils.`,
+      chartHref: "/#equity",
     },
     {
       theme: "Disadvantaged pupils",
       question:
         "Why did no disadvantaged pupil reach the higher standard in the latest year, and what pathway exists for high-attaining disadvantaged pupils?",
       why: "Higher-standard representation is an inclusion as well as excellence issue.",
+      chartHref: "/?view=compare&subject=rwm&metric=higher#charts",
     },
     {
       theme: "Curriculum & assessment",
       question:
         "What explains reading and GPS lagging England while writing is above — and how aligned are reading fluency, phonics catch-up (where relevant), vocabulary and GPS teaching across Years 3–6?",
       why: `Reading ${fmtPp(reading?.vsEngland)} and GPS ${fmtPp(gps?.vsEngland)} vs England; writing ${fmtPp(writing?.vsEngland)}.`,
+      chartHref: "/?view=compare&subject=reading&peer=average#charts",
     },
     {
       theme: "Curriculum & assessment",
@@ -302,6 +308,7 @@ export function buildAnalysis(
       question:
         "Which similar Hampshire schools or strong historical Bartley cohorts are we using as practical benchmarks, and why is matching 2017/18 combined RWM — or today’s top local peers — no longer (or still) a realistic ambition?",
       why: `Peak combined RWM was ${fmtPct(peak?.schoolExpected)} in ${peak ? periodShort(peak.period) : "—"}${peers?.peerAverageLatest.rwmExpected != null ? `; current top-three peer average is ${fmtPct(peers.peerAverageLatest.rwmExpected)}` : ""}.`,
+      chartHref: "/?view=history&subject=rwm&peer=average#charts",
     },
     {
       theme: "Staffing & professional development",
@@ -332,6 +339,7 @@ export function buildAnalysis(
       theme: "Comparison & ambition",
       question: `What would it take for Bartley to close even half the ${gapVsAvg !== null ? `${Math.abs(gapVsAvg).toFixed(0)} pp` : ""} gap to the top-three local peer average on combined RWM within three years, and which peer practices (curriculum, intervention, assessment) are we actively learning from?`,
       why: `Bartley ${fmtPct(latest?.schoolExpected)} vs peer average ${fmtPct(peerAvg)}; strongest peer ${top?.short} at ${fmtPct(top?.latest.rwmExpected)}.`,
+      chartHref: "/?view=compare&subject=rwm&peer=average#charts",
     });
   }
 

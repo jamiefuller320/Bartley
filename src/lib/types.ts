@@ -78,6 +78,7 @@ export interface DataSource {
   };
   release: string;
   note: string;
+  refreshedAt?: string | null;
 }
 
 export interface HistoryRow {
@@ -118,7 +119,20 @@ export interface SchoolMonitorData {
   history?: HistoryRow[];
   equityHistory?: EquityHistoryRow[];
   findings: Finding[];
-  threeYear?: unknown[];
+  threeYear?: ThreeYearRow[];
+}
+
+export interface ThreeYearRow {
+  subject: string;
+  breakdown: string;
+  topic: string;
+  values: {
+    expected_standard_pupil_percent: number | null;
+    higher_standard_pupil_percent: number | null;
+    average_scaled_score: number | null;
+    progress_measure_score?: number | null;
+    [key: string]: number | null | undefined;
+  };
 }
 
 export interface PeerLatestSnapshot {

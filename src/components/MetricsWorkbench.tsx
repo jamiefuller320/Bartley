@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
 import type {
   HistoryRow,
   PeerSchoolsBundle,
@@ -13,14 +14,16 @@ import { ComparisonTable } from "@/components/ComparisonTable";
 import { HistoryTrendChart } from "@/components/HistoryTrendChart";
 import { HistoryTable } from "@/components/HistoryTable";
 import { ProgressChart } from "@/components/ProgressChart";
-import { shortSubject } from "@/lib/format";
+import { PeerComparisonTable } from "@/components/PeerComparisonTable";
+import { shortSubject, fmtPct } from "@/lib/format";
 import {
   peerLatestValue,
   peerMetricByPeriod,
   peerOverlayLabel,
   type PeerOverlaySelection,
 } from "@/lib/peers";
-import { fmtPct } from "@/lib/format";
+import { subjectFromSlug } from "@/lib/board";
+import type { SchoolMonitorData } from "@/lib/types";
 
 const SUBJECTS = [
   "Reading, writing and maths",
@@ -31,27 +34,60 @@ const SUBJECTS = [
   "Science",
 ] as const;
 
-export function MetricsWorkbench({
+type SubjectOption = (typeof SUBJECTS)[number];
+
+function MetricsWorkbenchInner({
   subjects,
   history,
   progressHistory = [],
   period,
   peers,
+  data,
 }: {
   subjects: SubjectComparison[];
   history: HistoryRow[];
   progressHistory?: ProgressRow[];
   period: string;
   peers: PeerSchoolsBundle;
+  data: SchoolMonitorData;
 }) {
+  const searchParams = useSearchParams();
   const [mode, setMode] = useState<ChartViewMode>("compare");
-  const [subject, setSubject] =
-    useState<(typeof SUBJECTS)[number]>("Reading, writing and maths");
+  const [subject, setSubject] = useState<SubjectOption>(
+    "Reading, writing and maths",
+  );
   const [metric, setMetric] = useState<"expected" | "higher">("expected");
   const [showHampshire, setShowHampshire] = useState(true);
   const [showEngland, setShowEngland] = useState(true);
   const [peerOverlay, setPeerOverlay] =
     useState<PeerOverlaySelection>("none");
+
+  useEffect(() => {
+    const view = searchParams.get("view");
+    if (view === "history" || view === "compare") setMode(view);
+
+    const subjectParam = subjectFromSlug(searchParams.get("subject"));
+    if (subjectParam && SUBJECTS.includes(subjectParam as SubjectOption)) {
+      setSubject(subjectParam as SubjectOption);
+    }
+
+    const metricParam = searchParams.get("metric");
+    if (metricParam === "higher" || metricParam === "expected") {
+      setMetric(metricParam);
+    }
+
+    const peerParam = searchParams.get("peer");
+    if (peerParam === "average" || peerParam === "none") {
+      setPeerOverlay(peerParam);
+    } else if (peerParam && peers.peers.some((p) => p.urn === peerParam || p.short.toLowerCase() === peerParam.toLowerCase())) {
+      const match = peers.peers.find(
+        (p) =>
+          p.urn === peerParam ||
+          p.short.toLowerCase() === peerParam.toLowerCase(),
+      );
+      if (match) setPeerOverlay(match.urn);
+    }
+  }, [searchParams, peers.peers]);
 
   const subjectHistory = useMemo(
     () => history.filter((row) => row.subject === subject),
@@ -142,7 +178,11 @@ export function MetricsWorkbench({
           </button>
         </div>
 
-        <div className="overlay-toggles peer-overlay-panel" role="group" aria-label="Peer overlay">
+        <div
+          className="overlay-toggles peer-overlay-panel"
+          role="group"
+          aria-label="Peer overlay"
+        >
           <span className="overlay-label">Peer overlay</span>
           <label className="overlay-check">
             <input
@@ -186,11 +226,17 @@ export function MetricsWorkbench({
             />
             <ComparisonTable
               subjects={subjects.filter((row) => row.subject === subject)}
+              metric={metric}
+              cohortSize={data.profile.eligiblePupils}
             />
           </>
         ) : (
           <>
-            <div className="overlay-toggles" role="group" aria-label="Overlay benchmarks">
+            <div
+              className="overlay-toggles"
+              role="group"
+              aria-label="Overlay benchmarks"
+            >
               <label className="overlay-check">
                 <input
                   type="checkbox"
@@ -271,9 +317,42 @@ export function MetricsWorkbench({
             ) : null}
           </>
         )}
+
+        <div className="section-intro stacked">
+          <h3>Peer comparison table</h3>
+          <p>
+            Latest expected-standard figures for Bartley and the top three
+            similar-size local juniors, with links to Compare school
+            performance.
+          </p>
+        </div>
+        <PeerComparisonTable peers={peers} bartley={data} />
       </div>
 
       <ViewModeDock mode={mode} onChange={setMode} />
     </section>
+  );
+}
+
+export function MetricsWorkbench(props: {
+  subjects: SubjectComparison[];
+  history: HistoryRow[];
+  progressHistory?: ProgressRow[];
+  period: string;
+  peers: PeerSchoolsBundle;
+  data: SchoolMonitorData;
+}) {
+  return (
+    <Suspense
+      fallback={
+        <section className="section section-alt" id="charts">
+          <div className="shell">
+            <p className="muted">Loading charts…</p>
+          </div>
+        </section>
+      }
+    >
+      <MetricsWorkbenchInner {...props} />
+    </Suspense>
   );
 }

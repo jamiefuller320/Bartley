@@ -1,14 +1,26 @@
-import type { SubjectComparison } from "@/lib/types";
+import type { SchoolProfile, SubjectComparison } from "@/lib/types";
 import { fmtPct, fmtPp, shortSubject } from "@/lib/format";
 
-export function ComparisonTable({ subjects }: { subjects: SubjectComparison[] }) {
+export function ComparisonTable({
+  subjects,
+  metric = "expected",
+  cohortSize,
+}: {
+  subjects: SubjectComparison[];
+  metric?: "expected" | "higher";
+  cohortSize?: number | null;
+  profile?: SchoolProfile;
+}) {
   return (
     <div className="table-wrap">
       <table className="data-table">
         <thead>
           <tr>
             <th>Subject</th>
-            <th>School</th>
+            <th>
+              School
+              {cohortSize != null ? ` (n=${cohortSize})` : ""}
+            </th>
             <th>Hampshire</th>
             <th>England</th>
             <th>vs LA</th>
@@ -16,20 +28,30 @@ export function ComparisonTable({ subjects }: { subjects: SubjectComparison[] })
           </tr>
         </thead>
         <tbody>
-          {subjects.map((row) => (
-            <tr key={row.subject}>
-              <td>{shortSubject(row.subject)}</td>
-              <td>{fmtPct(row.schoolExpected)}</td>
-              <td>{fmtPct(row.hampshireExpected)}</td>
-              <td>{fmtPct(row.englandExpected)}</td>
-              <td className={deltaClass(row.vsHampshire)}>
-                {fmtPp(row.vsHampshire)}
-              </td>
-              <td className={deltaClass(row.vsEngland)}>
-                {fmtPp(row.vsEngland)}
-              </td>
-            </tr>
-          ))}
+          {subjects.map((row) => {
+            const school =
+              metric === "expected" ? row.schoolExpected : row.schoolHigher;
+            const hampshire =
+              metric === "expected"
+                ? row.hampshireExpected
+                : row.hampshireHigher;
+            const england =
+              metric === "expected" ? row.englandExpected : row.englandHigher;
+            const vsLa =
+              school != null && hampshire != null ? school - hampshire : null;
+            const vsEng =
+              school != null && england != null ? school - england : null;
+            return (
+              <tr key={row.subject}>
+                <td>{shortSubject(row.subject)}</td>
+                <td>{fmtPct(school)}</td>
+                <td>{fmtPct(hampshire)}</td>
+                <td>{fmtPct(england)}</td>
+                <td className={deltaClass(vsLa)}>{fmtPp(vsLa)}</td>
+                <td className={deltaClass(vsEng)}>{fmtPp(vsEng)}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>
