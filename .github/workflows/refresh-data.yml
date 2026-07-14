@@ -1,0 +1,59 @@
+name: Refresh DfE seed data
+
+on:
+  schedule:
+    # Mondays 06:00 UTC — after typical DfE weekday publish cycles
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: refresh-data
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Refresh Bartley seed from DfE API / CSP history
+        id: refresh
+        continue-on-error: true
+        run: npm run refresh-data
+
+      - name: Detect changes
+        id: changes
+        if: steps.refresh.outcome == 'success'
+        run: |
+          if git diff --quiet -- src/data/bartley-2024-25.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create pull request
+        if: steps.refresh.outcome == 'success' && steps.changes.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          commit-message: "chore: refresh Bartley DfE seed data"
+          title: "Refresh Bartley DfE seed data"
+          body: |
+            Automated refresh of `src/data/bartley-2024-25.json` from the DfE Explore Education Statistics API / CSP history pipeline.
+
+            Please review figures before merging — peer overlays still use the separately curated `peer-schools.json`.
+          branch: chore/refresh-dfe-data
+          delete-branch: true

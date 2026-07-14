@@ -9,17 +9,27 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import type { EquityRow } from "@/lib/types";
+import type { EquityRow, SchoolProfile } from "@/lib/types";
 import { domainValues, focusedDomain } from "@/lib/chart-scale";
+import { groupCount } from "@/lib/board";
 
-export function EquityChart({ equity }: { equity: EquityRow[] }) {
+export function EquityChart({
+  equity,
+  profile,
+}: {
+  equity: EquityRow[];
+  profile?: SchoolProfile;
+}) {
   const data = equity
     .filter((e) => e.expected !== null)
-    .map((e) => ({
-      group: e.group,
-      expected: e.expected,
-      higher: e.higher,
-    }));
+    .map((e) => {
+      const count = profile ? groupCount(profile, e.group) : null;
+      return {
+        group: count != null ? `${e.group} (n=${count})` : e.group,
+        expected: e.expected,
+        higher: e.higher,
+      };
+    });
 
   const domain = focusedDomain(domainValues(data, ["expected"]), "percent");
 
@@ -27,6 +37,7 @@ export function EquityChart({ equity }: { equity: EquityRow[] }) {
     <div className="chart-frame">
       <p className="chart-note">
         Axis range {domain[0]}–{domain[1]}% (zoomed to group differences).
+        Pupil counts (n) are the latest assessed cohort denominators.
       </p>
       <ResponsiveContainer width="100%" height={320}>
         <BarChart
@@ -47,7 +58,7 @@ export function EquityChart({ equity }: { equity: EquityRow[] }) {
           <YAxis
             type="category"
             dataKey="group"
-            width={128}
+            width={148}
             tick={{ fill: "#14261d", fontSize: 12 }}
             axisLine={false}
             tickLine={false}

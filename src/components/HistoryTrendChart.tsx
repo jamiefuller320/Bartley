@@ -18,6 +18,36 @@ function periodLabel(period: string): string {
   return b && b.length === 4 ? `${a}/${b.slice(2)}` : period;
 }
 
+type ChartPoint = {
+  year: string;
+  Bartley: number | null;
+  Hampshire: number | null;
+  England: number | null;
+  [key: string]: string | number | null | boolean | undefined;
+};
+
+/** Insert a labelled COVID gap between published years so lines do not imply continuity. */
+function withCovidGap(rows: ChartPoint[]): ChartPoint[] {
+  const out: ChartPoint[] = [];
+  for (let i = 0; i < rows.length; i += 1) {
+    out.push(rows[i]);
+    const next = rows[i + 1];
+    if (!next) continue;
+    const a = parseInt(String(rows[i].year).split("/")[0], 10);
+    const b = parseInt(String(next.year).split("/")[0], 10);
+    if (!Number.isNaN(a) && !Number.isNaN(b) && b - a > 1) {
+      out.push({
+        year: "19–22*",
+        Bartley: null,
+        Hampshire: null,
+        England: null,
+        gap: true,
+      });
+    }
+  }
+  return out;
+}
+
 export function HistoryTrendChart({
   history,
   subject = "Reading, writing and maths",
@@ -42,33 +72,36 @@ export function HistoryTrendChart({
   const overlayPeer = Boolean(peerSeriesName && peerByPeriod);
   const peerKey = peerSeriesName ?? "Peer";
 
-  const rows = history
+  const baseRows = history
     .filter((h) => h.subject === subject)
     .sort((a, b) => a.period.localeCompare(b.period))
-    .map((h) => ({
-      year: periodLabel(h.period),
-      Bartley:
-        metric === "expected"
-          ? h.schoolExpected
-          : metric === "higher"
-            ? h.schoolHigher
-            : h.schoolScaled,
-      Hampshire:
-        metric === "expected"
-          ? h.hampshireExpected
-          : metric === "higher"
-            ? h.hampshireHigher
-            : h.hampshireScaled,
-      England:
-        metric === "expected"
-          ? h.englandExpected
-          : metric === "higher"
-            ? h.englandHigher
-            : h.englandScaled,
-      [peerKey]: overlayPeer
-        ? (peerByPeriod?.get(h.period) ?? null)
-        : null,
-    }))
+    .map((h) => {
+      const point: ChartPoint = {
+        year: periodLabel(h.period),
+        Bartley:
+          metric === "expected"
+            ? h.schoolExpected
+            : metric === "higher"
+              ? h.schoolHigher
+              : h.schoolScaled,
+        Hampshire:
+          metric === "expected"
+            ? h.hampshireExpected
+            : metric === "higher"
+              ? (h.hampshireHigher ?? null)
+              : (h.hampshireScaled ?? null),
+        England:
+          metric === "expected"
+            ? h.englandExpected
+            : metric === "higher"
+              ? (h.englandHigher ?? null)
+              : (h.englandScaled ?? null),
+      };
+      if (overlayPeer) {
+        point[peerKey] = peerByPeriod?.get(h.period) ?? null;
+      }
+      return point;
+    })
     .filter((r) => {
       if (r.Bartley !== null) return true;
       if (overlayHampshire && r.Hampshire !== null) return true;
@@ -79,7 +112,9 @@ export function HistoryTrendChart({
       return false;
     });
 
-  if (!rows.length) {
+  const rows = withCovidGap(baseRows);
+
+  if (!baseRows.length) {
     return (
       <p className="muted">
         No published {metric} figures for {subject} across recent years.
@@ -96,6 +131,7 @@ export function HistoryTrendChart({
   ];
   const domain = focusedDomain(domainValues(rows, keys), kind);
   const isPct = metric !== "scaled";
+  const hasGap = rows.some((row) => row.gap);
 
   return (
     <div className="chart-frame">
@@ -103,6 +139,9 @@ export function HistoryTrendChart({
         Axis range {domain[0]}
         {isPct ? "%" : ""}–{domain[1]}
         {isPct ? "%" : ""} (zoomed to the values on display).
+        {hasGap
+          ? " Break at 19–22* marks COVID years with no performance-table KS2 files — lines do not connect across that gap."
+          : ""}
       </p>
       <ResponsiveContainer width="100%" height={320}>
         <LineChart data={rows} margin={{ top: 8, right: 12, left: -8, bottom: 8 }}>
@@ -142,7 +181,7 @@ export function HistoryTrendChart({
             stroke="#1b4332"
             strokeWidth={3}
             dot={{ r: 4, fill: "#1b4332" }}
-            connectNulls
+            connectNulls={false}
           />
           {overlayHampshire ? (
             <Line
@@ -152,7 +191,7 @@ export function HistoryTrendChart({
               strokeWidth={2}
               strokeDasharray="4 4"
               dot={{ r: 3, fill: "#52796f" }}
-              connectNulls
+              connectNulls={false}
             />
           ) : null}
           {overlayEngland ? (
@@ -162,7 +201,7 @@ export function HistoryTrendChart({
               stroke="#c9a227"
               strokeWidth={2}
               dot={{ r: 3, fill: "#c9a227" }}
-              connectNulls
+              connectNulls={false}
             />
           ) : null}
           {overlayPeer ? (
@@ -173,7 +212,7 @@ export function HistoryTrendChart({
               strokeWidth={2.5}
               strokeDasharray="6 3"
               dot={{ r: 3.5, fill: "#0e7490" }}
-              connectNulls
+              connectNulls={false}
             />
           ) : null}
         </LineChart>
