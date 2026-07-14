@@ -22,7 +22,7 @@ import {
   peerOverlayLabel,
   type PeerOverlaySelection,
 } from "@/lib/peers";
-import { subjectFromSlug } from "@/lib/board";
+import { subjectFromSlug, type SipTargetsBundle } from "@/lib/board";
 import type { SchoolMonitorData } from "@/lib/types";
 
 const SUBJECTS = [
@@ -43,6 +43,7 @@ function MetricsWorkbenchInner({
   period,
   peers,
   data,
+  sipTargets,
 }: {
   subjects: SubjectComparison[];
   history: HistoryRow[];
@@ -50,6 +51,7 @@ function MetricsWorkbenchInner({
   period: string;
   peers: PeerSchoolsBundle;
   data: SchoolMonitorData;
+  sipTargets: SipTargetsBundle;
 }) {
   const searchParams = useSearchParams();
   const [mode, setMode] = useState<ChartViewMode>("compare");
@@ -59,6 +61,9 @@ function MetricsWorkbenchInner({
   const [metric, setMetric] = useState<"expected" | "higher">("expected");
   const [showHampshire, setShowHampshire] = useState(true);
   const [showEngland, setShowEngland] = useState(true);
+  const [showSipTargets, setShowSipTargets] = useState(
+    sipTargets.enabledByDefault,
+  );
   const [peerOverlay, setPeerOverlay] =
     useState<PeerOverlaySelection>("none");
 
@@ -253,6 +258,20 @@ function MetricsWorkbenchInner({
                 />
                 <span>Overlay England</span>
               </label>
+              {sipTargets.targets.some(
+                (t) => t.subject === subject && t.metric === metric,
+              ) ? (
+                <label className="overlay-check">
+                  <input
+                    type="checkbox"
+                    checked={showSipTargets}
+                    onChange={(event) =>
+                      setShowSipTargets(event.target.checked)
+                    }
+                  />
+                  <span>Overlay SIP target</span>
+                </label>
+              ) : null}
             </div>
 
             <HistoryTrendChart
@@ -264,6 +283,8 @@ function MetricsWorkbenchInner({
               showEngland={showEngland}
               peerByPeriod={peerOverlay === "none" ? undefined : peerByPeriod}
               peerSeriesName={peerLabel}
+              sipTargets={sipTargets.targets}
+              showSipTargets={showSipTargets}
             />
             <HistoryTable history={history} subject={subject} />
 
@@ -290,6 +311,8 @@ function MetricsWorkbenchInner({
                     peerOverlay === "none" ? undefined : peerScaledByPeriod
                   }
                   peerSeriesName={peerLabel}
+                  sipTargets={sipTargets.targets}
+                  showSipTargets={showSipTargets}
                 />
               </>
             ) : null}
@@ -341,6 +364,7 @@ export function MetricsWorkbench(props: {
   period: string;
   peers: PeerSchoolsBundle;
   data: SchoolMonitorData;
+  sipTargets: SipTargetsBundle;
 }) {
   return (
     <Suspense

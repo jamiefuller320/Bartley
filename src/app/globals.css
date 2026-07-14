@@ -1074,3 +1074,81 @@ a:hover {
     margin-top: 1rem;
   }
 }
+
+.metric-delta {
+  display: inline-block;
+  margin-top: 0.2rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.volatility-note {
+  margin: 0.85rem 0 0;
+  padding: 0.7rem 0.85rem;
+  border-left: 3px solid var(--gold);
+  background: rgba(201, 162, 39, 0.08);
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.glossary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem 1.2rem;
+  margin: 0;
+}
+
+.glossary-item {
+  padding: 0.85rem 0.95rem;
+  border: 1px solid rgba(27, 67, 50, 0.1);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.glossary-item dt {
+  font-weight: 700;
+  color: var(--forest);
+  margin: 0 0 0.3rem;
+}
+
+.glossary-item dd {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.print-chart-block {
+  margin-top: 1.5rem;
+}
+
+.print-chart-block h3 {
+  margin: 0 0 0.55rem;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.2rem;
+  color: var(--forest);
+}
+
+@media (max-width: 900px) {
+  .glossary-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media print {
+  .meeting-pack-charts,
+  .print-chart-block,
+  .glossary-grid,
+  .print-pack-summary {
+    break-inside: avoid;
+  }
+
+  .print-chart-block {
+    page-break-inside: avoid;
+  }
+
+  .view-dock {
+    display: none !important;
+  }
+}

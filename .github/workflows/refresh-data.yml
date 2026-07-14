@@ -27,6 +27,11 @@ jobs:
           node-version: 22
           cache: npm
 
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
       - name: Install
         run: npm ci
 
@@ -35,25 +40,34 @@ jobs:
         continue-on-error: true
         run: npm run refresh-data
 
+      - name: Refresh curated peer school metrics
+        id: peers
+        continue-on-error: true
+        run: npm run refresh-peers
+
       - name: Detect changes
         id: changes
-        if: steps.refresh.outcome == 'success'
+        if: steps.refresh.outcome == 'success' || steps.peers.outcome == 'success'
         run: |
-          if git diff --quiet -- src/data/bartley-2024-25.json; then
+          if git diff --quiet -- src/data/bartley-2024-25.json src/data/peer-schools.json src/data/change-log.json; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Create pull request
-        if: steps.refresh.outcome == 'success' && steps.changes.outputs.changed == 'true'
+        if: (steps.refresh.outcome == 'success' || steps.peers.outcome == 'success') && steps.changes.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
-          commit-message: "chore: refresh Bartley DfE seed data"
-          title: "Refresh Bartley DfE seed data"
+          commit-message: "chore: refresh Bartley and peer DfE seed data"
+          title: "Refresh Bartley and peer DfE seed data"
           body: |
-            Automated refresh of `src/data/bartley-2024-25.json` from the DfE Explore Education Statistics API / CSP history pipeline.
+            Automated refresh of:
 
-            Please review figures before merging — peer overlays still use the separately curated `peer-schools.json`.
+            - `src/data/bartley-2024-25.json` (Bartley seed)
+            - `src/data/change-log.json` (what moved since previous seed)
+            - `src/data/peer-schools.json` (curated peer metrics from CSP KS2 downloads)
+
+            Please review figures before merging.
           branch: chore/refresh-dfe-data
           delete-branch: true

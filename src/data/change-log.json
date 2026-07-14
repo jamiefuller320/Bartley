@@ -1,0 +1,43 @@
+{
+  "generatedAt": "2026-07-14",
+  "previousRefreshedAt": "2023/2024",
+  "currentRefreshedAt": "2024/2025",
+  "summary": "Published-year movement from 2023/24 to 2024/25 (seeded until the next automated refresh writes a live diff).",
+  "items": [
+    {
+      "label": "RWM expected",
+      "previous": "60%",
+      "current": "62%",
+      "delta": "+2 pp",
+      "tone": "up"
+    },
+    {
+      "label": "RWM higher standard",
+      "previous": "5%",
+      "current": "10%",
+      "delta": "+5 pp",
+      "tone": "up"
+    },
+    {
+      "label": "Reading expected",
+      "previous": "77%",
+      "current": "72%",
+      "delta": "-5 pp",
+      "tone": "down"
+    },
+    {
+      "label": "GPS expected",
+      "previous": "67%",
+      "current": "68%",
+      "delta": "+1 pp",
+      "tone": "flat"
+    },
+    {
+      "label": "Gap to peer-average RWM",
+      "previous": "—",
+      "current": "-16 pp",
+      "delta": "-16 pp",
+      "tone": "down"
+    }
+  ]
+}

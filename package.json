@@ -8,7 +8,9 @@
     "build:pages": "GITHUB_PAGES=true next build",
     "start": "npx --yes serve out",
     "lint": "tsc --noEmit",
-    "refresh-data": "npx --yes tsx scripts/refresh-seed.ts"
+    "refresh-data": "npx --yes tsx scripts/refresh-seed.ts",
+    "refresh-peers": "python3 scripts/refresh-peers.py",
+    "refresh-all": "npm run refresh-data && npm run refresh-peers"
   },
   "dependencies": {
     "next": "^16.2.10",
