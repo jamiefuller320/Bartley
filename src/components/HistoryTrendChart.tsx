@@ -5,12 +5,14 @@ import {
   Legend,
   Line,
   LineChart,
+  ReferenceLine,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
 import type { HistoryRow } from "@/lib/types";
+import type { SipTarget } from "@/lib/board";
 import { domainValues, focusedDomain } from "@/lib/chart-scale";
 
 function periodLabel(period: string): string {
@@ -57,6 +59,8 @@ export function HistoryTrendChart({
   showEngland = true,
   peerByPeriod,
   peerSeriesName,
+  sipTargets = [],
+  showSipTargets = false,
 }: {
   history: HistoryRow[];
   subject?: string;
@@ -66,11 +70,16 @@ export function HistoryTrendChart({
   showEngland?: boolean;
   peerByPeriod?: Map<string, number | null>;
   peerSeriesName?: string | null;
+  sipTargets?: SipTarget[];
+  showSipTargets?: boolean;
 }) {
   const overlayHampshire = seriesMode === "compare" || showHampshire;
   const overlayEngland = seriesMode === "compare" || showEngland;
   const overlayPeer = Boolean(peerSeriesName && peerByPeriod);
   const peerKey = peerSeriesName ?? "Peer";
+  const activeTargets = showSipTargets
+    ? sipTargets.filter((t) => t.subject === subject && t.metric === metric)
+    : [];
 
   const baseRows = history
     .filter((h) => h.subject === subject)
@@ -129,7 +138,11 @@ export function HistoryTrendChart({
     ...(overlayEngland ? ["England"] : []),
     ...(overlayPeer ? [peerKey] : []),
   ];
-  const domain = focusedDomain(domainValues(rows, keys), kind);
+  const targetValues = activeTargets.map((t) => t.value);
+  const domain = focusedDomain(
+    [...domainValues(rows, keys), ...targetValues],
+    kind,
+  );
   const isPct = metric !== "scaled";
   const hasGap = rows.some((row) => row.gap);
 
@@ -141,6 +154,9 @@ export function HistoryTrendChart({
         {isPct ? "%" : ""} (zoomed to the values on display).
         {hasGap
           ? " Break at 19–22* marks COVID years with no performance-table KS2 files — lines do not connect across that gap."
+          : ""}
+        {activeTargets.length
+          ? ` SIP target line${activeTargets.length > 1 ? "s" : ""} shown for board ambition.`
           : ""}
       </p>
       <ResponsiveContainer width="100%" height={320}>
@@ -175,6 +191,20 @@ export function HistoryTrendChart({
             }}
           />
           <Legend />
+          {activeTargets.map((target) => (
+            <ReferenceLine
+              key={`${target.label}-${target.value}`}
+              y={target.value}
+              stroke="#9b2c2c"
+              strokeDasharray="2 4"
+              label={{
+                value: `${target.label}${target.byPeriod ? ` (${periodLabel(target.byPeriod)})` : ""}`,
+                fill: "#9b2c2c",
+                fontSize: 11,
+                position: "insideTopRight",
+              }}
+            />
+          ))}
           <Line
             type="monotone"
             dataKey="Bartley"

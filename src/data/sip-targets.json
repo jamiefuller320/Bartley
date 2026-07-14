@@ -1,0 +1,34 @@
+{
+  "note": "Edit these school improvement plan ambitions locally. They appear as optional overlays on year-on-year charts.",
+  "enabledByDefault": false,
+  "targets": [
+    {
+      "subject": "Reading, writing and maths",
+      "metric": "expected",
+      "label": "SIP RWM ambition",
+      "value": 70,
+      "byPeriod": "2026/2027"
+    },
+    {
+      "subject": "Reading, writing and maths",
+      "metric": "higher",
+      "label": "SIP higher-standard ambition",
+      "value": 15,
+      "byPeriod": "2026/2027"
+    },
+    {
+      "subject": "Reading",
+      "metric": "expected",
+      "label": "SIP reading ambition",
+      "value": 80,
+      "byPeriod": "2026/2027"
+    },
+    {
+      "subject": "Grammar, punctuation and spelling",
+      "metric": "expected",
+      "label": "SIP GPS ambition",
+      "value": 78,
+      "byPeriod": "2026/2027"
+    }
+  ]
+}

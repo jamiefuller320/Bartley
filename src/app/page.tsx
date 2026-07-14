@@ -1,6 +1,18 @@
-import { getBartleyMonitorData, getPeerSchoolsData } from "@/lib/data";
+import {
+  getBartleyMonitorData,
+  getChangeLog,
+  getPeerSchoolsData,
+  getSipTargets,
+} from "@/lib/data";
 import { scorecard } from "@/lib/evaluate";
-import { buildExecutiveSummary, fmtPctWithN, groupCount, threeYearRwm } from "@/lib/board";
+import {
+  buildExecutiveSummary,
+  fmtPctWithN,
+  groupCount,
+  threeYearRwm,
+  volatilityNote,
+  yearOnYear,
+} from "@/lib/board";
 import { fmtPct, fmtPp } from "@/lib/format";
 import { FindingsList } from "@/components/FindingsList";
 import { EquityChart } from "@/components/EquityChart";
@@ -9,12 +21,16 @@ import { ProgressChart } from "@/components/ProgressChart";
 import { CohortProfile } from "@/components/CohortProfile";
 import { MetricsWorkbench } from "@/components/MetricsWorkbench";
 import { ExecutiveSummaryCard } from "@/components/ExecutiveSummaryCard";
+import { ChangeLogCard } from "@/components/ChangeLogCard";
+import { GlossaryPanel } from "@/components/GlossaryPanel";
 import { SiteHeader } from "@/components/SiteHeader";
 import Link from "next/link";
 
 export default function HomePage() {
   const data = getBartleyMonitorData();
   const peers = getPeerSchoolsData();
+  const sipTargets = getSipTargets();
+  const changeLog = getChangeLog();
   const score = scorecard(data.subjects);
   const summary = buildExecutiveSummary(data, peers);
   const rwm = data.subjects.find(
@@ -24,6 +40,8 @@ export default function HomePage() {
   const progressHistory = data.progressHistory ?? [];
   const rolling = threeYearRwm(data.threeYear);
   const cohortN = groupCount(data.profile, "All pupils");
+  const yoy = yearOnYear(history, "Reading, writing and maths");
+  const volatility = volatilityNote(cohortN);
 
   return (
     <main>
@@ -51,6 +69,7 @@ export default function HomePage() {
       </section>
 
       <ExecutiveSummaryCard summary={summary} period={data.period} />
+      <ChangeLogCard changeLog={changeLog} />
 
       <section className="section section-alt" id="evaluation">
         <div className="shell">
@@ -62,6 +81,7 @@ export default function HomePage() {
               {rolling.expected != null
                 ? `; three-year average ${fmtPct(rolling.expected)}`
                 : ""}
+              {yoy.delta != null ? `; ${fmtPp(yoy.delta)} versus prior published year` : ""}
               .
             </p>
           </div>
@@ -70,9 +90,30 @@ export default function HomePage() {
             <div className="snapshot-metric" role="listitem">
               <span className="snapshot-label">RWM expected</span>
               <strong>{fmtPctWithN(score.rwmExpected, cohortN)}</strong>
+              {yoy.delta != null ? (
+                <span
+                  className={
+                    yoy.delta >= 1
+                      ? "metric-delta delta-up"
+                      : yoy.delta <= -1
+                        ? "metric-delta delta-down"
+                        : "metric-delta delta-flat"
+                  }
+                >
+                  {fmtPp(yoy.delta)} vs prior year
+                </span>
+              ) : null}
               <span className="snapshot-sub">
                 England {fmtPct(rwm?.englandExpected)} · Hampshire{" "}
                 {fmtPct(rwm?.hampshireExpected)}
+              </span>
+            </div>
+            <div className="snapshot-metric" role="listitem">
+              <span className="snapshot-label">RWM higher standard</span>
+              <strong>{fmtPctWithN(rwm?.schoolHigher, cohortN)}</strong>
+              <span className="snapshot-sub">
+                England {fmtPct(rwm?.englandHigher)} · Hampshire{" "}
+                {fmtPct(rwm?.hampshireHigher)}
               </span>
             </div>
             <div className="snapshot-metric" role="listitem">
@@ -86,11 +127,6 @@ export default function HomePage() {
               </span>
             </div>
             <div className="snapshot-metric" role="listitem">
-              <span className="snapshot-label">vs England</span>
-              <strong>{fmtPp(score.vsEngland)}</strong>
-              <span className="snapshot-sub">Combined expected standard</span>
-            </div>
-            <div className="snapshot-metric" role="listitem">
               <span className="snapshot-label">Year 6 pupils</span>
               <strong>{data.profile.pupilsAged11 ?? "—"}</strong>
               <span className="snapshot-sub">
@@ -98,6 +134,8 @@ export default function HomePage() {
               </span>
             </div>
           </div>
+
+          {volatility ? <p className="volatility-note">{volatility}</p> : null}
 
           <FindingsList findings={data.findings} />
           <p className="analysis-cta">
@@ -115,6 +153,7 @@ export default function HomePage() {
         period={data.period}
         peers={peers}
         data={data}
+        sipTargets={sipTargets}
       />
 
       <section className="section" id="equity">
@@ -181,7 +220,9 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section" id="source">
+      <GlossaryPanel />
+
+      <section className="section section-alt" id="source">
         <div className="shell source-block">
           <div className="section-intro">
             <h2>Data source</h2>
@@ -217,10 +258,10 @@ export default function HomePage() {
                   year: "numeric",
                 })
               : "date not recorded"}
-            . Use the floating slider on the charts to switch between Bartley /
-            Hampshire / England and Bartley year-on-year history. Peer overlays
-            and the peer table compare Bartley with the top three similar-size
-            local juniors.
+            . SIP ambitions live in{" "}
+            <code>src/data/sip-targets.json</code> and can be overlaid on
+            year-on-year charts. Peer overlays and the peer table compare
+            Bartley with the top three similar-size local juniors.
           </p>
         </div>
       </section>

@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getBartleyMonitorData, getPeerSchoolsData } from "@/lib/data";
+import {
+  getBartleyMonitorData,
+  getChangeLog,
+  getPeerSchoolsData,
+} from "@/lib/data";
 import { buildAnalysis } from "@/lib/analysis";
 import { buildExecutiveSummary } from "@/lib/board";
 import { SiteHeader } from "@/components/SiteHeader";
 import { PrintButton } from "@/components/PrintButton";
+import { MeetingPackCharts } from "@/components/MeetingPackCharts";
+import { GlossaryPanel } from "@/components/GlossaryPanel";
+import { ChangeLogCard } from "@/components/ChangeLogCard";
 
 export const metadata: Metadata = {
   title: "Analysis & governor questions · Bartley Insight",
@@ -17,6 +24,7 @@ export default function AnalysisPage() {
   const peers = getPeerSchoolsData();
   const analysis = buildAnalysis(data, peers);
   const summary = buildExecutiveSummary(data, peers);
+  const changeLog = getChangeLog();
 
   const themes = Array.from(
     new Set(analysis.questions.map((q) => q.theme)),
@@ -37,7 +45,7 @@ export default function AnalysisPage() {
             {data.source.refreshedAt
               ? ` (dataset refreshed ${data.source.refreshedAt})`
               : ""}
-            . For charts and source detail, see the{" "}
+            . For interactive charts, see the{" "}
             <Link href="/">dashboard</Link>.
           </p>
           <div className="hero-actions analysis-actions no-print">
@@ -53,17 +61,36 @@ export default function AnalysisPage() {
         <div className="shell">
           <div className="section-intro">
             <h2>Meeting pack snapshot</h2>
-            <p>Print this page for a paper pack; the snapshot below leads the briefing.</p>
+            <p>
+              Print this page for a paper pack. Snapshot, glossary, narrative,
+              and fixed charts below are designed to travel together.
+            </p>
           </div>
           <div className="snapshot-row" role="list">
             {summary.headlineMetrics.map((metric) => (
               <div key={metric.label} className="snapshot-metric" role="listitem">
                 <span className="snapshot-label">{metric.label}</span>
                 <strong>{metric.value}</strong>
+                {metric.delta ? (
+                  <span
+                    className={
+                      metric.deltaTone === "up"
+                        ? "metric-delta delta-up"
+                        : metric.deltaTone === "down"
+                          ? "metric-delta delta-down"
+                          : "metric-delta delta-flat"
+                    }
+                  >
+                    {metric.delta}
+                  </span>
+                ) : null}
                 <span className="snapshot-sub">{metric.detail}</span>
               </div>
             ))}
           </div>
+          {summary.volatilityNote ? (
+            <p className="volatility-note">{summary.volatilityNote}</p>
+          ) : null}
           <div className="exec-grid">
             <div className="exec-panel">
               <h3>Top risks</h3>
@@ -85,11 +112,21 @@ export default function AnalysisPage() {
         </div>
       </section>
 
+      <ChangeLogCard changeLog={changeLog} />
+      <MeetingPackCharts data={data} peers={peers} />
+      <GlossaryPanel />
+
       <section className="section">
         <div className="shell analysis-layout">
           <aside className="analysis-toc no-print" aria-label="On this page">
             <p className="analysis-toc-title">On this page</p>
             <ol>
+              <li>
+                <a href="#meeting-charts">Meeting pack charts</a>
+              </li>
+              <li>
+                <a href="#glossary">Glossary</a>
+              </li>
               {analysis.sections.map((section) => (
                 <li key={section.id}>
                   <a href={`#${section.id}`}>{section.title}</a>

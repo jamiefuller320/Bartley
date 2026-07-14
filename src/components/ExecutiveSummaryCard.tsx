@@ -15,7 +15,8 @@ export function ExecutiveSummaryCard({
           <h2>Executive summary</h2>
           <p>
             One-page board pack for {period.replace("/", "–")}: headline
-            metrics, top risks, and the questions worth asking first.
+            metrics (including year-on-year movement and higher standard), top
+            risks, and the questions worth asking first.
           </p>
         </div>
 
@@ -24,10 +25,27 @@ export function ExecutiveSummaryCard({
             <div key={metric.label} className="snapshot-metric" role="listitem">
               <span className="snapshot-label">{metric.label}</span>
               <strong>{metric.value}</strong>
+              {metric.delta ? (
+                <span
+                  className={
+                    metric.deltaTone === "up"
+                      ? "metric-delta delta-up"
+                      : metric.deltaTone === "down"
+                        ? "metric-delta delta-down"
+                        : "metric-delta delta-flat"
+                  }
+                >
+                  {metric.delta}
+                </span>
+              ) : null}
               <span className="snapshot-sub">{metric.detail}</span>
             </div>
           ))}
         </div>
+
+        {summary.volatilityNote ? (
+          <p className="volatility-note">{summary.volatilityNote}</p>
+        ) : null}
 
         <div className="exec-grid">
           <div className="exec-panel">
