@@ -77,6 +77,168 @@ a:hover {
   font-size: 1.15rem;
   letter-spacing: -0.02em;
   color: var(--forest);
+  text-decoration: none;
+}
+
+.header-nav a.nav-active {
+  color: var(--forest);
+  text-decoration: underline;
+}
+
+.analysis-cta {
+  margin-top: 1.5rem;
+  color: var(--ink-soft);
+}
+
+.analysis-cta a {
+  font-weight: 650;
+  color: var(--forest);
+}
+
+.analysis-hero {
+  padding: 3.5rem 0 2rem;
+  background:
+    linear-gradient(180deg, rgba(27, 67, 50, 0.08), transparent 70%),
+    linear-gradient(120deg, rgba(201, 162, 39, 0.08), transparent 50%);
+}
+
+.analysis-hero h1 {
+  margin: 0;
+  max-width: 18ch;
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(2rem, 4.5vw, 3.2rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  color: var(--forest);
+}
+
+.analysis-lede {
+  margin: 1.1rem 0 0;
+  max-width: 44rem;
+  font-size: 1.12rem;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.analysis-meta {
+  margin: 1rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+.analysis-layout {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 2.5rem;
+  align-items: start;
+}
+
+.analysis-toc {
+  position: sticky;
+  top: 5rem;
+  padding-top: 0.25rem;
+}
+
+.analysis-toc-title {
+  margin: 0 0 0.6rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.analysis-toc ol {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--ink-soft);
+  line-height: 1.7;
+  font-size: 0.92rem;
+}
+
+.analysis-toc a {
+  text-decoration: none;
+}
+
+.analysis-toc a:hover {
+  text-decoration: underline;
+}
+
+.analysis-section {
+  margin-bottom: 2.75rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid rgba(27, 67, 50, 0.12);
+}
+
+.analysis-section h2 {
+  margin: 0 0 0.9rem;
+  font-family: var(--font-display), Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(1.45rem, 2.5vw, 1.9rem);
+  color: var(--forest);
+}
+
+.analysis-section h3 {
+  margin: 1.5rem 0 0.7rem;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.15rem;
+  color: var(--ink);
+}
+
+.analysis-section p {
+  margin: 0 0 0.9rem;
+  line-height: 1.65;
+  color: var(--ink);
+  max-width: 46rem;
+}
+
+.analysis-section ul {
+  margin: 0.4rem 0 0;
+  padding-left: 1.2rem;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  max-width: 46rem;
+}
+
+.question-theme {
+  margin-top: 1.5rem;
+}
+
+.question-list {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.question-list li {
+  margin: 0 0 1.15rem;
+}
+
+.question-text {
+  margin: 0 0 0.35rem !important;
+  font-weight: 650;
+  color: var(--ink) !important;
+}
+
+.question-why {
+  margin: 0 !important;
+  color: var(--ink-soft) !important;
+  font-size: 0.95rem;
+}
+
+.question-why span {
+  font-weight: 650;
+  color: var(--forest);
+}
+
+@media (max-width: 900px) {
+  .analysis-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .analysis-toc {
+    position: static;
+  }
 }
 
 .header-nav {

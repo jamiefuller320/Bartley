@@ -48,7 +48,13 @@ npm run refresh-data
 
 Writes an updated snapshot to `src/data/bartley-2024-25.json`.
 
-## Historical data
+## Governor analysis
+
+Open `/analysis` for a written governing-board briefing generated from the published data, including:
+
+- Overall attainment, subject pattern, equity and progress findings
+- Strategic questions for school leaders, grouped by theme
+- Caveats about cohort size, COVID gaps and data limits
 
 Rich multi-year subject comparisons use the official **Compare school performance KS2 CSV downloads**:
 

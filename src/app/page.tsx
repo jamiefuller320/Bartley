@@ -6,6 +6,8 @@ import { EquityChart } from "@/components/EquityChart";
 import { ProgressChart } from "@/components/ProgressChart";
 import { CohortProfile } from "@/components/CohortProfile";
 import { MetricsWorkbench } from "@/components/MetricsWorkbench";
+import { SiteHeader } from "@/components/SiteHeader";
+import Link from "next/link";
 
 export default function HomePage() {
   const data = getBartleyMonitorData();
@@ -18,18 +20,7 @@ export default function HomePage() {
 
   return (
     <main>
-      <header className="site-header">
-        <div className="shell header-inner">
-          <p className="tool-mark">Bartley Insight</p>
-          <nav className="header-nav" aria-label="Sections">
-            <a href="#evaluation">Evaluation</a>
-            <a href="#charts">Charts</a>
-            <a href="#equity">Equity</a>
-            <a href="#progress">Progress</a>
-            <a href="#source">Source</a>
-          </nav>
-        </div>
-      </header>
+      <SiteHeader active="home" />
 
       <section className="hero">
         <div className="hero-atmosphere" aria-hidden="true" />
@@ -45,14 +36,9 @@ export default function HomePage() {
             <a className="btn-primary" href="#charts">
               Open charts
             </a>
-            <a
-              className="btn-ghost"
-              href={data.source.primarySite}
-              target="_blank"
-              rel="noreferrer"
-            >
-              Official school page
-            </a>
+            <Link className="btn-ghost" href="/analysis">
+              Governor analysis
+            </Link>
           </div>
         </div>
       </section>
@@ -98,6 +84,11 @@ export default function HomePage() {
           </div>
 
           <FindingsList findings={data.findings} />
+          <p className="analysis-cta">
+            Prefer a written briefing for the board?{" "}
+            <Link href="/analysis">Open the governor analysis and question set</Link>
+            .
+          </p>
         </div>
       </section>
 
