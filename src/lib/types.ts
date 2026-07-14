@@ -120,3 +120,74 @@ export interface SchoolMonitorData {
   findings: Finding[];
   threeYear?: unknown[];
 }
+
+export interface PeerLatestSnapshot {
+  rwmExpected: number | null;
+  rwmHigher: number | null;
+  readingExpected: number | null;
+  readingHigher: number | null;
+  readingScaled: number | null;
+  writingExpected: number | null;
+  writingHigher: number | null;
+  mathsExpected: number | null;
+  mathsHigher: number | null;
+  mathsScaled: number | null;
+  gpsExpected: number | null;
+  gpsHigher: number | null;
+  gpsScaled: number | null;
+  scienceExpected: number | null;
+  readingProgress: number | null;
+  writingProgress: number | null;
+  mathsProgress: number | null;
+  boysRwmExpected: number | null;
+  girlsRwmExpected: number | null;
+  disadvantagedRwmExpected: number | null;
+  notDisadvantagedRwmExpected: number | null;
+  eligiblePupils: number | null;
+  pupilsAged11: number | null;
+  disadvantagedPercent: number | null;
+}
+
+export interface PeerSchool {
+  urn: string;
+  name: string;
+  short: string;
+  postcode: string;
+  reason: string;
+  town: string;
+  ageRange: string;
+  laEstab: string;
+  latest: PeerLatestSnapshot;
+  compareUrl: string;
+}
+
+export interface PeerHistoryRow {
+  period: string;
+  label: string;
+  subject: string;
+  byUrnExpected: Record<string, number | null>;
+  byUrnHigher: Record<string, number | null>;
+  byUrnScaled: Record<string, number | null>;
+  averageExpected: number | null;
+  averageHigher: number | null;
+  averageScaled: number | null;
+}
+
+export interface PeerSchoolsBundle {
+  selection: {
+    method: string;
+    bartleyUrn: string;
+    bartleyLatestEligible: number;
+    years: string[];
+  };
+  peers: PeerSchool[];
+  peerAverageLatest: {
+    rwmExpected: number | null;
+    readingExpected: number | null;
+    writingExpected: number | null;
+    mathsExpected: number | null;
+    gpsExpected: number | null;
+    scienceExpected: number | null;
+  };
+  history: PeerHistoryRow[];
+}

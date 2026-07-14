@@ -1,0 +1,1631 @@
+{
+  "selection": {
+    "method": "Hampshire LEA junior schools (ages 7\u201311), open, eligible cohort within ~40% of Bartley (81), postcodes in SO40\u2013SO53 / BH24 / SP6 vicinity; ranked by 2024/25 combined RWM expected standard.",
+    "bartleyUrn": "116338",
+    "bartleyLatestEligible": 81.0,
+    "years": [
+      "2015-2016",
+      "2016-2017",
+      "2017-2018",
+      "2018-2019",
+      "2022-2023",
+      "2023-2024",
+      "2024-2025"
+    ]
+  },
+  "peers": [
+    {
+      "urn": "116051",
+      "name": "Lymington Junior School",
+      "short": "Lymington",
+      "postcode": "SO41 9GP",
+      "reason": "Highest RWM among similar-size juniors in the New Forest / Waterside fringe (2024/25).",
+      "town": "Lymington",
+      "ageRange": "7-11",
+      "laEstab": "8502332",
+      "latest": {
+        "rwmExpected": 81.0,
+        "rwmHigher": 21.0,
+        "readingExpected": 84.0,
+        "readingHigher": 38.0,
+        "readingScaled": 107.0,
+        "writingExpected": 84.0,
+        "writingHigher": 29.0,
+        "mathsExpected": 89.0,
+        "mathsHigher": 43.0,
+        "mathsScaled": 107.0,
+        "gpsExpected": 86.0,
+        "gpsHigher": 44.0,
+        "gpsScaled": 108.0,
+        "scienceExpected": 94.0,
+        "readingProgress": null,
+        "writingProgress": null,
+        "mathsProgress": null,
+        "boysRwmExpected": 79.0,
+        "girlsRwmExpected": 83.0,
+        "disadvantagedRwmExpected": 67.0,
+        "notDisadvantagedRwmExpected": 83.0,
+        "eligiblePupils": 63.0,
+        "pupilsAged11": 63.0,
+        "disadvantagedPercent": 14.0
+      },
+      "compareUrl": "https://www.compare-school-performance.service.gov.uk/school/116051"
+    },
+    {
+      "urn": "116007",
+      "name": "Hiltingbury Junior School",
+      "short": "Hiltingbury",
+      "postcode": "SO53 5NP",
+      "reason": "Joint-highest RWM among similar-size juniors in the wider southern Hampshire vicinity (2024/25).",
+      "town": "Eastleigh",
+      "ageRange": "7-11",
+      "laEstab": "8502274",
+      "latest": {
+        "rwmExpected": 81.0,
+        "rwmHigher": 14.0,
+        "readingExpected": 87.0,
+        "readingHigher": 52.0,
+        "readingScaled": 109.0,
+        "writingExpected": 92.0,
+        "writingHigher": 23.0,
+        "mathsExpected": 87.0,
+        "mathsHigher": 45.0,
+        "mathsScaled": 108.0,
+        "gpsExpected": 92.0,
+        "gpsHigher": 58.0,
+        "gpsScaled": 110.0,
+        "scienceExpected": 85.0,
+        "readingProgress": null,
+        "writingProgress": null,
+        "mathsProgress": null,
+        "boysRwmExpected": 78.0,
+        "girlsRwmExpected": 84.0,
+        "disadvantagedRwmExpected": 60.0,
+        "notDisadvantagedRwmExpected": 84.0,
+        "eligiblePupils": 95.0,
+        "pupilsAged11": 95.0,
+        "disadvantagedPercent": 11.0
+      },
+      "compareUrl": "https://www.compare-school-performance.service.gov.uk/school/116007"
+    },
+    {
+      "urn": "115998",
+      "name": "North Baddesley Junior School",
+      "short": "N. Baddesley",
+      "postcode": "SO52 9EP",
+      "reason": "Third-highest RWM among similar-size juniors near the Southampton fringe (2024/25).",
+      "town": "Southampton",
+      "ageRange": "7-11",
+      "laEstab": "8502265",
+      "latest": {
+        "rwmExpected": 72.0,
+        "rwmHigher": 18.0,
+        "readingExpected": 74.0,
+        "readingHigher": 38.0,
+        "readingScaled": 106.0,
+        "writingExpected": 86.0,
+        "writingHigher": 22.0,
+        "mathsExpected": 83.0,
+        "mathsHigher": 33.0,
+        "mathsScaled": 106.0,
+        "gpsExpected": 84.0,
+        "gpsHigher": 40.0,
+        "gpsScaled": 108.0,
+        "scienceExpected": 93.0,
+        "readingProgress": null,
+        "writingProgress": null,
+        "mathsProgress": null,
+        "boysRwmExpected": 65.0,
+        "girlsRwmExpected": 81.0,
+        "disadvantagedRwmExpected": 41.0,
+        "notDisadvantagedRwmExpected": 79.0,
+        "eligiblePupils": 90.0,
+        "pupilsAged11": 89.0,
+        "disadvantagedPercent": 19.0
+      },
+      "compareUrl": "https://www.compare-school-performance.service.gov.uk/school/115998"
+    }
+  ],
+  "peerAverageLatest": {
+    "rwmExpected": 78.0,
+    "readingExpected": 81.7,
+    "writingExpected": 87.3,
+    "mathsExpected": 86.3,
+    "gpsExpected": 87.3,
+    "scienceExpected": 90.7
+  },
+  "history": [
+    {
+      "period": "2015/2016",
+      "label": "2015/16",
+      "subject": "Reading, writing and maths",
+      "byUrnExpected": {
+        "116051": 86.0,
+        "116007": 68.0,
+        "115998": 57.0
+      },
+      "byUrnHigher": {
+        "116051": 19.0,
+        "116007": 10.0,
+        "115998": 15.0
+      },
+      "byUrnScaled": {},
+      "averageExpected": 70.3,
+      "averageHigher": 14.7,
+      "averageScaled": null
+    },
+    {
+      "period": "2015/2016",
+      "label": "2015/16",
+      "subject": "Reading",
+      "byUrnExpected": {
+        "116051": 90.0,
+        "116007": 82.0,
+        "115998": 67.0
+      },
+      "byUrnHigher": {
+        "116051": 44.0,
+        "116007": 32.0,
+        "115998": 32.0
+      },
+      "byUrnScaled": {
+        "116051": 108.0,
+        "116007": 106.0,
+        "115998": 105.0
+      },
+      "averageExpected": 79.7,
+      "averageHigher": 36.0,
+      "averageScaled": 106.3
+    },
+    {
+      "period": "2015/2016",
+      "label": "2015/16",
+      "subject": "Writing",
+      "byUrnExpected": {
+        "116051": 92.0,
+        "116007": 92.0,
+        "115998": 75.0
+      },
+      "byUrnHigher": {
+        "116051": 25.0,
+        "116007": 27.0,
+        "115998": 25.0
+      },
+      "byUrnScaled": {},
+      "averageExpected": 86.3,
+      "averageHigher": 25.7,
+      "averageScaled": null
+    },
+    {
+      "period": "2015/2016",
+      "label": "2015/16",
+      "subject": "Maths",
+      "byUrnExpected": {
+        "116051": 100.0,
+        "116007": 76.0,
+        "115998": 77.0
+      },
+      "byUrnHigher": {
+        "116051": 38.0,
+        "116007": 19.0,
+        "115998": 32.0
+      },
+      "byUrnScaled": {
+        "116051": 108.0,
+        "116007": 104.0,
+        "115998": 105.0
+      },
+      "averageExpected": 84.3,
+      "averageHigher": 29.7,
+      "averageScaled": 105.7
+    },
+    {
+      "period": "2015/2016",
+      "label": "2015/16",
+      "subject": "Grammar, punctuation and spelling",
+      "byUrnExpected": {
+        "116051": 95.0,
+        "116007": 85.0,
+        "115998": 82.0
+      },
+      "byUrnHigher": {
+        "116051": 43.0,
+        "116007": 30.0,
+        "115998": 27.0
+      },
+      "byUrnScaled": {
+        "116051": 109.0,
+        "116007": 107.0,
+        "115998": 106.0
+      },
+      "averageExpected": 87.3,
+      "averageHigher": 33.3,
+      "averageScaled": 107.3
+    },
+    {
+      "period": "2015/2016",
+      "label": "2015/16",
+      "subject": "Science",
+      "byUrnExpected": {
+        "116051": 97.0,
+        "116007": 88.0,
+        "115998": 82.0
+      },
+      "byUrnHigher": {},
+      "byUrnScaled": {},
+      "averageExpected": 89.0,
+      "averageHigher": null,
+      "averageScaled": null
+    },
+    {
+      "period": "2016/2017",
+      "label": "2016/17",
+      "subject": "Reading, writing and maths",
+      "byUrnExpected": {
+        "116051": 78.0,
+        "116007": 77.0,
+        "115998": 69.0
+      },
+      "byUrnHigher": {
+        "116051": 10.0,
+        "116007": 18.0,
+        "115998": 14.0
+      },
+      "byUrnScaled": {},
+      "averageExpected": 74.7,
+      "averageHigher": 14.0,
+      "averageScaled": null
+    },
+    {
+      "period": "2016/2017",
+      "label": "2016/17",
+      "subject": "Reading",
+      "byUrnExpected": {
+        "116051": 87.0,
+        "116007": 89.0,
+        "115998": 83.0
+      },
+      "byUrnHigher": {
+        "116051": 41.0,
+        "116007": 44.0,
+        "115998": 23.0
+      },
+      "byUrnScaled": {
+        "116051": 107.0,
+        "116007": 108.0,
+        "115998": 104.0
+      },
+      "averageExpected": 86.3,
+      "averageHigher": 36.0,
+      "averageScaled": 106.3
+    },
+    {
+      "period": "2016/2017",
+      "label": "2016/17",
+      "subject": "Writing",
+      "byUrnExpected": {
+        "116051": 84.0,
+        "116007": 84.0,
+        "115998": 83.0
+      },
+      "byUrnHigher": {
+        "116051": 16.0,
+        "116007": 31.0,
+        "115998": 23.0
+      },
+      "byUrnScaled": {},
+      "averageExpected": 83.7,
+      "averageHigher": 23.3,
+      "averageScaled": null
+    },
+    {
+      "period": "2016/2017",
+      "label": "2016/17",
+      "subject": "Maths",
+      "byUrnExpected": {
+        "116051": 84.0,
+        "116007": 93.0,
+        "115998": 75.0
+      },
+      "byUrnHigher": {
+        "116051": 27.0,
+        "116007": 36.0,
+        "115998": 23.0
+      },
+      "byUrnScaled": {
+        "116051": 105.0,
+        "116007": 107.0,
+        "115998": 104.0
+      },
+      "averageExpected": 84.0,
+      "averageHigher": 28.7,
+      "averageScaled": 105.3
+    },
+    {
+      "period": "2016/2017",
+      "label": "2016/17",
+      "subject": "Grammar, punctuation and spelling",
+      "byUrnExpected": {
+        "116051": 89.0,
+        "116007": 94.0,
+        "115998": 84.0
+      },
+      "byUrnHigher": {
+        "116051": 44.0,
+        "116007": 31.0,
+        "115998": 30.0
+      },
+      "byUrnScaled": {
+        "116051": 108.0,
+        "116007": 107.0,
+        "115998": 106.0
+      },
+      "averageExpected": 89.0,
+      "averageHigher": 35.0,
+      "averageScaled": 107.0
+    },
+    {
+      "period": "2016/2017",
+      "label": "2016/17",
+      "subject": "Science",
+      "byUrnExpected": {
+        "116051": 79.0,
+        "116007": 94.0,
+        "115998": 80.0
+      },
+      "byUrnHigher": {},
+      "byUrnScaled": {},
+      "averageExpected": 84.3,
+      "averageHigher": null,
+      "averageScaled": null
+    },
+    {
+      "period": "2017/2018",
+      "label": "2017/18",
+      "subject": "Reading, writing and maths",
+      "byUrnExpected": {
+        "116051": 91.0,
+        "116007": 77.0,
+        "115998": 75.0
+      },
+      "byUrnHigher": {
+        "116051": 19.0,
+        "116007": 21.0,
+        "115998": 19.0
+      },
+      "byUrnScaled": {},
+      "averageExpected": 81.0,
+      "averageHigher": 19.7,
+      "averageScaled": null
+    },
+    {
+      "period": "2017/2018",
+      "label": "2017/18",
+      "subject": "Reading",
+      "byUrnExpected": {
+        "116051": 97.0,
+        "116007": 85.0,
+        "115998": 83.0
+      },
+      "byUrnHigher": {
+        "116051": 44.0,
+        "116007": 41.0,
+        "115998": 36.0
+      },
+      "byUrnScaled": {
+        "116051": 109.0,
+        "116007": 108.0,
+        "115998": 107.0
+      },
+      "averageExpected": 88.3,
+      "averageHigher": 40.3,
+      "averageScaled": 108.0
+    },
+    {
+      "period": "2017/2018",
+      "label": "2017/18",
+      "subject": "Writing",
+      "byUrnExpected": {
+        "116051": 92.0,
+        "116007": 86.0,
+        "115998": 84.0
+      },
+      "byUrnHigher": {
+        "116051": 25.0,
+        "116007": 29.0,
+        "115998": 30.0
+      },
+      "byUrnScaled": {},
+      "averageExpected": 87.3,
+      "averageHigher": 28.0,
+      "averageScaled": null
+    },
+    {
+      "period": "2017/2018",
+      "label": "2017/18",
+      "subject": "Maths",
+      "byUrnExpected": {
+        "116051": 95.0,
+        "116007": 88.0,
+        "115998": 84.0
+      },
+      "byUrnHigher": {
+        "116051": 39.0,
+        "116007": 52.0,
+        "115998": 30.0
+      },
+      "byUrnScaled": {
+        "116051": 108.0,
+        "116007": 108.0,
+        "115998": 105.0
+      },
+      "averageExpected": 89.0,
+      "averageHigher": 40.3,
+      "averageScaled": 107.0
+    },
+    {
+      "period": "2017/2018",
+      "label": "2017/18",
+      "subject": "Grammar, punctuation and spelling",
+      "byUrnExpected": {
+        "116051": 98.0,
+        "116007": 85.0,
+        "115998": 80.0
+      },
+      "byUrnHigher": {
+        "116051": 53.0,
+        "116007": 46.0,
+        "115998": 36.0
+      },
+      "byUrnScaled": {
+        "116051": 110.0,
+        "116007": 108.0,
+        "115998": 107.0
+      },
+      "averageExpected": 87.7,
+      "averageHigher": 45.0,
+      "averageScaled": 108.3
+    },
+    {
+      "period": "2017/2018",
+      "label": "2017/18",
+      "subject": "Science",
+      "byUrnExpected": {
+        "116051": 97.0,
+        "116007": 85.0,
+        "115998": 89.0
+      },
+      "byUrnHigher": {},
+      "byUrnScaled": {},
+      "averageExpected": 90.3,
+      "averageHigher": null,
+      "averageScaled": null
+    },
+    {
+      "period": "2018/2019",
+      "label": "2018/19",
+      "subject": "Reading, writing and maths",
+      "byUrnExpected": {
+        "116051": 93.0,
+        "116007": 84.0,
+        "115998": 88.0
+      },
+      "byUrnHigher": {
+        "116051": 20.0,
+        "116007": 26.0,
+        "115998": 16.0
+      },
+      "byUrnScaled": {},
+      "averageExpected": 88.3,
+      "averageHigher": 20.7,
+      "averageScaled": null
+    },
+    {
+      "period": "2018/2019",
+      "label": "2018/19",
+      "subject": "Reading",
+      "byUrnExpected": {
+        "116051": 93.0,
+        "116007": 85.0,
+        "115998": 89.0
+      },
+      "byUrnHigher": {
+        "116051": 53.0,
+        "116007": 45.0,
+        "115998": 39.0
+      },
+      "byUrnScaled": {
+        "116051": 109.0,
+        "116007": 108.0,
+        "115998": 107.0
+      },
+      "averageExpected": 89.0,
+      "averageHigher": 45.7,
+      "averageScaled": 108.0
+    },
+    {
+      "period": "2018/2019",
+      "label": "2018/19",
+      "subject": "Writing",
+      "byUrnExpected": {
+        "116051": 95.0,
+        "116007": 93.0,
+        "115998": 94.0
+      },
+      "byUrnHigher": {
+        "116051": 32.0,
+        "116007": 36.0,
+        "115998": 34.0
+      },
+      "byUrnScaled": {},
+      "averageExpected": 94.0,
+      "averageHigher": 34.0,
+      "averageScaled": null
+    },
+    {
+      "period": "2018/2019",
+      "label": "2018/19",
+      "subject": "Maths",
+      "byUrnExpected": {
+        "116051": 95.0,
+        "116007": 94.0,
+        "115998": 94.0
+      },
+      "byUrnHigher": {
+        "116051": 39.0,
+        "116007": 52.0,
+        "115998": 42.0
+      },
+      "byUrnScaled": {
+        "116051": 108.0,
+        "116007": 110.0,
+        "115998": 108.0
+      },
+      "averageExpected": 94.3,
+      "averageHigher": 44.3,
+      "averageScaled": 108.7
+    },
+    {
+      "period": "2018/2019",
+      "label": "2018/19",
+      "subject": "Grammar, punctuation and spelling",
+      "byUrnExpected": {
+        "116051": 93.0,
+        "116007": 90.0,
+        "115998": 92.0
+      },
+      "byUrnHigher": {
+        "116051": 54.0,
+        "116007": 54.0,
+        "115998": 50.0
+      },
+      "byUrnScaled": {
+        "116051": 110.0,
+        "116007": 110.0,
+        "115998": 109.0
+      },
+      "averageExpected": 91.7,
+      "averageHigher": 52.7,
+      "averageScaled": 109.7
+    },
+    {
+      "period": "2018/2019",
+      "label": "2018/19",
+      "subject": "Science",
+      "byUrnExpected": {
+        "116051": 95.0,
+        "116007": 94.0,
+        "115998": 94.0
+      },
+      "byUrnHigher": {},
+      "byUrnScaled": {},
+      "averageExpected": 94.3,
+      "averageHigher": null,
+      "averageScaled": null
+    },
+    {
+      "period": "2022/2023",
+      "label": "2022/23",
+      "subject": "Reading, writing and maths",
+      "byUrnExpected": {
+        "116051": 73.0,
+        "116007": 83.0,
+        "115998": 76.0
+      },
+      "byUrnHigher": {
+        "116051": 6.0,
+        "116007": 11.0,
+        "115998": 24.0
+      },
+      "byUrnScaled": {},
+      "averageExpected": 77.3,
+      "averageHigher": 13.7,
+      "averageScaled": null
+    },
+    {
+      "period": "2022/2023",
+      "label": "2022/23",
+      "subject": "Reading",
+      "byUrnExpected": {
+        "116051": 81.0,
+        "116007": 91.0,
+        "115998": 84.0
+      },
+      "byUrnHigher": {
+        "116051": 40.0,
+        "116007": 47.0,
+        "115998": 41.0
+      },
+      "byUrnScaled": {
+        "116051": 107.0,
+        "116007": 109.0,
+        "115998": 108.0
+      },
+      "averageExpected": 85.3,
+      "averageHigher": 42.7,
+      "averageScaled": 108.0
+    },
+    {
+      "period": "2022/2023",
+      "label": "2022/23",
+      "subject": "Writing",
+      "byUrnExpected": {
+        "116051": 79.0,
+        "116007": 90.0,
+        "115998": 84.0
+      },
+      "byUrnHigher": {
+        "116051": 27.0,
+        "116007": 15.0,
+        "115998": 32.0
+      },
+      "byUrnScaled": {},
+      "averageExpected": 84.3,
+      "averageHigher": 24.7,
+      "averageScaled": null
+    },
+    {
+      "period": "2022/2023",
+      "label": "2022/23",
+      "subject": "Maths",
+      "byUrnExpected": {
+        "116051": 83.0,
+        "116007": 90.0,
+        "115998": 87.0
+      },
+      "byUrnHigher": {
+        "116051": 13.0,
+        "116007": 42.0,
+        "115998": 38.0
+      },
+      "byUrnScaled": {
+        "116051": 104.0,
+        "116007": 108.0,
+        "115998": 107.0
+      },
+      "averageExpected": 86.7,
+      "averageHigher": 31.0,
+      "averageScaled": 106.3
+    },
+    {
+      "period": "2022/2023",
+      "label": "2022/23",
+      "subject": "Grammar, punctuation and spelling",
+      "byUrnExpected": {
+        "116051": 75.0,
+        "116007": 92.0,
+        "115998": 86.0
+      },
+      "byUrnHigher": {
+        "116051": 30.0,
+        "116007": 49.0,
+        "115998": 44.0
+      },
+      "byUrnScaled": {
+        "116051": 105.0,
+        "116007": 110.0,
+        "115998": 108.0
+      },
+      "averageExpected": 84.3,
+      "averageHigher": 41.0,
+      "averageScaled": 107.7
+    },
+    {
+      "period": "2022/2023",
+      "label": "2022/23",
+      "subject": "Science",
+      "byUrnExpected": {
+        "116051": 92.0,
+        "116007": 81.0,
+        "115998": 89.0
+      },
+      "byUrnHigher": {},
+      "byUrnScaled": {},
+      "averageExpected": 87.3,
+      "averageHigher": null,
+      "averageScaled": null
+    },
+    {
+      "period": "2023/2024",
+      "label": "2023/24",
+      "subject": "Reading, writing and maths",
+      "byUrnExpected": {
+        "116051": 66.0,
+        "116007": 81.0,
+        "115998": 67.0
+      },
+      "byUrnHigher": {
+        "116051": 8.0,
+        "116007": 23.0,
+        "115998": 17.0
+      },
+      "byUrnScaled": {},
+      "averageExpected": 71.3,
+      "averageHigher": 16.0,
+      "averageScaled": null
+    },
+    {
+      "period": "2023/2024",
+      "label": "2023/24",
+      "subject": "Reading",
+      "byUrnExpected": {
+        "116051": 77.0,
+        "116007": 86.0,
+        "115998": 80.0
+      },
+      "byUrnHigher": {
+        "116051": 28.0,
+        "116007": 55.0,
+        "115998": 39.0
+      },
+      "byUrnScaled": {
+        "116051": 104.0,
+        "116007": 109.0,
+        "115998": 106.0
+      },
+      "averageExpected": 81.0,
+      "averageHigher": 40.7,
+      "averageScaled": 106.3
+    },
+    {
+      "period": "2023/2024",
+      "label": "2023/24",
+      "subject": "Writing",
+      "byUrnExpected": {
+        "116051": 78.0,
+        "116007": 91.0,
+        "115998": 83.0
+      },
+      "byUrnHigher": {
+        "116051": 12.0,
+        "116007": 28.0,
+        "115998": 19.0
+      },
+      "byUrnScaled": {},
+      "averageExpected": 84.0,
+      "averageHigher": 19.7,
+      "averageScaled": null
+    },
+    {
+      "period": "2023/2024",
+      "label": "2023/24",
+      "subject": "Maths",
+      "byUrnExpected": {
+        "116051": 78.0,
+        "116007": 92.0,
+        "115998": 78.0
+      },
+      "byUrnHigher": {
+        "116051": 31.0,
+        "116007": 43.0,
+        "115998": 29.0
+      },
+      "byUrnScaled": {
+        "116051": 105.0,
+        "116007": 109.0,
+        "115998": 105.0
+      },
+      "averageExpected": 82.7,
+      "averageHigher": 34.3,
+      "averageScaled": 106.3
+    },
+    {
+      "period": "2023/2024",
+      "label": "2023/24",
+      "subject": "Grammar, punctuation and spelling",
+      "byUrnExpected": {
+        "116051": 78.0,
+        "116007": 91.0,
+        "115998": 81.0
+      },
+      "byUrnHigher": {
+        "116051": 25.0,
+        "116007": 61.0,
+        "115998": 38.0
+      },
+      "byUrnScaled": {
+        "116051": 104.0,
+        "116007": 111.0,
+        "115998": 106.0
+      },
+      "averageExpected": 83.3,
+      "averageHigher": 41.3,
+      "averageScaled": 107.0
+    },
+    {
+      "period": "2023/2024",
+      "label": "2023/24",
+      "subject": "Science",
+      "byUrnExpected": {
+        "116051": 82.0,
+        "116007": 90.0,
+        "115998": 92.0
+      },
+      "byUrnHigher": {},
+      "byUrnScaled": {},
+      "averageExpected": 88.0,
+      "averageHigher": null,
+      "averageScaled": null
+    },
+    {
+      "period": "2024/2025",
+      "label": "2024/25",
+      "subject": "Reading, writing and maths",
+      "byUrnExpected": {
+        "116051": 81.0,
+        "116007": 81.0,
+        "115998": 72.0
+      },
+      "byUrnHigher": {
+        "116051": 21.0,
+        "116007": 14.0,
+        "115998": 18.0
+      },
+      "byUrnScaled": {},
+      "averageExpected": 78.0,
+      "averageHigher": 17.7,
+      "averageScaled": null
+    },
+    {
+      "period": "2024/2025",
+      "label": "2024/25",
+      "subject": "Reading",
+      "byUrnExpected": {
+        "116051": 84.0,
+        "116007": 87.0,
+        "115998": 74.0
+      },
+      "byUrnHigher": {
+        "116051": 38.0,
+        "116007": 52.0,
+        "115998": 38.0
+      },
+      "byUrnScaled": {
+        "116051": 107.0,
+        "116007": 109.0,
+        "115998": 106.0
+      },
+      "averageExpected": 81.7,
+      "averageHigher": 42.7,
+      "averageScaled": 107.3
+    },
+    {
+      "period": "2024/2025",
+      "label": "2024/25",
+      "subject": "Writing",
+      "byUrnExpected": {
+        "116051": 84.0,
+        "116007": 92.0,
+        "115998": 86.0
+      },
+      "byUrnHigher": {
+        "116051": 29.0,
+        "116007": 23.0,
+        "115998": 22.0
+      },
+      "byUrnScaled": {},
+      "averageExpected": 87.3,
+      "averageHigher": 24.7,
+      "averageScaled": null
+    },
+    {
+      "period": "2024/2025",
+      "label": "2024/25",
+      "subject": "Maths",
+      "byUrnExpected": {
+        "116051": 89.0,
+        "116007": 87.0,
+        "115998": 83.0
+      },
+      "byUrnHigher": {
+        "116051": 43.0,
+        "116007": 45.0,
+        "115998": 33.0
+      },
+      "byUrnScaled": {
+        "116051": 107.0,
+        "116007": 108.0,
+        "115998": 106.0
+      },
+      "averageExpected": 86.3,
+      "averageHigher": 40.3,
+      "averageScaled": 107.0
+    },
+    {
+      "period": "2024/2025",
+      "label": "2024/25",
+      "subject": "Grammar, punctuation and spelling",
+      "byUrnExpected": {
+        "116051": 86.0,
+        "116007": 92.0,
+        "115998": 84.0
+      },
+      "byUrnHigher": {
+        "116051": 44.0,
+        "116007": 58.0,
+        "115998": 40.0
+      },
+      "byUrnScaled": {
+        "116051": 108.0,
+        "116007": 110.0,
+        "115998": 108.0
+      },
+      "averageExpected": 87.3,
+      "averageHigher": 47.3,
+      "averageScaled": 108.7
+    },
+    {
+      "period": "2024/2025",
+      "label": "2024/25",
+      "subject": "Science",
+      "byUrnExpected": {
+        "116051": 94.0,
+        "116007": 85.0,
+        "115998": 93.0
+      },
+      "byUrnHigher": {},
+      "byUrnScaled": {},
+      "averageExpected": 90.7,
+      "averageHigher": null,
+      "averageScaled": null
+    }
+  ],
+  "byUrnYearMetrics": {
+    "115998": [
+      {
+        "period": "2015/2016",
+        "label": "2015/16",
+        "metrics": {
+          "rwmExpected": 57.0,
+          "rwmHigher": 15.0,
+          "readingExpected": 67.0,
+          "readingHigher": 32.0,
+          "readingScaled": 105.0,
+          "writingExpected": 75.0,
+          "writingHigher": 25.0,
+          "mathsExpected": 77.0,
+          "mathsHigher": 32.0,
+          "mathsScaled": 105.0,
+          "gpsExpected": 82.0,
+          "gpsHigher": 27.0,
+          "gpsScaled": 106.0,
+          "scienceExpected": 82.0,
+          "readingProgress": 1.3,
+          "writingProgress": 0.7,
+          "mathsProgress": 1.8,
+          "boysRwmExpected": 52.0,
+          "girlsRwmExpected": 61.0,
+          "disadvantagedRwmExpected": 38.0,
+          "notDisadvantagedRwmExpected": 60.0,
+          "eligiblePupils": 60.0,
+          "pupilsAged11": 59.0,
+          "disadvantagedPercent": 13.0
+        }
+      },
+      {
+        "period": "2016/2017",
+        "label": "2016/17",
+        "metrics": {
+          "rwmExpected": 69.0,
+          "rwmHigher": 14.0,
+          "readingExpected": 83.0,
+          "readingHigher": 23.0,
+          "readingScaled": 104.0,
+          "writingExpected": 83.0,
+          "writingHigher": 23.0,
+          "mathsExpected": 75.0,
+          "mathsHigher": 23.0,
+          "mathsScaled": 104.0,
+          "gpsExpected": 84.0,
+          "gpsHigher": 30.0,
+          "gpsScaled": 106.0,
+          "scienceExpected": 80.0,
+          "readingProgress": -1.2,
+          "writingProgress": 0.4,
+          "mathsProgress": -1.3,
+          "boysRwmExpected": 71.0,
+          "girlsRwmExpected": 67.0,
+          "disadvantagedRwmExpected": 67.0,
+          "notDisadvantagedRwmExpected": 69.0,
+          "eligiblePupils": 64.0,
+          "pupilsAged11": 63.0,
+          "disadvantagedPercent": 23.0
+        }
+      },
+      {
+        "period": "2017/2018",
+        "label": "2017/18",
+        "metrics": {
+          "rwmExpected": 75.0,
+          "rwmHigher": 19.0,
+          "readingExpected": 83.0,
+          "readingHigher": 36.0,
+          "readingScaled": 107.0,
+          "writingExpected": 84.0,
+          "writingHigher": 30.0,
+          "mathsExpected": 84.0,
+          "mathsHigher": 30.0,
+          "mathsScaled": 105.0,
+          "gpsExpected": 80.0,
+          "gpsHigher": 36.0,
+          "gpsScaled": 107.0,
+          "scienceExpected": 89.0,
+          "readingProgress": 0.9,
+          "writingProgress": 1.1,
+          "mathsProgress": 0.5,
+          "boysRwmExpected": 78.0,
+          "girlsRwmExpected": 70.0,
+          "disadvantagedRwmExpected": 36.0,
+          "notDisadvantagedRwmExpected": 86.0,
+          "eligiblePupils": 64.0,
+          "pupilsAged11": 63.0,
+          "disadvantagedPercent": 22.0
+        }
+      },
+      {
+        "period": "2018/2019",
+        "label": "2018/19",
+        "metrics": {
+          "rwmExpected": 88.0,
+          "rwmHigher": 16.0,
+          "readingExpected": 89.0,
+          "readingHigher": 39.0,
+          "readingScaled": 107.0,
+          "writingExpected": 94.0,
+          "writingHigher": 34.0,
+          "mathsExpected": 94.0,
+          "mathsHigher": 42.0,
+          "mathsScaled": 108.0,
+          "gpsExpected": 92.0,
+          "gpsHigher": 50.0,
+          "gpsScaled": 109.0,
+          "scienceExpected": 94.0,
+          "readingProgress": 1.0,
+          "writingProgress": 2.1,
+          "mathsProgress": 1.6,
+          "boysRwmExpected": 84.0,
+          "girlsRwmExpected": 91.0,
+          "disadvantagedRwmExpected": 63.0,
+          "notDisadvantagedRwmExpected": 91.0,
+          "eligiblePupils": 64.0,
+          "pupilsAged11": 64.0,
+          "disadvantagedPercent": 13.0
+        }
+      },
+      {
+        "period": "2022/2023",
+        "label": "2022/23",
+        "metrics": {
+          "rwmExpected": 76.0,
+          "rwmHigher": 24.0,
+          "readingExpected": 84.0,
+          "readingHigher": 41.0,
+          "readingScaled": 108.0,
+          "writingExpected": 84.0,
+          "writingHigher": 32.0,
+          "mathsExpected": 87.0,
+          "mathsHigher": 38.0,
+          "mathsScaled": 107.0,
+          "gpsExpected": 86.0,
+          "gpsHigher": 44.0,
+          "gpsScaled": 108.0,
+          "scienceExpected": 89.0,
+          "readingProgress": 0.9,
+          "writingProgress": 1.8,
+          "mathsProgress": 1.3,
+          "boysRwmExpected": 78.0,
+          "girlsRwmExpected": 75.0,
+          "disadvantagedRwmExpected": 30.0,
+          "notDisadvantagedRwmExpected": 85.0,
+          "eligiblePupils": 63.0,
+          "pupilsAged11": 64.0,
+          "disadvantagedPercent": 16.0
+        }
+      },
+      {
+        "period": "2023/2024",
+        "label": "2023/24",
+        "metrics": {
+          "rwmExpected": 67.0,
+          "rwmHigher": 17.0,
+          "readingExpected": 80.0,
+          "readingHigher": 39.0,
+          "readingScaled": 106.0,
+          "writingExpected": 83.0,
+          "writingHigher": 19.0,
+          "mathsExpected": 78.0,
+          "mathsHigher": 29.0,
+          "mathsScaled": 105.0,
+          "gpsExpected": 81.0,
+          "gpsHigher": 38.0,
+          "gpsScaled": 106.0,
+          "scienceExpected": 92.0,
+          "readingProgress": null,
+          "writingProgress": null,
+          "mathsProgress": null,
+          "boysRwmExpected": 66.0,
+          "girlsRwmExpected": 69.0,
+          "disadvantagedRwmExpected": 29.0,
+          "notDisadvantagedRwmExpected": 75.0,
+          "eligiblePupils": 89.0,
+          "pupilsAged11": 91.0,
+          "disadvantagedPercent": 16.0
+        }
+      },
+      {
+        "period": "2024/2025",
+        "label": "2024/25",
+        "metrics": {
+          "rwmExpected": 72.0,
+          "rwmHigher": 18.0,
+          "readingExpected": 74.0,
+          "readingHigher": 38.0,
+          "readingScaled": 106.0,
+          "writingExpected": 86.0,
+          "writingHigher": 22.0,
+          "mathsExpected": 83.0,
+          "mathsHigher": 33.0,
+          "mathsScaled": 106.0,
+          "gpsExpected": 84.0,
+          "gpsHigher": 40.0,
+          "gpsScaled": 108.0,
+          "scienceExpected": 93.0,
+          "readingProgress": null,
+          "writingProgress": null,
+          "mathsProgress": null,
+          "boysRwmExpected": 65.0,
+          "girlsRwmExpected": 81.0,
+          "disadvantagedRwmExpected": 41.0,
+          "notDisadvantagedRwmExpected": 79.0,
+          "eligiblePupils": 90.0,
+          "pupilsAged11": 89.0,
+          "disadvantagedPercent": 19.0
+        }
+      }
+    ],
+    "116051": [
+      {
+        "period": "2015/2016",
+        "label": "2015/16",
+        "metrics": {
+          "rwmExpected": 86.0,
+          "rwmHigher": 19.0,
+          "readingExpected": 90.0,
+          "readingHigher": 44.0,
+          "readingScaled": 108.0,
+          "writingExpected": 92.0,
+          "writingHigher": 25.0,
+          "mathsExpected": 100.0,
+          "mathsHigher": 38.0,
+          "mathsScaled": 108.0,
+          "gpsExpected": 95.0,
+          "gpsHigher": 43.0,
+          "gpsScaled": 109.0,
+          "scienceExpected": 97.0,
+          "readingProgress": 3.7,
+          "writingProgress": 1.3,
+          "mathsProgress": 3.0,
+          "boysRwmExpected": 79.0,
+          "girlsRwmExpected": 96.0,
+          "disadvantagedRwmExpected": 82.0,
+          "notDisadvantagedRwmExpected": 87.0,
+          "eligiblePupils": 63.0,
+          "pupilsAged11": 64.0,
+          "disadvantagedPercent": 17.0
+        }
+      },
+      {
+        "period": "2016/2017",
+        "label": "2016/17",
+        "metrics": {
+          "rwmExpected": 78.0,
+          "rwmHigher": 10.0,
+          "readingExpected": 87.0,
+          "readingHigher": 41.0,
+          "readingScaled": 107.0,
+          "writingExpected": 84.0,
+          "writingHigher": 16.0,
+          "mathsExpected": 84.0,
+          "mathsHigher": 27.0,
+          "mathsScaled": 105.0,
+          "gpsExpected": 89.0,
+          "gpsHigher": 44.0,
+          "gpsScaled": 108.0,
+          "scienceExpected": 79.0,
+          "readingProgress": 0.6,
+          "writingProgress": -1.6,
+          "mathsProgress": -1.4,
+          "boysRwmExpected": 71.0,
+          "girlsRwmExpected": 86.0,
+          "disadvantagedRwmExpected": 75.0,
+          "notDisadvantagedRwmExpected": 78.0,
+          "eligiblePupils": 63.0,
+          "pupilsAged11": 63.0,
+          "disadvantagedPercent": 13.0
+        }
+      },
+      {
+        "period": "2017/2018",
+        "label": "2017/18",
+        "metrics": {
+          "rwmExpected": 91.0,
+          "rwmHigher": 19.0,
+          "readingExpected": 97.0,
+          "readingHigher": 44.0,
+          "readingScaled": 109.0,
+          "writingExpected": 92.0,
+          "writingHigher": 25.0,
+          "mathsExpected": 95.0,
+          "mathsHigher": 39.0,
+          "mathsScaled": 108.0,
+          "gpsExpected": 98.0,
+          "gpsHigher": 53.0,
+          "gpsScaled": 110.0,
+          "scienceExpected": 97.0,
+          "readingProgress": 0.7,
+          "writingProgress": -1.3,
+          "mathsProgress": 0.6,
+          "boysRwmExpected": 96.0,
+          "girlsRwmExpected": 86.0,
+          "disadvantagedRwmExpected": 81.0,
+          "notDisadvantagedRwmExpected": 94.0,
+          "eligiblePupils": 64.0,
+          "pupilsAged11": 64.0,
+          "disadvantagedPercent": 25.0
+        }
+      },
+      {
+        "period": "2018/2019",
+        "label": "2018/19",
+        "metrics": {
+          "rwmExpected": 93.0,
+          "rwmHigher": 20.0,
+          "readingExpected": 93.0,
+          "readingHigher": 53.0,
+          "readingScaled": 109.0,
+          "writingExpected": 95.0,
+          "writingHigher": 32.0,
+          "mathsExpected": 95.0,
+          "mathsHigher": 39.0,
+          "mathsScaled": 108.0,
+          "gpsExpected": 93.0,
+          "gpsHigher": 54.0,
+          "gpsScaled": 110.0,
+          "scienceExpected": 95.0,
+          "readingProgress": 1.6,
+          "writingProgress": 0.4,
+          "mathsProgress": -0.2,
+          "boysRwmExpected": 93.0,
+          "girlsRwmExpected": 94.0,
+          "disadvantagedRwmExpected": 82.0,
+          "notDisadvantagedRwmExpected": 96.0,
+          "eligiblePupils": 59.0,
+          "pupilsAged11": 61.0,
+          "disadvantagedPercent": 19.0
+        }
+      },
+      {
+        "period": "2022/2023",
+        "label": "2022/23",
+        "metrics": {
+          "rwmExpected": 73.0,
+          "rwmHigher": 6.0,
+          "readingExpected": 81.0,
+          "readingHigher": 40.0,
+          "readingScaled": 107.0,
+          "writingExpected": 79.0,
+          "writingHigher": 27.0,
+          "mathsExpected": 83.0,
+          "mathsHigher": 13.0,
+          "mathsScaled": 104.0,
+          "gpsExpected": 75.0,
+          "gpsHigher": 30.0,
+          "gpsScaled": 105.0,
+          "scienceExpected": 92.0,
+          "readingProgress": 0.2,
+          "writingProgress": 0.7,
+          "mathsProgress": -1.9,
+          "boysRwmExpected": 65.0,
+          "girlsRwmExpected": 83.0,
+          "disadvantagedRwmExpected": 69.0,
+          "notDisadvantagedRwmExpected": 74.0,
+          "eligiblePupils": 63.0,
+          "pupilsAged11": 64.0,
+          "disadvantagedPercent": 21.0
+        }
+      },
+      {
+        "period": "2023/2024",
+        "label": "2023/24",
+        "metrics": {
+          "rwmExpected": 66.0,
+          "rwmHigher": 8.0,
+          "readingExpected": 77.0,
+          "readingHigher": 28.0,
+          "readingScaled": 104.0,
+          "writingExpected": 78.0,
+          "writingHigher": 12.0,
+          "mathsExpected": 78.0,
+          "mathsHigher": 31.0,
+          "mathsScaled": 105.0,
+          "gpsExpected": 78.0,
+          "gpsHigher": 25.0,
+          "gpsScaled": 104.0,
+          "scienceExpected": 82.0,
+          "readingProgress": null,
+          "writingProgress": null,
+          "mathsProgress": null,
+          "boysRwmExpected": 51.0,
+          "girlsRwmExpected": 88.0,
+          "disadvantagedRwmExpected": 46.0,
+          "notDisadvantagedRwmExpected": 71.0,
+          "eligiblePupils": 65.0,
+          "pupilsAged11": 64.0,
+          "disadvantagedPercent": 20.0
+        }
+      },
+      {
+        "period": "2024/2025",
+        "label": "2024/25",
+        "metrics": {
+          "rwmExpected": 81.0,
+          "rwmHigher": 21.0,
+          "readingExpected": 84.0,
+          "readingHigher": 38.0,
+          "readingScaled": 107.0,
+          "writingExpected": 84.0,
+          "writingHigher": 29.0,
+          "mathsExpected": 89.0,
+          "mathsHigher": 43.0,
+          "mathsScaled": 107.0,
+          "gpsExpected": 86.0,
+          "gpsHigher": 44.0,
+          "gpsScaled": 108.0,
+          "scienceExpected": 94.0,
+          "readingProgress": null,
+          "writingProgress": null,
+          "mathsProgress": null,
+          "boysRwmExpected": 79.0,
+          "girlsRwmExpected": 83.0,
+          "disadvantagedRwmExpected": 67.0,
+          "notDisadvantagedRwmExpected": 83.0,
+          "eligiblePupils": 63.0,
+          "pupilsAged11": 63.0,
+          "disadvantagedPercent": 14.0
+        }
+      }
+    ],
+    "116007": [
+      {
+        "period": "2015/2016",
+        "label": "2015/16",
+        "metrics": {
+          "rwmExpected": 68.0,
+          "rwmHigher": 10.0,
+          "readingExpected": 82.0,
+          "readingHigher": 32.0,
+          "readingScaled": 106.0,
+          "writingExpected": 92.0,
+          "writingHigher": 27.0,
+          "mathsExpected": 76.0,
+          "mathsHigher": 19.0,
+          "mathsScaled": 104.0,
+          "gpsExpected": 85.0,
+          "gpsHigher": 30.0,
+          "gpsScaled": 107.0,
+          "scienceExpected": 88.0,
+          "readingProgress": 1.2,
+          "writingProgress": 1.2,
+          "mathsProgress": -1.0,
+          "boysRwmExpected": 70.0,
+          "girlsRwmExpected": 67.0,
+          "disadvantagedRwmExpected": null,
+          "notDisadvantagedRwmExpected": null,
+          "eligiblePupils": 98.0,
+          "pupilsAged11": 99.0,
+          "disadvantagedPercent": 1.0
+        }
+      },
+      {
+        "period": "2016/2017",
+        "label": "2016/17",
+        "metrics": {
+          "rwmExpected": 77.0,
+          "rwmHigher": 18.0,
+          "readingExpected": 89.0,
+          "readingHigher": 44.0,
+          "readingScaled": 108.0,
+          "writingExpected": 84.0,
+          "writingHigher": 31.0,
+          "mathsExpected": 93.0,
+          "mathsHigher": 36.0,
+          "mathsScaled": 107.0,
+          "gpsExpected": 94.0,
+          "gpsHigher": 31.0,
+          "gpsScaled": 107.0,
+          "scienceExpected": 94.0,
+          "readingProgress": 1.1,
+          "writingProgress": -1.0,
+          "mathsProgress": 0.1,
+          "boysRwmExpected": 76.0,
+          "girlsRwmExpected": 78.0,
+          "disadvantagedRwmExpected": null,
+          "notDisadvantagedRwmExpected": null,
+          "eligiblePupils": 100.0,
+          "pupilsAged11": 100.0,
+          "disadvantagedPercent": 2.0
+        }
+      },
+      {
+        "period": "2017/2018",
+        "label": "2017/18",
+        "metrics": {
+          "rwmExpected": 77.0,
+          "rwmHigher": 21.0,
+          "readingExpected": 85.0,
+          "readingHigher": 41.0,
+          "readingScaled": 108.0,
+          "writingExpected": 86.0,
+          "writingHigher": 29.0,
+          "mathsExpected": 88.0,
+          "mathsHigher": 52.0,
+          "mathsScaled": 108.0,
+          "gpsExpected": 85.0,
+          "gpsHigher": 46.0,
+          "gpsScaled": 108.0,
+          "scienceExpected": 85.0,
+          "readingProgress": 0.3,
+          "writingProgress": -1.1,
+          "mathsProgress": 1.2,
+          "boysRwmExpected": 76.0,
+          "girlsRwmExpected": 79.0,
+          "disadvantagedRwmExpected": null,
+          "notDisadvantagedRwmExpected": null,
+          "eligiblePupils": 96.0,
+          "pupilsAged11": 96.0,
+          "disadvantagedPercent": 5.0
+        }
+      },
+      {
+        "period": "2018/2019",
+        "label": "2018/19",
+        "metrics": {
+          "rwmExpected": 84.0,
+          "rwmHigher": 26.0,
+          "readingExpected": 85.0,
+          "readingHigher": 45.0,
+          "readingScaled": 108.0,
+          "writingExpected": 93.0,
+          "writingHigher": 36.0,
+          "mathsExpected": 94.0,
+          "mathsHigher": 52.0,
+          "mathsScaled": 110.0,
+          "gpsExpected": 90.0,
+          "gpsHigher": 54.0,
+          "gpsScaled": 110.0,
+          "scienceExpected": 94.0,
+          "readingProgress": 1.1,
+          "writingProgress": 1.0,
+          "mathsProgress": 2.5,
+          "boysRwmExpected": 83.0,
+          "girlsRwmExpected": 84.0,
+          "disadvantagedRwmExpected": null,
+          "notDisadvantagedRwmExpected": null,
+          "eligiblePupils": 97.0,
+          "pupilsAged11": 97.0,
+          "disadvantagedPercent": 2.0
+        }
+      },
+      {
+        "period": "2022/2023",
+        "label": "2022/23",
+        "metrics": {
+          "rwmExpected": 83.0,
+          "rwmHigher": 11.0,
+          "readingExpected": 91.0,
+          "readingHigher": 47.0,
+          "readingScaled": 109.0,
+          "writingExpected": 90.0,
+          "writingHigher": 15.0,
+          "mathsExpected": 90.0,
+          "mathsHigher": 42.0,
+          "mathsScaled": 108.0,
+          "gpsExpected": 92.0,
+          "gpsHigher": 49.0,
+          "gpsScaled": 110.0,
+          "scienceExpected": 81.0,
+          "readingProgress": 0.4,
+          "writingProgress": -0.7,
+          "mathsProgress": 1.3,
+          "boysRwmExpected": 79.0,
+          "girlsRwmExpected": 88.0,
+          "disadvantagedRwmExpected": 44.0,
+          "notDisadvantagedRwmExpected": 87.0,
+          "eligiblePupils": 96.0,
+          "pupilsAged11": 95.0,
+          "disadvantagedPercent": 9.0
+        }
+      },
+      {
+        "period": "2023/2024",
+        "label": "2023/24",
+        "metrics": {
+          "rwmExpected": 81.0,
+          "rwmHigher": 23.0,
+          "readingExpected": 86.0,
+          "readingHigher": 55.0,
+          "readingScaled": 109.0,
+          "writingExpected": 91.0,
+          "writingHigher": 28.0,
+          "mathsExpected": 92.0,
+          "mathsHigher": 43.0,
+          "mathsScaled": 109.0,
+          "gpsExpected": 91.0,
+          "gpsHigher": 61.0,
+          "gpsScaled": 111.0,
+          "scienceExpected": 90.0,
+          "readingProgress": null,
+          "writingProgress": null,
+          "mathsProgress": null,
+          "boysRwmExpected": 80.0,
+          "girlsRwmExpected": 83.0,
+          "disadvantagedRwmExpected": 56.0,
+          "notDisadvantagedRwmExpected": 84.0,
+          "eligiblePupils": 97.0,
+          "pupilsAged11": 99.0,
+          "disadvantagedPercent": 9.0
+        }
+      },
+      {
+        "period": "2024/2025",
+        "label": "2024/25",
+        "metrics": {
+          "rwmExpected": 81.0,
+          "rwmHigher": 14.0,
+          "readingExpected": 87.0,
+          "readingHigher": 52.0,
+          "readingScaled": 109.0,
+          "writingExpected": 92.0,
+          "writingHigher": 23.0,
+          "mathsExpected": 87.0,
+          "mathsHigher": 45.0,
+          "mathsScaled": 108.0,
+          "gpsExpected": 92.0,
+          "gpsHigher": 58.0,
+          "gpsScaled": 110.0,
+          "scienceExpected": 85.0,
+          "readingProgress": null,
+          "writingProgress": null,
+          "mathsProgress": null,
+          "boysRwmExpected": 78.0,
+          "girlsRwmExpected": 84.0,
+          "disadvantagedRwmExpected": 60.0,
+          "notDisadvantagedRwmExpected": 84.0,
+          "eligiblePupils": 95.0,
+          "pupilsAged11": 95.0,
+          "disadvantagedPercent": 11.0
+        }
+      }
+    ]
+  }
+}

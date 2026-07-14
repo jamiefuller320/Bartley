@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import type {
   HistoryRow,
+  PeerSchoolsBundle,
   ProgressRow,
   SubjectComparison,
 } from "@/lib/types";
@@ -13,6 +14,13 @@ import { HistoryTrendChart } from "@/components/HistoryTrendChart";
 import { HistoryTable } from "@/components/HistoryTable";
 import { ProgressChart } from "@/components/ProgressChart";
 import { shortSubject } from "@/lib/format";
+import {
+  peerLatestValue,
+  peerMetricByPeriod,
+  peerOverlayLabel,
+  type PeerOverlaySelection,
+} from "@/lib/peers";
+import { fmtPct } from "@/lib/format";
 
 const SUBJECTS = [
   "Reading, writing and maths",
@@ -28,11 +36,13 @@ export function MetricsWorkbench({
   history,
   progressHistory = [],
   period,
+  peers,
 }: {
   subjects: SubjectComparison[];
   history: HistoryRow[];
   progressHistory?: ProgressRow[];
   period: string;
+  peers: PeerSchoolsBundle;
 }) {
   const [mode, setMode] = useState<ChartViewMode>("compare");
   const [subject, setSubject] =
@@ -40,13 +50,39 @@ export function MetricsWorkbench({
   const [metric, setMetric] = useState<"expected" | "higher">("expected");
   const [showHampshire, setShowHampshire] = useState(true);
   const [showEngland, setShowEngland] = useState(true);
+  const [peerOverlay, setPeerOverlay] =
+    useState<PeerOverlaySelection>("none");
 
   const subjectHistory = useMemo(
     () => history.filter((row) => row.subject === subject),
     [history, subject],
   );
   const hasScaled = subjectHistory.some((row) => row.schoolScaled !== null);
-  const progressForSubject = progressHistory.filter((row) => row.subject === subject);
+  const progressForSubject = progressHistory.filter(
+    (row) => row.subject === subject,
+  );
+
+  const peerLabel = peerOverlayLabel(peers, peerOverlay);
+  const peerByPeriod = useMemo(
+    () =>
+      peerMetricByPeriod(
+        peers,
+        peerOverlay,
+        subject,
+        metric === "higher" ? "higher" : "expected",
+      ),
+    [peers, peerOverlay, subject, metric],
+  );
+  const peerScaledByPeriod = useMemo(
+    () => peerMetricByPeriod(peers, peerOverlay, subject, "scaled"),
+    [peers, peerOverlay, subject],
+  );
+  const peerCompareValue = peerLatestValue(
+    peers,
+    peerOverlay,
+    subject,
+    metric === "higher" ? "higher" : "expected",
+  );
 
   return (
     <section className="section section-alt" id="charts">
@@ -55,9 +91,23 @@ export function MetricsWorkbench({
           <h2>Performance charts</h2>
           <p>
             {mode === "compare"
-              ? `Latest year (${period.replace("/", "–")}) — Bartley against Hampshire and England. Axis ranges zoom to the data band so small gaps are easier to see.`
-              : "Bartley year-on-year history. Optionally overlay Hampshire and England with the checkboxes below."}
+              ? `Latest year (${period.replace("/", "–")}) — Bartley against Hampshire and England. Optionally overlay a top local peer or the peer average.`
+              : "Bartley year-on-year history. Overlay Hampshire, England, and a selected peer school or peer average with the controls below."}
           </p>
+        </div>
+
+        <div className="peer-strip" aria-label="Similar top-performing peers">
+          <p className="peer-strip-lead">
+            Top 3 similar-size juniors nearby (2024/25 RWM):{" "}
+            {peers.peers
+              .map(
+                (p) =>
+                  `${p.short} ${fmtPct(p.latest.rwmExpected)} (n=${p.latest.eligiblePupils ?? "—"})`,
+              )
+              .join(" · ")}
+            . Peer average {fmtPct(peers.peerAverageLatest.rwmExpected)}.
+          </p>
+          <p className="peer-strip-note muted">{peers.selection.method}</p>
         </div>
 
         <div className="history-tabs" role="tablist" aria-label="Subject">
@@ -92,12 +142,47 @@ export function MetricsWorkbench({
           </button>
         </div>
 
+        <div className="overlay-toggles peer-overlay-panel" role="group" aria-label="Peer overlay">
+          <span className="overlay-label">Peer overlay</span>
+          <label className="overlay-check">
+            <input
+              type="radio"
+              name="peer-overlay"
+              checked={peerOverlay === "none"}
+              onChange={() => setPeerOverlay("none")}
+            />
+            <span>None</span>
+          </label>
+          <label className="overlay-check">
+            <input
+              type="radio"
+              name="peer-overlay"
+              checked={peerOverlay === "average"}
+              onChange={() => setPeerOverlay("average")}
+            />
+            <span>Peer average</span>
+          </label>
+          {peers.peers.map((school) => (
+            <label key={school.urn} className="overlay-check">
+              <input
+                type="radio"
+                name="peer-overlay"
+                checked={peerOverlay === school.urn}
+                onChange={() => setPeerOverlay(school.urn)}
+              />
+              <span>{school.short}</span>
+            </label>
+          ))}
+        </div>
+
         {mode === "compare" ? (
           <>
             <SubjectComparisonChart
               subjects={subjects.filter((row) => row.subject === subject)}
               metric={metric}
               focused
+              peerValue={peerCompareValue}
+              peerSeriesName={peerLabel}
             />
             <ComparisonTable
               subjects={subjects.filter((row) => row.subject === subject)}
@@ -131,6 +216,8 @@ export function MetricsWorkbench({
               seriesMode="bartley"
               showHampshire={showHampshire}
               showEngland={showEngland}
+              peerByPeriod={peerOverlay === "none" ? undefined : peerByPeriod}
+              peerSeriesName={peerLabel}
             />
             <HistoryTable history={history} subject={subject} />
 
@@ -140,7 +227,7 @@ export function MetricsWorkbench({
                   <h3>Average scaled score</h3>
                   <p>
                     Bartley scaled scores over time for {shortSubject(subject)}
-                    {showHampshire || showEngland
+                    {showHampshire || showEngland || peerLabel
                       ? ", with selected overlays"
                       : ""}
                     .
@@ -153,6 +240,10 @@ export function MetricsWorkbench({
                   seriesMode="bartley"
                   showHampshire={showHampshire}
                   showEngland={showEngland}
+                  peerByPeriod={
+                    peerOverlay === "none" ? undefined : peerScaledByPeriod
+                  }
+                  peerSeriesName={peerLabel}
                 />
               </>
             ) : null}
@@ -165,7 +256,9 @@ export function MetricsWorkbench({
                 </div>
                 <ProgressChart
                   progress={[...progressForSubject]
-                    .sort((a, b) => (a.period ?? "").localeCompare(b.period ?? ""))
+                    .sort((a, b) =>
+                      (a.period ?? "").localeCompare(b.period ?? ""),
+                    )
                     .map((row) => ({
                       subject: (row.period ?? "").replace("/20", "/"),
                       score: row.score,

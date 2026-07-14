@@ -18,11 +18,18 @@ export function SubjectComparisonChart({
   subjects,
   metric = "expected",
   focused = true,
+  peerValue = null,
+  peerSeriesName = null,
 }: {
   subjects: SubjectComparison[];
   metric?: "expected" | "higher";
   focused?: boolean;
+  peerValue?: number | null;
+  peerSeriesName?: string | null;
 }) {
+  const peerKey = peerSeriesName ?? "Peer";
+  const showPeer = Boolean(peerSeriesName && peerValue !== null);
+
   const data = subjects
     .filter((s) =>
       metric === "expected"
@@ -35,10 +42,17 @@ export function SubjectComparisonChart({
       Hampshire:
         metric === "expected" ? s.hampshireExpected : s.hampshireHigher,
       England: metric === "expected" ? s.englandExpected : s.englandHigher,
+      ...(showPeer ? { [peerKey]: peerValue } : {}),
     }));
 
+  const keys = [
+    "Bartley",
+    "Hampshire",
+    "England",
+    ...(showPeer ? [peerKey] : []),
+  ];
   const domain = focused
-    ? focusedDomain(domainValues(data, ["Bartley", "Hampshire", "England"]), "percent")
+    ? focusedDomain(domainValues(data, keys), "percent")
     : ([0, 100] as [number, number]);
 
   return (
@@ -82,6 +96,9 @@ export function SubjectComparisonChart({
           <Bar dataKey="Bartley" fill="#1b4332" radius={[4, 4, 0, 0]} />
           <Bar dataKey="Hampshire" fill="#52796f" radius={[4, 4, 0, 0]} />
           <Bar dataKey="England" fill="#c9a227" radius={[4, 4, 0, 0]} />
+          {showPeer ? (
+            <Bar dataKey={peerKey} fill="#0e7490" radius={[4, 4, 0, 0]} />
+          ) : null}
         </BarChart>
       </ResponsiveContainer>
     </div>
