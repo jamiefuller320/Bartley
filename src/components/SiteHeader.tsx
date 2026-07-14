@@ -17,9 +17,9 @@ export function SiteHeader({ active }: { active?: "home" | "analysis" }) {
           >
             Analysis
           </Link>
-          <a href="/#charts">Charts</a>
-          <a href="/#equity">Equity</a>
-          <a href="/#source">Source</a>
+          <Link href="/#charts">Charts</Link>
+          <Link href="/#equity">Equity</Link>
+          <Link href="/#source">Source</Link>
         </nav>
       </div>
     </header>
