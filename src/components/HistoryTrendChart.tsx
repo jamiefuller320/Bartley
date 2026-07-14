@@ -25,6 +25,8 @@ export function HistoryTrendChart({
   seriesMode = "compare",
   showHampshire = true,
   showEngland = true,
+  peerByPeriod,
+  peerSeriesName,
 }: {
   history: HistoryRow[];
   subject?: string;
@@ -32,9 +34,13 @@ export function HistoryTrendChart({
   seriesMode?: "compare" | "bartley";
   showHampshire?: boolean;
   showEngland?: boolean;
+  peerByPeriod?: Map<string, number | null>;
+  peerSeriesName?: string | null;
 }) {
   const overlayHampshire = seriesMode === "compare" || showHampshire;
   const overlayEngland = seriesMode === "compare" || showEngland;
+  const overlayPeer = Boolean(peerSeriesName && peerByPeriod);
+  const peerKey = peerSeriesName ?? "Peer";
 
   const rows = history
     .filter((h) => h.subject === subject)
@@ -59,11 +65,17 @@ export function HistoryTrendChart({
           : metric === "higher"
             ? h.englandHigher
             : h.englandScaled,
+      [peerKey]: overlayPeer
+        ? (peerByPeriod?.get(h.period) ?? null)
+        : null,
     }))
     .filter((r) => {
       if (r.Bartley !== null) return true;
       if (overlayHampshire && r.Hampshire !== null) return true;
       if (overlayEngland && r.England !== null) return true;
+      if (overlayPeer && r[peerKey] !== null && r[peerKey] !== undefined) {
+        return true;
+      }
       return false;
     });
 
@@ -80,6 +92,7 @@ export function HistoryTrendChart({
     "Bartley",
     ...(overlayHampshire ? ["Hampshire"] : []),
     ...(overlayEngland ? ["England"] : []),
+    ...(overlayPeer ? [peerKey] : []),
   ];
   const domain = focusedDomain(domainValues(rows, keys), kind);
   const isPct = metric !== "scaled";
@@ -149,6 +162,17 @@ export function HistoryTrendChart({
               stroke="#c9a227"
               strokeWidth={2}
               dot={{ r: 3, fill: "#c9a227" }}
+              connectNulls
+            />
+          ) : null}
+          {overlayPeer ? (
+            <Line
+              type="monotone"
+              dataKey={peerKey}
+              stroke="#0e7490"
+              strokeWidth={2.5}
+              strokeDasharray="6 3"
+              dot={{ r: 3.5, fill: "#0e7490" }}
               connectNulls
             />
           ) : null}

@@ -1,9 +1,11 @@
 import type {
   EquityHistoryRow,
   HistoryRow,
+  PeerSchoolsBundle,
   SchoolMonitorData,
 } from "@/lib/types";
 import { fmtPct, fmtPp, shortSubject } from "@/lib/format";
+import { ppGap } from "@/lib/peers";
 
 export type AnalysisSection = {
   id: string;
@@ -41,7 +43,10 @@ function equitySeries(
     .sort((a, b) => a.period.localeCompare(b.period));
 }
 
-export function buildAnalysis(data: SchoolMonitorData): {
+export function buildAnalysis(
+  data: SchoolMonitorData,
+  peers?: PeerSchoolsBundle,
+): {
   headline: string;
   summary: string;
   sections: AnalysisSection[];
@@ -182,6 +187,61 @@ export function buildAnalysis(data: SchoolMonitorData): {
     },
   ];
 
+  if (peers?.peers?.length) {
+    const peerAvg = peers.peerAverageLatest.rwmExpected;
+    const gapVsAvg = ppGap(latest?.schoolExpected, peerAvg);
+    const ranked = [...peers.peers].sort(
+      (a, b) =>
+        (b.latest.rwmExpected ?? 0) - (a.latest.rwmExpected ?? 0),
+    );
+    const top = ranked[0];
+    const gapVsTop = ppGap(latest?.schoolExpected, top?.latest.rwmExpected);
+    const readingGap = ppGap(
+      reading?.schoolExpected,
+      peers.peerAverageLatest.readingExpected,
+    );
+    const writingGap = ppGap(
+      writing?.schoolExpected,
+      peers.peerAverageLatest.writingExpected,
+    );
+    const mathsGap = ppGap(
+      maths?.schoolExpected,
+      peers.peerAverageLatest.mathsExpected,
+    );
+    const gpsGap = ppGap(
+      gps?.schoolExpected,
+      peers.peerAverageLatest.gpsExpected,
+    );
+
+    const peerNames = ranked
+      .map(
+        (p) =>
+          `${p.name} (${fmtPct(p.latest.rwmExpected)} RWM, ${p.latest.eligiblePupils ?? "—"} eligible, ${p.postcode})`,
+      )
+      .join("; ");
+
+    sections.splice(1, 0, {
+      id: "peers",
+      title: "Where Bartley sits versus strong local peers",
+      paragraphs: [
+        `To set a practical ambition beyond LA and national averages, the dashboard compares Bartley with the three highest-performing similar-size junior schools nearby: ${peerNames}. Selection used Hampshire junior schools (ages 7–11) with a Year 6 cohort within about 40% of Bartley’s ${peers.selection.bartleyLatestEligible} eligible pupils, in the SO40–SO53 / BH24 / SP6 vicinity, ranked by 2024/25 combined RWM.`,
+        gapVsAvg !== null && gapVsTop !== null
+          ? `On the latest combined measure, Bartley at ${fmtPct(latest?.schoolExpected)} sits ${Math.abs(gapVsAvg).toFixed(0)} pp ${gapVsAvg < 0 ? "below" : "above"} the top-three peer average (${fmtPct(peerAvg)}) and ${Math.abs(gapVsTop).toFixed(0)} pp ${gapVsTop < 0 ? "below" : "above"} the strongest peer (${top.short} at ${fmtPct(top.latest.rwmExpected)}). That is a clearer gap than the near-parity with England: Bartley is broadly average nationally, but not yet performing like the best local schools of a similar size.`
+          : "Peer comparison figures are incomplete for the latest year.",
+        `Subject gaps versus the peer average explain much of the combined shortfall: reading ${fmtPp(readingGap)}, writing ${fmtPp(writingGap)}, maths ${fmtPp(mathsGap)}, and GPS ${fmtPp(gpsGap)} relative to the top-three mean. Writing is Bartley’s closest subject to the peer pack; reading and GPS are the largest shortfalls — the same pattern as versus England, but amplified against high-performing neighbours.`,
+        `Equity context also differs. Peer disadvantaged RWM results (${ranked.map((p) => `${p.short} ${fmtPct(p.latest.disadvantagedRwmExpected)}`).join(", ")}) are generally higher than Bartley’s ${fmtPct(dis?.expected)}, while peer gender gaps are narrower than Bartley’s latest boys–girls split. Closing toward peer performance is therefore not only about whole-cohort attainment: it implies stronger outcomes for boys and disadvantaged pupils as well.`,
+      ],
+      bullets: [
+        `Peer average latest RWM: ${fmtPct(peerAvg)} versus Bartley ${fmtPct(latest?.schoolExpected)} (${fmtPp(gapVsAvg)}).`,
+        ...ranked.map(
+          (p) =>
+            `${p.short}: RWM ${fmtPct(p.latest.rwmExpected)}, reading ${fmtPct(p.latest.readingExpected)}, writing ${fmtPct(p.latest.writingExpected)}, maths ${fmtPct(p.latest.mathsExpected)}, GPS ${fmtPct(p.latest.gpsExpected)}; disadvantaged share ${fmtPct(p.latest.disadvantagedPercent)}.`,
+        ),
+        "Use the chart peer overlay (one school at a time, or peer average) to see how far Bartley’s year-on-year line sits from these benchmarks.",
+      ],
+    });
+  }
+
   const questions: StrategicQuestion[] = [
     {
       theme: "Outcomes strategy",
@@ -240,8 +300,8 @@ export function buildAnalysis(data: SchoolMonitorData): {
     {
       theme: "Comparison & ambition",
       question:
-        "Which similar Hampshire schools or strong historical Bartley cohorts are we using as practical benchmarks, and why is matching 2017/18 combined RWM no longer (or still) a realistic ambition?",
-      why: `Peak combined RWM was ${fmtPct(peak?.schoolExpected)} in ${peak ? periodShort(peak.period) : "—"}.`,
+        "Which similar Hampshire schools or strong historical Bartley cohorts are we using as practical benchmarks, and why is matching 2017/18 combined RWM — or today’s top local peers — no longer (or still) a realistic ambition?",
+      why: `Peak combined RWM was ${fmtPct(peak?.schoolExpected)} in ${peak ? periodShort(peak.period) : "—"}${peers?.peerAverageLatest.rwmExpected != null ? `; current top-three peer average is ${fmtPct(peers.peerAverageLatest.rwmExpected)}` : ""}.`,
     },
     {
       theme: "Staffing & professional development",
@@ -257,12 +317,31 @@ export function buildAnalysis(data: SchoolMonitorData): {
     },
   ];
 
+  if (peers?.peers?.length) {
+    const peerAvg = peers.peerAverageLatest.rwmExpected;
+    const gapVsAvg = ppGap(
+      data.subjects.find((s) => s.subject === "Reading, writing and maths")
+        ?.schoolExpected,
+      peerAvg,
+    );
+    const top = [...peers.peers].sort(
+      (a, b) =>
+        (b.latest.rwmExpected ?? 0) - (a.latest.rwmExpected ?? 0),
+    )[0];
+    questions.splice(1, 0, {
+      theme: "Comparison & ambition",
+      question: `What would it take for Bartley to close even half the ${gapVsAvg !== null ? `${Math.abs(gapVsAvg).toFixed(0)} pp` : ""} gap to the top-three local peer average on combined RWM within three years, and which peer practices (curriculum, intervention, assessment) are we actively learning from?`,
+      why: `Bartley ${fmtPct(latest?.schoolExpected)} vs peer average ${fmtPct(peerAvg)}; strongest peer ${top?.short} at ${fmtPct(top?.latest.rwmExpected)}.`,
+    });
+  }
+
   // Fold automated findings into a short appendix list via returned sections already; keep caveats separate.
   const caveats = [
     "Published performance-table KS2 files are unavailable for 2019/20–2021/22 (COVID cancellation / not published in tables), so trend lines skip those years.",
     "Progress measures are missing for recent cohorts without KS1 baselines.",
     "With a single junior-school Year 6 cohort, percentage-point swings can reflect a small number of pupils; always ask for pupil counts behind the percentages.",
     "This analysis uses DfE Compare school performance / Explore education statistics published figures only — it does not include internal tracking, Ofsted judgement text, or confidential ASP/IDSR detail.",
+    "Peer schools were selected as open Hampshire juniors of similar cohort size in the local postcode band, ranked by latest combined RWM — not by Ofsted grade, progress, or exact distance. Vicinity is approximate (postcode band), not crow-flies metres.",
   ];
 
   return { headline, summary, sections, questions, caveats };

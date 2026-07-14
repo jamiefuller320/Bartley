@@ -1,4 +1,4 @@
-import { getBartleyMonitorData } from "@/lib/data";
+import { getBartleyMonitorData, getPeerSchoolsData } from "@/lib/data";
 import { scorecard } from "@/lib/evaluate";
 import { fmtPct, fmtPp } from "@/lib/format";
 import { FindingsList } from "@/components/FindingsList";
@@ -11,6 +11,7 @@ import Link from "next/link";
 
 export default function HomePage() {
   const data = getBartleyMonitorData();
+  const peers = getPeerSchoolsData();
   const score = scorecard(data.subjects);
   const rwm = data.subjects.find(
     (s) => s.subject === "Reading, writing and maths",
@@ -97,6 +98,7 @@ export default function HomePage() {
         history={history}
         progressHistory={progressHistory}
         period={data.period}
+        peers={peers}
       />
 
       <section className="section" id="equity">
@@ -177,7 +179,8 @@ export default function HomePage() {
           </ul>
           <p className="muted">
             Use the floating slider on the charts to switch between Bartley /
-            Hampshire / England and Bartley year-on-year history.
+            Hampshire / England and Bartley year-on-year history. Peer overlays
+            compare Bartley with the top three similar-size local juniors.
           </p>
         </div>
       </section>

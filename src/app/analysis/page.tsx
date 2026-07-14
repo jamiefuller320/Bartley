@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getBartleyMonitorData } from "@/lib/data";
+import { getBartleyMonitorData, getPeerSchoolsData } from "@/lib/data";
 import { buildAnalysis } from "@/lib/analysis";
 import { SiteHeader } from "@/components/SiteHeader";
 
@@ -12,7 +12,8 @@ export const metadata: Metadata = {
 
 export default function AnalysisPage() {
   const data = getBartleyMonitorData();
-  const analysis = buildAnalysis(data);
+  const peers = getPeerSchoolsData();
+  const analysis = buildAnalysis(data, peers);
 
   const themes = Array.from(
     new Set(analysis.questions.map((q) => q.theme)),
