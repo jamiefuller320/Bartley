@@ -10,7 +10,8 @@
     "lint": "tsc --noEmit",
     "refresh-data": "npx --yes tsx scripts/refresh-seed.ts",
     "refresh-peers": "python3 scripts/refresh-peers.py",
-    "refresh-all": "npm run refresh-data && npm run refresh-peers"
+    "refresh-feeders": "python3 scripts/extract-feeder-schools.py",
+    "refresh-all": "npm run refresh-data && npm run refresh-peers && npm run refresh-feeders"
   },
   "dependencies": {
     "next": "^16.2.10",

@@ -205,3 +205,84 @@ export interface PeerSchoolsBundle {
   };
   history: PeerHistoryRow[];
 }
+
+/** Infant / KS1 feeder school snapshot (census + absence; attainment often null). */
+export interface FeederLatestSnapshot {
+  pupilsOnRoll: number | null;
+  boysPercent: number | null;
+  girlsPercent: number | null;
+  fsmEverPercent: number | null;
+  fsmEverCount: number | null;
+  senSupportPercent: number | null;
+  senSupportCount: number | null;
+  ehcPercent: number | null;
+  ehcCount: number | null;
+  ealPercent: number | null;
+  absencePercent: number | null;
+  persistentAbsencePercent: number | null;
+  phonicsYear1Expected: number | null;
+  phonicsByEndYear2Expected: number | null;
+  ks1ReadingExpected: number | null;
+  ks1WritingExpected: number | null;
+  ks1MathsExpected: number | null;
+  ks1ScienceExpected: number | null;
+}
+
+export interface FeederSchool {
+  urn: string;
+  name: string;
+  short: string;
+  laEstab: string;
+  town: string;
+  postcode: string;
+  ageRange: string;
+  schoolType: string;
+  religiousDenomination: string;
+  compareUrl: string;
+  latest: FeederLatestSnapshot;
+  role: "feeder" | "peer";
+  reason?: string;
+}
+
+export interface FeederGroupAverage {
+  label: string;
+  pupilsOnRoll: number | null;
+  fsmEverPercent: number | null;
+  senSupportPercent: number | null;
+  ehcPercent: number | null;
+  ealPercent: number | null;
+  absencePercent: number | null;
+  persistentAbsencePercent: number | null;
+}
+
+export interface PhonicsBenchmarkRow {
+  period: string;
+  label: string;
+  hampshireYear1: number | null;
+  englandYear1: number | null;
+  hampshireByEndYear2: number | null;
+  englandByEndYear2: number | null;
+}
+
+export interface FeederSchoolsBundle {
+  generatedAt: string;
+  period: string;
+  purpose: string;
+  selection: {
+    feeders: string;
+    peers: string;
+    ks1Note: string;
+  };
+  feeders: FeederSchool[];
+  feederAverage: FeederGroupAverage;
+  peers: FeederSchool[];
+  peerAverage: FeederGroupAverage;
+  phonicsBenchmarks: PhonicsBenchmarkRow[];
+  bartleyPriorLearningContext: {
+    note: string;
+    progressPeriod: string;
+    readingProgress: number | null;
+    writingProgress: number | null;
+    mathsProgress: number | null;
+  };
+}

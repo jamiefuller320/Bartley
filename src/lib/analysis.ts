@@ -1,10 +1,11 @@
 import type {
   EquityHistoryRow,
+  FeederSchoolsBundle,
   HistoryRow,
   PeerSchoolsBundle,
   SchoolMonitorData,
 } from "@/lib/types";
-import { fmtPct, fmtPp, shortSubject } from "@/lib/format";
+import { fmtNum, fmtPct, fmtPp, shortSubject } from "@/lib/format";
 import { ppGap } from "@/lib/peers";
 
 export type AnalysisSection = {
@@ -47,6 +48,7 @@ function equitySeries(
 export function buildAnalysis(
   data: SchoolMonitorData,
   peers?: PeerSchoolsBundle,
+  feeders?: FeederSchoolsBundle,
 ): {
   headline: string;
   summary: string;
@@ -243,6 +245,57 @@ export function buildAnalysis(
     });
   }
 
+  if (feeders?.feeders?.length) {
+    const feederNames = feeders.feeders
+      .map(
+        (f) =>
+          `${f.name} (${f.laEstab.slice(0, 3)}/${f.laEstab.slice(3)}, NOR ${fmtNum(f.latest.pupilsOnRoll, 0)}, persistent absence ${fmtPct(f.latest.persistentAbsencePercent, 1)})`,
+      )
+      .join("; ");
+    const peerNamesInfant = feeders.peers
+      .map(
+        (p) =>
+          `${p.short} (NOR ${fmtNum(p.latest.pupilsOnRoll, 0)}, PA ${fmtPct(p.latest.persistentAbsencePercent, 1)})`,
+      )
+      .join("; ");
+    const latestPhonics =
+      feeders.phonicsBenchmarks[feeders.phonicsBenchmarks.length - 1];
+    const ctx = feeders.bartleyPriorLearningContext;
+    const absGap =
+      feeders.feederAverage.absencePercent != null &&
+      feeders.peerAverage.absencePercent != null
+        ? feeders.feederAverage.absencePercent -
+          feeders.peerAverage.absencePercent
+        : null;
+    const paGap =
+      feeders.feederAverage.persistentAbsencePercent != null &&
+      feeders.peerAverage.persistentAbsencePercent != null
+        ? feeders.feederAverage.persistentAbsencePercent -
+          feeders.peerAverage.persistentAbsencePercent
+        : null;
+
+    sections.push({
+      id: "prior-learning",
+      title: "Prior learning from feeder infants",
+      paragraphs: [
+        `Bartley’s intake is shaped by three named Church of England infant feeders: ${feederNames}. Together they average about ${fmtNum(feeders.feederAverage.pupilsOnRoll, 0)} pupils on roll, with FSM ever ${fmtPct(feeders.feederAverage.fsmEverPercent)}, overall absence ${fmtPct(feeders.feederAverage.absencePercent, 1)}, and persistent absence ${fmtPct(feeders.feederAverage.persistentAbsencePercent, 1)} in ${periodShort(feeders.period)}.`,
+        `School-level KS1 teacher assessment and phonics results are no longer published in Compare school performance open downloads, so governors cannot yet read feeder attainment from public tables. The dashboard therefore benchmarks feeders against the three strongest similar-size local Hampshire infants on the best published school-level quality signal — attendance: ${peerNamesInfant}. That peer pack averages absence ${fmtPct(feeders.peerAverage.absencePercent, 1)} and persistent absence ${fmtPct(feeders.peerAverage.persistentAbsencePercent, 1)}.`,
+        absGap != null && paGap != null
+          ? `On those published signals the named feeders currently look stronger than the local infant peer average (overall absence ${fmtPp(absGap)}; persistent absence ${fmtPp(paGap)}). That is useful context for intake stability, but it is not a substitute for phonics or KS1 attainment. Hampshire Year 1 phonics sits at ${fmtPct(latestPhonics?.hampshireYear1)} versus England ${fmtPct(latestPhonics?.englandYear1)}; by end of Year 2, ${fmtPct(latestPhonics?.hampshireByEndYear2)} / ${fmtPct(latestPhonics?.englandByEndYear2)}. Asking for feeder ASP phonics/KS1 would let the board judge whether prior learning is genuinely high-quality before Bartley.`
+          : "Attendance comparisons between feeders and local infant peers are incomplete for the latest year.",
+        `${ctx.note} Last published scores: reading ${fmtNum(ctx.readingProgress)}, writing ${fmtNum(ctx.writingProgress)}, maths ${fmtNum(ctx.mathsProgress)} (${periodShort(ctx.progressPeriod)}). If feeder prior learning is strong, near-zero or negative junior progress would raise sharper questions about value-added in Years 3–6; if feeder baselines are weaker than assumed, Bartley’s KS2 position may understate the school’s contribution.`,
+      ],
+      bullets: [
+        ...feeders.feeders.map(
+          (f) =>
+            `${f.short}: NOR ${fmtNum(f.latest.pupilsOnRoll, 0)}, FSM ever ${fmtPct(f.latest.fsmEverPercent)}, SEN support ${fmtPct(f.latest.senSupportPercent)}, EHC ${fmtPct(f.latest.ehcPercent)}, absence ${fmtPct(f.latest.absencePercent, 1)}, persistent absence ${fmtPct(f.latest.persistentAbsencePercent, 1)}.`,
+        ),
+        `Infant peer average (top 3 by absence): NOR ${fmtNum(feeders.peerAverage.pupilsOnRoll, 0)}, FSM ${fmtPct(feeders.peerAverage.fsmEverPercent)}, absence ${fmtPct(feeders.peerAverage.absencePercent, 1)}, PA ${fmtPct(feeders.peerAverage.persistentAbsencePercent, 1)}.`,
+        "Fill phonics Y1 / by end Y2 and KS1 reading–writing–maths columns from ASP or local authority extracts when available.",
+      ],
+    });
+  }
+
   const questions: StrategicQuestion[] = [
     {
       theme: "Outcomes strategy",
@@ -343,6 +396,45 @@ export function buildAnalysis(
     });
   }
 
+  if (feeders?.feeders?.length) {
+    const feederList = feeders.feeders.map((f) => f.short).join(", ");
+    const infantPeers = feeders.peers.map((p) => p.short).join(", ");
+    questions.push(
+      {
+        theme: "Prior learning & feeders",
+        question: `What Year 1 and end-of-Year 2 phonics expected-standard figures (and historical trend) do Netley Marsh, St Michael and All Angels, and Copythorne show in ASP, and how do those compare with Hampshire (${fmtPct(feeders.phonicsBenchmarks.at(-1)?.hampshireYear1)} Y1 / ${fmtPct(feeders.phonicsBenchmarks.at(-1)?.hampshireByEndYear2)} by end Y2) and with the local infant peer pack (${infantPeers})?`,
+        why: "School-level phonics is not in CSP open downloads; ASP is required to judge prior reading foundations before Bartley.",
+        chartHref: "/#feeders",
+      },
+      {
+        theme: "Prior learning & feeders",
+        question:
+          "Where KS1 teacher assessment is still held locally (even if non-statutory nationally), what proportion of each feeder’s leavers were at expected standard in reading, writing and maths — and how does that map onto Bartley’s current Year 3 baseline assessments?",
+        why: "KS1 school-level results were removed from performance-table downloads after 2022/23; governors still need an intake attainment picture.",
+        chartHref: "/#feeders",
+      },
+      {
+        theme: "Prior learning & feeders",
+        question: `Given that the named feeders currently show stronger published attendance than the similar-size local infant average (feeder PA ${fmtPct(feeders.feederAverage.persistentAbsencePercent, 1)} vs peer ${fmtPct(feeders.peerAverage.persistentAbsencePercent, 1)}), how does leadership separate “strong infant schooling” from “advantageous intake” when explaining Bartley’s KS2 position?`,
+        why: `${feederList} are the named feeders; peer ranking used absence as a proxy because KS1 attainment is unpublished.`,
+        chartHref: "/#feeders",
+      },
+      {
+        theme: "Prior learning & feeders",
+        question:
+          "What joint transition work with the three feeders (curriculum, phonics fidelity, writing expectations, attendance) is in place, and which Year 3 gaps most often reflect incomplete prior learning rather than junior provision?",
+        why: "Demonstrating the impact of prior learning requires a shared picture of what children can do on entry — not only end-of-KS2 tables.",
+        chartHref: "/#feeders",
+      },
+      {
+        theme: "Prior learning & feeders",
+        question: `If feeder prior learning is as strong as attendance and LA phonics context suggest, what does Bartley’s last published progress (reading ${fmtNum(feeders.bartleyPriorLearningContext.readingProgress)}, writing ${fmtNum(feeders.bartleyPriorLearningContext.writingProgress)}, maths ${fmtNum(feeders.bartleyPriorLearningContext.mathsProgress)}) imply about value-added in Years 3–6 — and what internal tracking replaces missing progress measures for recent cohorts?`,
+        why: "Progress scores are the published bridge from KS1 baselines to junior outcomes; they are unavailable for the newest cohorts.",
+        chartHref: "/#progress",
+      },
+    );
+  }
+
   // Fold automated findings into a short appendix list via returned sections already; keep caveats separate.
   const caveats = [
     "Published performance-table KS2 files are unavailable for 2019/20–2021/22 (COVID cancellation / not published in tables), so trend lines skip those years.",
@@ -350,6 +442,11 @@ export function buildAnalysis(
     "With a single junior-school Year 6 cohort, percentage-point swings can reflect a small number of pupils; always ask for pupil counts behind the percentages.",
     "This analysis uses DfE Compare school performance / Explore education statistics published figures only — it does not include internal tracking, Ofsted judgement text, or confidential ASP/IDSR detail.",
     "Peer schools were selected as open Hampshire juniors of similar cohort size in the local postcode band, ranked by latest combined RWM — not by Ofsted grade, progress, or exact distance. Vicinity is approximate (postcode band), not crow-flies metres.",
+    ...(feeders?.feeders?.length
+      ? [
+          "School-level KS1 and phonics attainment are no longer in CSP open downloads; feeder/peer attainment columns are null until ASP or local figures are supplied. Infant “top 3” peers are ranked by published absence within a similar NOR band — a proxy, not an attainment league table.",
+        ]
+      : []),
   ];
 
   return { headline, summary, sections, questions, caveats };

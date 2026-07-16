@@ -72,6 +72,9 @@ export function SiteHeader({ active }: { active?: "home" | "analysis" }) {
           <Link href="/#equity" onClick={close}>
             Equity
           </Link>
+          <Link href="/#feeders" onClick={close}>
+            Feeders
+          </Link>
           <Link href="/#glossary" onClick={close}>
             Glossary
           </Link>
