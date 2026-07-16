@@ -981,6 +981,48 @@ a:hover {
   text-decoration: underline;
 }
 
+.feeder-table .feeder-meta {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 0.82rem;
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+
+.feeder-reason {
+  display: inline-block;
+  max-width: 28rem;
+  line-height: 1.35;
+}
+
+.feeder-callout {
+  margin-top: 2rem;
+  padding: 1.35rem 1.5rem;
+  background: linear-gradient(
+    135deg,
+    rgba(27, 67, 50, 0.06),
+    rgba(201, 162, 39, 0.08)
+  );
+  border-left: 3px solid var(--forest);
+}
+
+.feeder-callout h3 {
+  margin: 0 0 0.5rem;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.25rem;
+  color: var(--forest);
+}
+
+.feeder-callout p {
+  margin: 0 0 0.75rem;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.feeder-callout p:last-child {
+  margin-bottom: 0;
+}
+
 .row-focus {
   background: rgba(27, 67, 50, 0.06);
   font-weight: 650;

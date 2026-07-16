@@ -1,6 +1,7 @@
 import {
   getBartleyMonitorData,
   getChangeLog,
+  getFeederSchoolsData,
   getPeerSchoolsData,
   getSipTargets,
 } from "@/lib/data";
@@ -23,12 +24,14 @@ import { MetricsWorkbench } from "@/components/MetricsWorkbench";
 import { ExecutiveSummaryCard } from "@/components/ExecutiveSummaryCard";
 import { ChangeLogCard } from "@/components/ChangeLogCard";
 import { GlossaryPanel } from "@/components/GlossaryPanel";
+import { FeederSchoolsSection } from "@/components/FeederSchoolsSection";
 import { SiteHeader } from "@/components/SiteHeader";
 import Link from "next/link";
 
 export default function HomePage() {
   const data = getBartleyMonitorData();
   const peers = getPeerSchoolsData();
+  const feeders = getFeederSchoolsData();
   const sipTargets = getSipTargets();
   const changeLog = getChangeLog();
   const score = scorecard(data.subjects);
@@ -220,6 +223,8 @@ export default function HomePage() {
         </div>
       </section>
 
+      <FeederSchoolsSection feeders={feeders} />
+
       <GlossaryPanel />
 
       <section className="section section-alt" id="source">
@@ -261,7 +266,9 @@ export default function HomePage() {
             . SIP ambitions live in{" "}
             <code>src/data/sip-targets.json</code> and can be overlaid on
             year-on-year charts. Peer overlays and the peer table compare
-            Bartley with the top three similar-size local juniors.
+            Bartley with the top three similar-size local juniors. The feeder
+            section uses census/absence for named infants plus LA/national
+            phonics; school-level KS1/phonics columns await ASP figures.
           </p>
         </div>
       </section>

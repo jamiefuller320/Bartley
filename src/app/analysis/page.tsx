@@ -3,6 +3,7 @@ import Link from "next/link";
 import {
   getBartleyMonitorData,
   getChangeLog,
+  getFeederSchoolsData,
   getPeerSchoolsData,
 } from "@/lib/data";
 import { buildAnalysis } from "@/lib/analysis";
@@ -22,7 +23,8 @@ export const metadata: Metadata = {
 export default function AnalysisPage() {
   const data = getBartleyMonitorData();
   const peers = getPeerSchoolsData();
-  const analysis = buildAnalysis(data, peers);
+  const feeders = getFeederSchoolsData();
+  const analysis = buildAnalysis(data, peers, feeders);
   const summary = buildExecutiveSummary(data, peers);
   const changeLog = getChangeLog();
 

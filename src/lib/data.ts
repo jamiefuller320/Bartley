@@ -1,8 +1,10 @@
 import seed from "@/data/bartley-2024-25.json";
 import peerSeed from "@/data/peer-schools.json";
+import feederSeed from "@/data/feeder-schools.json";
 import changeLogSeed from "@/data/change-log.json";
 import sipSeed from "@/data/sip-targets.json";
 import type {
+  FeederSchoolsBundle,
   PeerSchoolsBundle,
   SchoolMonitorData,
 } from "@/lib/types";
@@ -14,6 +16,10 @@ export function getBartleyMonitorData(): SchoolMonitorData {
 
 export function getPeerSchoolsData(): PeerSchoolsBundle {
   return peerSeed as PeerSchoolsBundle;
+}
+
+export function getFeederSchoolsData(): FeederSchoolsBundle {
+  return feederSeed as FeederSchoolsBundle;
 }
 
 export function getChangeLog(): ChangeLog {

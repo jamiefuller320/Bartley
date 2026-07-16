@@ -45,28 +45,34 @@ jobs:
         continue-on-error: true
         run: npm run refresh-peers
 
+      - name: Refresh feeder infant context
+        id: feeders
+        continue-on-error: true
+        run: npm run refresh-feeders
+
       - name: Detect changes
         id: changes
-        if: steps.refresh.outcome == 'success' || steps.peers.outcome == 'success'
+        if: steps.refresh.outcome == 'success' || steps.peers.outcome == 'success' || steps.feeders.outcome == 'success'
         run: |
-          if git diff --quiet -- src/data/bartley-2024-25.json src/data/peer-schools.json src/data/change-log.json; then
+          if git diff --quiet -- src/data/bartley-2024-25.json src/data/peer-schools.json src/data/change-log.json src/data/feeder-schools.json; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Create pull request
-        if: (steps.refresh.outcome == 'success' || steps.peers.outcome == 'success') && steps.changes.outputs.changed == 'true'
+        if: (steps.refresh.outcome == 'success' || steps.peers.outcome == 'success' || steps.feeders.outcome == 'success') && steps.changes.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
-          commit-message: "chore: refresh Bartley and peer DfE seed data"
-          title: "Refresh Bartley and peer DfE seed data"
+          commit-message: "chore: refresh Bartley, peer, and feeder DfE seed data"
+          title: "Refresh Bartley, peer, and feeder DfE seed data"
           body: |
             Automated refresh of:
 
             - `src/data/bartley-2024-25.json` (Bartley seed)
             - `src/data/change-log.json` (what moved since previous seed)
             - `src/data/peer-schools.json` (curated peer metrics from CSP KS2 downloads)
+            - `src/data/feeder-schools.json` (feeder infants + local infant peers from GIAS/census/absence)
 
             Please review figures before merging.
           branch: chore/refresh-dfe-data
