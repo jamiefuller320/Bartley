@@ -2,12 +2,24 @@
 
 export const COVID_GAP_LABEL = "COVID";
 
+/** Normal year-to-year step on the numeric X axis. */
+export const YEAR_STEP = 1;
+
+/** COVID unpublished stretch uses half a normal year step. */
+export const COVID_GAP_STEP = YEAR_STEP / 2;
+
 export const COVID_GAP_NOTE =
-  "Hatched band (one year-slot wide) = continuous COVID gap, 2019/20–2021/22 unpublished.";
+  "Hatched band (½ year-slot) = continuous COVID gap, 2019/20–2021/22 unpublished.";
 
 export type CovidGapPoint = {
   year: string;
   gap: true;
+};
+
+export type ScaledChartPoint<T> = T & {
+  x: number;
+  year: string;
+  gap?: boolean;
 };
 
 /** True when consecutive published years skip one or more academic years. */
@@ -21,33 +33,40 @@ export function hasYearSkip(
 }
 
 /**
- * Insert a single compressed COVID gap category between published years
- * so lines break without spending three category slots on 2019–22.
+ * Place published years on a numeric X axis (step = 1) and insert a null
+ * COVID point so the break spans only half a normal year interval.
  */
-export function insertCovidGapCategory<T extends { year: string }>(
+export function withHalfWidthCovidGap<T extends { year: string }>(
   rows: T[],
   makeGap: () => T & CovidGapPoint,
-): Array<T | (T & CovidGapPoint)> {
-  const out: Array<T | (T & CovidGapPoint)> = [];
+): {
+  rows: Array<ScaledChartPoint<T>>;
+  gapRange: { x0: number; x1: number } | null;
+  tickLabels: Map<number, string>;
+} {
+  const out: Array<ScaledChartPoint<T>> = [];
+  const tickLabels = new Map<number, string>();
+  let gapRange: { x0: number; x1: number } | null = null;
+  let x = 0;
+
   for (let i = 0; i < rows.length; i += 1) {
-    out.push(rows[i]);
-    const next = rows[i + 1];
-    if (!next) continue;
-    if (hasYearSkip(rows[i].year, next.year)) {
-      out.push(makeGap());
+    out.push({ ...rows[i], x, gap: false });
+    tickLabels.set(x, rows[i].year);
+
+    if (i >= rows.length - 1) continue;
+
+    if (hasYearSkip(rows[i].year, rows[i + 1].year)) {
+      const x0 = x;
+      const x1 = x + COVID_GAP_STEP;
+      const mid = (x0 + x1) / 2;
+      out.push({ ...makeGap(), x: mid, gap: true });
+      tickLabels.set(mid, COVID_GAP_LABEL);
+      gapRange = { x0, x1 };
+      x = x1;
+    } else {
+      x += YEAR_STEP;
     }
   }
-  return out;
-}
 
-export function findCovidGapBounds(
-  rows: Array<{ year: string; gap?: boolean }>,
-): { gapLabel: string; before: string | null; after: string | null } | null {
-  const idx = rows.findIndex((row) => row.gap);
-  if (idx < 0) return null;
-  return {
-    gapLabel: rows[idx].year,
-    before: idx > 0 ? rows[idx - 1].year : null,
-    after: idx < rows.length - 1 ? rows[idx + 1].year : null,
-  };
+  return { rows: out, gapRange, tickLabels };
 }
