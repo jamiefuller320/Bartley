@@ -29,9 +29,9 @@ const TERMS = [
       "KS1–KS2 value-added estimate with confidence intervals; around zero is broadly average. Missing for recent cohorts without KS1 baselines.",
   },
   {
-    term: "COVID gap (19–22*)",
+    term: "COVID gap (hatched)",
     definition:
-      "Performance-table KS2 files were not published for 2019/20–2021/22, so trend lines intentionally break.",
+      "Performance-table KS2 files were not published for 2019/20–2021/22. Charts show one compressed hatched band so the break reads as a continuous multi-year gap, not missing single years.",
   },
   {
     term: "Disadvantaged",

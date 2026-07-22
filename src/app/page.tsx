@@ -200,7 +200,8 @@ export default function HomePage() {
                 <h3>Equity over time</h3>
                 <p>
                   Boys, girls, and disadvantage gaps across published years —
-                  with the COVID performance-table gap marked explicitly.
+                  with a compressed hatched band for the COVID performance-table
+                  gap.
                 </p>
               </div>
               <EquityHistoryChart equityHistory={data.equityHistory ?? []} />

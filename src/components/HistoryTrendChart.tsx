@@ -14,6 +14,16 @@ import {
 import type { HistoryRow } from "@/lib/types";
 import type { SipTarget } from "@/lib/board";
 import { domainValues, focusedDomain } from "@/lib/chart-scale";
+import {
+  COVID_GAP_LABEL,
+  COVID_GAP_NOTE,
+  insertCovidGapCategory,
+} from "@/lib/covid-gap";
+import {
+  CovidAwareYearTick,
+  CovidGapReferenceArea,
+  CovidHatchDefs,
+} from "@/components/CovidGapBand";
 
 function periodLabel(period: string): string {
   const [a, b] = period.split("/");
@@ -25,30 +35,9 @@ type ChartPoint = {
   Bartley: number | null;
   Hampshire: number | null;
   England: number | null;
+  gap?: boolean;
   [key: string]: string | number | null | boolean | undefined;
 };
-
-/** Insert a labelled COVID gap between published years so lines do not imply continuity. */
-function withCovidGap(rows: ChartPoint[]): ChartPoint[] {
-  const out: ChartPoint[] = [];
-  for (let i = 0; i < rows.length; i += 1) {
-    out.push(rows[i]);
-    const next = rows[i + 1];
-    if (!next) continue;
-    const a = parseInt(String(rows[i].year).split("/")[0], 10);
-    const b = parseInt(String(next.year).split("/")[0], 10);
-    if (!Number.isNaN(a) && !Number.isNaN(b) && b - a > 1) {
-      out.push({
-        year: "19–22*",
-        Bartley: null,
-        Hampshire: null,
-        England: null,
-        gap: true,
-      });
-    }
-  }
-  return out;
-}
 
 export function HistoryTrendChart({
   history,
@@ -121,7 +110,14 @@ export function HistoryTrendChart({
       return false;
     });
 
-  const rows = withCovidGap(baseRows);
+  const rows = insertCovidGapCategory(baseRows, () => ({
+    year: COVID_GAP_LABEL,
+    Bartley: null,
+    Hampshire: null,
+    England: null,
+    gap: true as const,
+    ...(overlayPeer ? { [peerKey]: null } : {}),
+  }));
 
   if (!baseRows.length) {
     return (
@@ -149,24 +145,25 @@ export function HistoryTrendChart({
   return (
     <div className="chart-frame">
       <p className="chart-note">
-        Axis range {domain[0]}
+        Axis {domain[0]}
         {isPct ? "%" : ""}–{domain[1]}
-        {isPct ? "%" : ""} (zoomed to the values on display).
-        {hasGap
-          ? " Break at 19–22* marks COVID years with no performance-table KS2 files — lines do not connect across that gap."
-          : ""}
+        {isPct ? "%" : ""}
+        {hasGap ? ` · ${COVID_GAP_NOTE}` : ""}
         {activeTargets.length
-          ? ` SIP target line${activeTargets.length > 1 ? "s" : ""} shown for board ambition.`
+          ? ` · SIP target${activeTargets.length > 1 ? "s" : ""} overlaid.`
           : ""}
       </p>
       <ResponsiveContainer width="100%" height={320}>
-        <LineChart data={rows} margin={{ top: 8, right: 12, left: -8, bottom: 8 }}>
+        <LineChart data={rows} margin={{ top: 8, right: 12, left: -8, bottom: 4 }}>
+          <CovidHatchDefs patternId="covid-hatch-history" />
           <CartesianGrid stroke="rgba(27, 67, 50, 0.08)" vertical={false} />
           <XAxis
             dataKey="year"
-            tick={{ fill: "#3d5248", fontSize: 12 }}
+            tick={<CovidAwareYearTick gapLabel={COVID_GAP_LABEL} />}
             axisLine={false}
             tickLine={false}
+            interval={0}
+            height={28}
           />
           <YAxis
             tick={{ fill: "#3d5248", fontSize: 12 }}
@@ -184,6 +181,11 @@ export function HistoryTrendChart({
                   : value.toFixed(0)
                 : "—"
             }
+            labelFormatter={(label) =>
+              label === COVID_GAP_LABEL
+                ? "COVID gap (2019/20–2021/22)"
+                : String(label)
+            }
             contentStyle={{
               background: "#f4f8f5",
               border: "1px solid rgba(27,67,50,0.12)",
@@ -191,6 +193,12 @@ export function HistoryTrendChart({
             }}
           />
           <Legend />
+          {hasGap ? (
+            <CovidGapReferenceArea
+              gapLabel={COVID_GAP_LABEL}
+              patternId="covid-hatch-history"
+            />
+          ) : null}
           {activeTargets.map((target) => (
             <ReferenceLine
               key={`${target.label}-${target.value}`}

@@ -12,6 +12,16 @@ import {
 } from "recharts";
 import type { EquityHistoryRow } from "@/lib/types";
 import { domainValues, focusedDomain } from "@/lib/chart-scale";
+import {
+  COVID_GAP_LABEL,
+  COVID_GAP_NOTE,
+  insertCovidGapCategory,
+} from "@/lib/covid-gap";
+import {
+  CovidAwareYearTick,
+  CovidGapReferenceArea,
+  CovidHatchDefs,
+} from "@/components/CovidGapBand";
 
 function periodLabel(period: string): string {
   const [a, b] = period.split("/");
@@ -24,6 +34,15 @@ const COLORS: Record<(typeof GROUPS)[number], string> = {
   Girls: "#2d6a4f",
   Disadvantaged: "#9b2c2c",
   "Not disadvantaged": "#0e7490",
+};
+
+type EquityPoint = {
+  year: string;
+  Boys: number | null;
+  Girls: number | null;
+  Disadvantaged: number | null;
+  "Not disadvantaged": number | null;
+  gap?: boolean;
 };
 
 export function EquityHistoryChart({
@@ -39,29 +58,13 @@ export function EquityHistoryChart({
     ),
   ].sort();
 
-  const withGap: string[] = [];
-  for (let i = 0; i < periods.length; i += 1) {
-    withGap.push(periods[i]);
-    const year = Number(periods[i].slice(0, 4));
-    const next = periods[i + 1];
-    if (next && Number(next.slice(0, 4)) - year > 1) {
-      withGap.push("__covid_gap__");
-    }
-  }
-
-  const rows = withGap.map((period) => {
-    if (period === "__covid_gap__") {
-      return {
-        year: "19–22*",
-        Boys: null,
-        Girls: null,
-        Disadvantaged: null,
-        "Not disadvantaged": null,
-        gap: true,
-      };
-    }
-    const point: Record<string, string | number | boolean | null> = {
+  const baseRows: EquityPoint[] = periods.map((period) => {
+    const point: EquityPoint = {
       year: periodLabel(period),
+      Boys: null,
+      Girls: null,
+      Disadvantaged: null,
+      "Not disadvantaged": null,
       gap: false,
     };
     for (const group of GROUPS) {
@@ -72,27 +75,39 @@ export function EquityHistoryChart({
     return point;
   });
 
+  const rows = insertCovidGapCategory(baseRows, () => ({
+    year: COVID_GAP_LABEL,
+    Boys: null,
+    Girls: null,
+    Disadvantaged: null,
+    "Not disadvantaged": null,
+    gap: true as const,
+  }));
+
   if (!rows.some((row) => GROUPS.some((group) => row[group] != null))) {
     return <p className="muted">No published equity history available.</p>;
   }
 
   const domain = focusedDomain(domainValues(rows, [...GROUPS]), "percent");
+  const hasGap = rows.some((row) => row.gap);
 
   return (
     <div className="chart-frame">
       <p className="chart-note">
-        Combined RWM expected standard by pupil group. Axis {domain[0]}–
-        {domain[1]}%. Gap marker 19–22* = COVID years not published in
-        performance tables.
+        Combined RWM by pupil group · axis {domain[0]}–{domain[1]}%
+        {hasGap ? ` · ${COVID_GAP_NOTE}` : ""}
       </p>
       <ResponsiveContainer width="100%" height={320}>
-        <LineChart data={rows} margin={{ top: 8, right: 12, left: -8, bottom: 8 }}>
+        <LineChart data={rows} margin={{ top: 8, right: 12, left: -8, bottom: 4 }}>
+          <CovidHatchDefs patternId="covid-hatch-equity" />
           <CartesianGrid stroke="rgba(27, 67, 50, 0.08)" vertical={false} />
           <XAxis
             dataKey="year"
-            tick={{ fill: "#3d5248", fontSize: 12 }}
+            tick={<CovidAwareYearTick gapLabel={COVID_GAP_LABEL} />}
             axisLine={false}
             tickLine={false}
+            interval={0}
+            height={28}
           />
           <YAxis
             tick={{ fill: "#3d5248", fontSize: 12 }}
@@ -106,6 +121,11 @@ export function EquityHistoryChart({
             formatter={(value) =>
               typeof value === "number" ? `${value}%` : "—"
             }
+            labelFormatter={(label) =>
+              label === COVID_GAP_LABEL
+                ? "COVID gap (2019/20–2021/22)"
+                : String(label)
+            }
             contentStyle={{
               background: "#f4f8f5",
               border: "1px solid rgba(27,67,50,0.12)",
@@ -113,6 +133,12 @@ export function EquityHistoryChart({
             }}
           />
           <Legend />
+          {hasGap ? (
+            <CovidGapReferenceArea
+              gapLabel={COVID_GAP_LABEL}
+              patternId="covid-hatch-equity"
+            />
+          ) : null}
           {GROUPS.map((group) => (
             <Line
               key={group}
