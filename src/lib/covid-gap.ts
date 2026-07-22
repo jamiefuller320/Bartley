@@ -3,7 +3,7 @@
 export const COVID_GAP_LABEL = "COVID";
 
 export const COVID_GAP_NOTE =
-  "Hatched band = continuous COVID gap (2019/20–2021/22 unpublished in performance tables).";
+  "Hatched band (one year-slot wide) = continuous COVID gap, 2019/20–2021/22 unpublished.";
 
 export type CovidGapPoint = {
   year: string;

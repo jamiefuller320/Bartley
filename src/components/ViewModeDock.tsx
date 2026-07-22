@@ -9,41 +9,54 @@ export function ViewModeDock({
   mode: ChartViewMode;
   onChange: (mode: ChartViewMode) => void;
 }) {
+  const setCompare = () => onChange("compare");
+  const setHistory = () => onChange("history");
+  const toggle = () => onChange(mode === "compare" ? "history" : "compare");
+
   return (
     <div className="view-dock" role="group" aria-label="Chart view mode">
-      <span className={mode === "compare" ? "view-dock-label active" : "view-dock-label"}>
+      <button
+        type="button"
+        className={
+          mode === "compare" ? "view-dock-label active" : "view-dock-label"
+        }
+        onClick={setCompare}
+        aria-pressed={mode === "compare"}
+      >
         Bartley / Hampshire / England
-      </span>
-      <label className="view-dock-switch">
-        <span className="sr-only">Switch chart view</span>
-        <input
-          type="range"
-          min={0}
-          max={1}
-          step={1}
-          value={mode === "compare" ? 0 : 1}
-          onChange={(event) =>
-            onChange(event.target.value === "0" ? "compare" : "history")
-          }
-          aria-valuetext={
-            mode === "compare"
-              ? "Bartley versus Hampshire and England"
-              : "Bartley year on year history"
-          }
-        />
+      </button>
+
+      <button
+        type="button"
+        className="view-dock-switch"
+        onClick={toggle}
+        aria-label="Switch chart view"
+        aria-pressed={mode === "history"}
+        title={
+          mode === "compare"
+            ? "Show Bartley year-on-year history"
+            : "Show Bartley versus Hampshire and England"
+        }
+      >
         <span className="view-dock-track" aria-hidden="true">
           <span
             className={
-              mode === "history"
-                ? "view-dock-thumb history"
-                : "view-dock-thumb"
+              mode === "history" ? "view-dock-thumb history" : "view-dock-thumb"
             }
           />
         </span>
-      </label>
-      <span className={mode === "history" ? "view-dock-label active" : "view-dock-label"}>
+      </button>
+
+      <button
+        type="button"
+        className={
+          mode === "history" ? "view-dock-label active" : "view-dock-label"
+        }
+        onClick={setHistory}
+        aria-pressed={mode === "history"}
+      >
         Bartley year-on-year
-      </span>
+      </button>
     </div>
   );
 }

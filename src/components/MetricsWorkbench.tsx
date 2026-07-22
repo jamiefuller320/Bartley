@@ -84,7 +84,14 @@ function MetricsWorkbenchInner({
     const peerParam = searchParams.get("peer");
     if (peerParam === "average" || peerParam === "none") {
       setPeerOverlay(peerParam);
-    } else if (peerParam && peers.peers.some((p) => p.urn === peerParam || p.short.toLowerCase() === peerParam.toLowerCase())) {
+    } else if (
+      peerParam &&
+      peers.peers.some(
+        (p) =>
+          p.urn === peerParam ||
+          p.short.toLowerCase() === peerParam.toLowerCase(),
+      )
+    ) {
       const match = peers.peers.find(
         (p) =>
           p.urn === peerParam ||
@@ -93,6 +100,14 @@ function MetricsWorkbenchInner({
       if (match) setPeerOverlay(match.urn);
     }
   }, [searchParams, peers.peers]);
+
+  const changeMode = (next: ChartViewMode) => {
+    setMode(next);
+    if (typeof window === "undefined") return;
+    const url = new URL(window.location.href);
+    url.searchParams.set("view", next);
+    window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash || "#charts"}`);
+  };
 
   const subjectHistory = useMemo(
     () => history.filter((row) => row.subject === subject),
@@ -133,8 +148,27 @@ function MetricsWorkbenchInner({
           <p>
             {mode === "compare"
               ? `Latest year (${period.replace("/", "–")}) — Bartley against Hampshire and England. Optionally overlay a top local peer or the peer average.`
-              : "Bartley year-on-year history. Overlay Hampshire, England, and a selected peer school or peer average with the controls below."}
+              : "Bartley year-on-year history. Overlay Hampshire, England, and a selected peer school or peer average with the controls below. The hatched COVID band marks unpublished 2019/20–2021/22 performance-table years."}
           </p>
+        </div>
+
+        <div className="chart-view-toggle" role="group" aria-label="Chart view">
+          <button
+            type="button"
+            className={mode === "compare" ? "history-tab active" : "history-tab"}
+            onClick={() => changeMode("compare")}
+            aria-pressed={mode === "compare"}
+          >
+            Latest vs Hampshire / England
+          </button>
+          <button
+            type="button"
+            className={mode === "history" ? "history-tab active" : "history-tab"}
+            onClick={() => changeMode("history")}
+            aria-pressed={mode === "history"}
+          >
+            Year-on-year history
+          </button>
         </div>
 
         <div className="peer-strip" aria-label="Similar top-performing peers">
@@ -352,7 +386,7 @@ function MetricsWorkbenchInner({
         <PeerComparisonTable peers={peers} bartley={data} />
       </div>
 
-      <ViewModeDock mode={mode} onChange={setMode} />
+      <ViewModeDock mode={mode} onChange={changeMode} />
     </section>
   );
 }
