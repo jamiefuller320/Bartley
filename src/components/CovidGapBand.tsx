@@ -1,39 +1,38 @@
 "use client";
 
 import { useId } from "react";
-import { usePlotArea, useXAxisScale } from "recharts";
+import { ReferenceArea } from "recharts";
 import { COVID_GAP_LABEL } from "@/lib/covid-gap";
 
-/**
- * Draws a hatched band over the single COVID gap category.
- * Uses Recharts 3 scale hooks so the band spans exactly one year-slot
- * (same spacing as neighbouring year ticks) and always paints.
- */
-export function CovidGapBand({
-  gapLabel = COVID_GAP_LABEL,
-  areaLabel = "COVID gap",
-}: {
-  gapLabel?: string;
-  areaLabel?: string;
-}) {
-  const plotArea = usePlotArea();
-  const xScale = useXAxisScale();
-  const reactId = useId().replace(/:/g, "");
-  const clipId = `covid-gap-clip-${reactId}`;
+type AreaShapeProps = {
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
+};
 
-  if (!plotArea || !xScale) return null;
+function HatchedGapShape({
+  x,
+  y,
+  width,
+  height,
+  label,
+  clipId,
+}: AreaShapeProps & { label: string; clipId: string }) {
+  if (
+    x == null ||
+    y == null ||
+    width == null ||
+    height == null ||
+    !Number.isFinite(width) ||
+    !Number.isFinite(height) ||
+    width < 2 ||
+    height < 2
+  ) {
+    return null;
+  }
 
-  const xStart = xScale(gapLabel, { position: "start" });
-  const xEnd = xScale(gapLabel, { position: "end" });
-  if (xStart == null || xEnd == null) return null;
-
-  const x = Math.min(xStart, xEnd);
-  const width = Math.abs(xEnd - xStart);
-  if (width <= 0) return null;
-
-  const y = plotArea.y;
-  const height = plotArea.height;
-  const spacing = 7;
+  const spacing = 6;
   const lines: React.ReactNode[] = [];
   for (let i = -height; i < width + height; i += spacing) {
     lines.push(
@@ -43,14 +42,14 @@ export function CovidGapBand({
         y1={y + height}
         x2={x + i + height}
         y2={y}
-        stroke="rgba(27, 67, 50, 0.4)"
-        strokeWidth={1.75}
+        stroke="rgba(27, 67, 50, 0.45)"
+        strokeWidth={2}
       />,
     );
   }
 
   return (
-    <g className="covid-gap-hatch" aria-label={areaLabel}>
+    <g className="covid-gap-hatch" aria-label={label}>
       <defs>
         <clipPath id={clipId}>
           <rect x={x} y={y} width={width} height={height} />
@@ -61,10 +60,10 @@ export function CovidGapBand({
         y={y}
         width={width}
         height={height}
-        fill="rgba(27, 67, 50, 0.08)"
-        stroke="rgba(27, 67, 50, 0.4)"
-        strokeWidth={1}
-        strokeDasharray="3 2"
+        fill="rgba(27, 67, 50, 0.12)"
+        stroke="rgba(27, 67, 50, 0.45)"
+        strokeWidth={1.25}
+        strokeDasharray="4 2"
       />
       <g clipPath={`url(#${clipId})`}>{lines}</g>
       <text
@@ -72,28 +71,69 @@ export function CovidGapBand({
         y={y + height / 2}
         textAnchor="middle"
         dominantBaseline="middle"
-        fill="#3d5248"
+        fill="#1b4332"
         fontSize={11}
         fontStyle="italic"
-        fontWeight={600}
+        fontWeight={700}
         style={{ pointerEvents: "none" }}
       >
-        {areaLabel}
+        {label}
       </text>
     </g>
   );
 }
 
-/** X-axis tick: gap category keeps equal spacing; quiet mark under the band. */
+/**
+ * Hatched band between numeric x0→x1 (½ of a normal year step).
+ * Uses ReferenceArea so Recharts resolves pixel width on a number axis
+ * (line-chart category scales have no bandwidth, which previously hid the hatch).
+ */
+export function CovidGapBand({
+  x0,
+  x1,
+  areaLabel = "COVID gap",
+}: {
+  x0: number;
+  x1: number;
+  areaLabel?: string;
+}) {
+  const reactId = useId().replace(/:/g, "");
+  const clipId = `covid-gap-clip-${reactId}`;
+
+  return (
+    <ReferenceArea
+      x1={x0}
+      x2={x1}
+      ifOverflow="visible"
+      stroke="none"
+      fill="none"
+      fillOpacity={1}
+      label={false}
+      shape={(props: AreaShapeProps) => (
+        <HatchedGapShape
+          {...props}
+          label={areaLabel}
+          clipId={clipId}
+        />
+      )}
+    />
+  );
+}
+
+/** Numeric X tick: map value → year label; quiet mark under the COVID band. */
 export function CovidAwareYearTick(props: {
   x?: number;
   y?: number;
-  payload?: { value?: string };
-  gapLabel?: string;
+  payload?: { value?: number | string };
+  tickLabels?: Map<number, string>;
 }) {
-  const { x = 0, y = 0, payload, gapLabel = COVID_GAP_LABEL } = props;
-  const value = payload?.value ?? "";
-  const isGap = value === gapLabel;
+  const { x = 0, y = 0, payload, tickLabels } = props;
+  const raw = payload?.value;
+  const numeric = typeof raw === "number" ? raw : Number(raw);
+  const label =
+    tickLabels?.get(numeric) ??
+    (typeof raw === "string" ? raw : String(raw ?? ""));
+  const isGap = label === COVID_GAP_LABEL;
   return (
     <text
       x={x}
@@ -103,7 +143,7 @@ export function CovidAwareYearTick(props: {
       fontSize={isGap ? 10 : 12}
       fontStyle={isGap ? "italic" : undefined}
     >
-      {isGap ? "…" : value}
+      {isGap ? "…" : label}
     </text>
   );
 }

@@ -15,7 +15,7 @@ import { domainValues, focusedDomain } from "@/lib/chart-scale";
 import {
   COVID_GAP_LABEL,
   COVID_GAP_NOTE,
-  insertCovidGapCategory,
+  withHalfWidthCovidGap,
 } from "@/lib/covid-gap";
 import {
   CovidAwareYearTick,
@@ -74,39 +74,44 @@ export function EquityHistoryChart({
     return point;
   });
 
-  const rows = insertCovidGapCategory(baseRows, () => ({
-    year: COVID_GAP_LABEL,
-    Boys: null,
-    Girls: null,
-    Disadvantaged: null,
-    "Not disadvantaged": null,
-    gap: true as const,
-  }));
+  const { rows, gapRange, tickLabels } = withHalfWidthCovidGap(
+    baseRows,
+    () => ({
+      year: COVID_GAP_LABEL,
+      Boys: null,
+      Girls: null,
+      Disadvantaged: null,
+      "Not disadvantaged": null,
+      gap: true as const,
+    }),
+  );
 
   if (!rows.some((row) => GROUPS.some((group) => row[group] != null))) {
     return <p className="muted">No published equity history available.</p>;
   }
 
   const domain = focusedDomain(domainValues(rows, [...GROUPS]), "percent");
-  const hasGap = rows.some((row) => row.gap);
+  const xTicks = rows.map((row) => row.x);
 
   return (
     <div className="chart-frame">
       <p className="chart-note">
         Combined RWM by pupil group · axis {domain[0]}–{domain[1]}%
-        {hasGap ? ` · ${COVID_GAP_NOTE}` : ""}
+        {gapRange ? ` · ${COVID_GAP_NOTE}` : ""}
       </p>
       <ResponsiveContainer width="100%" height={320}>
         <LineChart data={rows} margin={{ top: 8, right: 12, left: -8, bottom: 4 }}>
           <CartesianGrid stroke="rgba(27, 67, 50, 0.08)" vertical={false} />
           <XAxis
-            dataKey="year"
-            tick={<CovidAwareYearTick gapLabel={COVID_GAP_LABEL} />}
+            type="number"
+            dataKey="x"
+            ticks={xTicks}
+            domain={["dataMin", "dataMax"]}
+            tick={<CovidAwareYearTick tickLabels={tickLabels} />}
             axisLine={false}
             tickLine={false}
-            interval={0}
             height={28}
-            padding={{ left: 0, right: 0 }}
+            padding={{ left: 12, right: 12 }}
           />
           <YAxis
             tick={{ fill: "#3d5248", fontSize: 12 }}
@@ -120,11 +125,14 @@ export function EquityHistoryChart({
             formatter={(value) =>
               typeof value === "number" ? `${value}%` : "—"
             }
-            labelFormatter={(label) =>
-              label === COVID_GAP_LABEL
-                ? "COVID gap (2019/20–2021/22)"
-                : String(label)
-            }
+            labelFormatter={(label) => {
+              const numeric = typeof label === "number" ? label : Number(label);
+              const name = tickLabels.get(numeric);
+              if (name === COVID_GAP_LABEL) {
+                return "COVID gap (2019/20–2021/22)";
+              }
+              return name ?? String(label);
+            }}
             contentStyle={{
               background: "#f4f8f5",
               border: "1px solid rgba(27,67,50,0.12)",
@@ -132,7 +140,9 @@ export function EquityHistoryChart({
             }}
           />
           <Legend />
-          {hasGap ? <CovidGapBand gapLabel={COVID_GAP_LABEL} /> : null}
+          {gapRange ? (
+            <CovidGapBand x0={gapRange.x0} x1={gapRange.x1} />
+          ) : null}
           {GROUPS.map((group) => (
             <Line
               key={group}
@@ -147,6 +157,7 @@ export function EquityHistoryChart({
               }
               dot={{ r: 3, fill: COLORS[group] }}
               connectNulls={false}
+              isAnimationActive={false}
             />
           ))}
         </LineChart>

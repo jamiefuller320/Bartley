@@ -17,7 +17,7 @@ import { domainValues, focusedDomain } from "@/lib/chart-scale";
 import {
   COVID_GAP_LABEL,
   COVID_GAP_NOTE,
-  insertCovidGapCategory,
+  withHalfWidthCovidGap,
 } from "@/lib/covid-gap";
 import {
   CovidAwareYearTick,
@@ -35,6 +35,7 @@ type ChartPoint = {
   Hampshire: number | null;
   England: number | null;
   gap?: boolean;
+  x?: number;
   [key: string]: string | number | null | boolean | undefined;
 };
 
@@ -109,7 +110,7 @@ export function HistoryTrendChart({
       return false;
     });
 
-  const rows = insertCovidGapCategory(baseRows, () => ({
+  const { rows, gapRange, tickLabels } = withHalfWidthCovidGap(baseRows, () => ({
     year: COVID_GAP_LABEL,
     Bartley: null,
     Hampshire: null,
@@ -139,7 +140,7 @@ export function HistoryTrendChart({
     kind,
   );
   const isPct = metric !== "scaled";
-  const hasGap = rows.some((row) => row.gap);
+  const xTicks = rows.map((row) => row.x);
 
   return (
     <div className="chart-frame">
@@ -147,7 +148,7 @@ export function HistoryTrendChart({
         Axis {domain[0]}
         {isPct ? "%" : ""}–{domain[1]}
         {isPct ? "%" : ""}
-        {hasGap ? ` · ${COVID_GAP_NOTE}` : ""}
+        {gapRange ? ` · ${COVID_GAP_NOTE}` : ""}
         {activeTargets.length
           ? ` · SIP target${activeTargets.length > 1 ? "s" : ""} overlaid.`
           : ""}
@@ -156,13 +157,15 @@ export function HistoryTrendChart({
         <LineChart data={rows} margin={{ top: 8, right: 12, left: -8, bottom: 4 }}>
           <CartesianGrid stroke="rgba(27, 67, 50, 0.08)" vertical={false} />
           <XAxis
-            dataKey="year"
-            tick={<CovidAwareYearTick gapLabel={COVID_GAP_LABEL} />}
+            type="number"
+            dataKey="x"
+            ticks={xTicks}
+            domain={["dataMin", "dataMax"]}
+            tick={<CovidAwareYearTick tickLabels={tickLabels} />}
             axisLine={false}
             tickLine={false}
-            interval={0}
             height={28}
-            padding={{ left: 0, right: 0 }}
+            padding={{ left: 12, right: 12 }}
           />
           <YAxis
             tick={{ fill: "#3d5248", fontSize: 12 }}
@@ -180,11 +183,14 @@ export function HistoryTrendChart({
                   : value.toFixed(0)
                 : "—"
             }
-            labelFormatter={(label) =>
-              label === COVID_GAP_LABEL
-                ? "COVID gap (2019/20–2021/22)"
-                : String(label)
-            }
+            labelFormatter={(label) => {
+              const numeric = typeof label === "number" ? label : Number(label);
+              const name = tickLabels.get(numeric);
+              if (name === COVID_GAP_LABEL) {
+                return "COVID gap (2019/20–2021/22)";
+              }
+              return name ?? String(label);
+            }}
             contentStyle={{
               background: "#f4f8f5",
               border: "1px solid rgba(27,67,50,0.12)",
@@ -192,7 +198,9 @@ export function HistoryTrendChart({
             }}
           />
           <Legend />
-          {hasGap ? <CovidGapBand gapLabel={COVID_GAP_LABEL} /> : null}
+          {gapRange ? (
+            <CovidGapBand x0={gapRange.x0} x1={gapRange.x1} />
+          ) : null}
           {activeTargets.map((target) => (
             <ReferenceLine
               key={`${target.label}-${target.value}`}
@@ -214,6 +222,7 @@ export function HistoryTrendChart({
             strokeWidth={3}
             dot={{ r: 4, fill: "#1b4332" }}
             connectNulls={false}
+            isAnimationActive={false}
           />
           {overlayHampshire ? (
             <Line
@@ -224,6 +233,7 @@ export function HistoryTrendChart({
               strokeDasharray="4 4"
               dot={{ r: 3, fill: "#52796f" }}
               connectNulls={false}
+              isAnimationActive={false}
             />
           ) : null}
           {overlayEngland ? (
@@ -234,6 +244,7 @@ export function HistoryTrendChart({
               strokeWidth={2}
               dot={{ r: 3, fill: "#c9a227" }}
               connectNulls={false}
+              isAnimationActive={false}
             />
           ) : null}
           {overlayPeer ? (
@@ -245,6 +256,7 @@ export function HistoryTrendChart({
               strokeDasharray="6 3"
               dot={{ r: 3.5, fill: "#0e7490" }}
               connectNulls={false}
+              isAnimationActive={false}
             />
           ) : null}
         </LineChart>
