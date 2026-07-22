@@ -22,7 +22,6 @@ import {
 import {
   CovidAwareYearTick,
   CovidGapReferenceArea,
-  CovidHatchDefs,
 } from "@/components/CovidGapBand";
 
 function periodLabel(period: string): string {
@@ -155,7 +154,6 @@ export function HistoryTrendChart({
       </p>
       <ResponsiveContainer width="100%" height={320}>
         <LineChart data={rows} margin={{ top: 8, right: 12, left: -8, bottom: 4 }}>
-          <CovidHatchDefs patternId="covid-hatch-history" />
           <CartesianGrid stroke="rgba(27, 67, 50, 0.08)" vertical={false} />
           <XAxis
             dataKey="year"
@@ -164,6 +162,7 @@ export function HistoryTrendChart({
             tickLine={false}
             interval={0}
             height={28}
+            padding={{ left: 0, right: 0 }}
           />
           <YAxis
             tick={{ fill: "#3d5248", fontSize: 12 }}
@@ -194,10 +193,7 @@ export function HistoryTrendChart({
           />
           <Legend />
           {hasGap ? (
-            <CovidGapReferenceArea
-              gapLabel={COVID_GAP_LABEL}
-              patternId="covid-hatch-history"
-            />
+            <CovidGapReferenceArea gapLabel={COVID_GAP_LABEL} />
           ) : null}
           {activeTargets.map((target) => (
             <ReferenceLine

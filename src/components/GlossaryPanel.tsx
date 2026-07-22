@@ -31,7 +31,7 @@ const TERMS = [
   {
     term: "COVID gap (hatched)",
     definition:
-      "Performance-table KS2 files were not published for 2019/20–2021/22. Charts show one compressed hatched band so the break reads as a continuous multi-year gap, not missing single years.",
+      "Performance-table KS2 files were not published for 2019/20–2021/22. Charts keep one year-slot for that stretch (same spacing as other years), hatched with a centred label, so lines break without implying continuity.",
   },
   {
     term: "Disadvantaged",

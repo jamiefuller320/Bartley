@@ -1,74 +1,121 @@
 "use client";
 
-import { Customized, ReferenceArea } from "recharts";
+import { useId } from "react";
+import { ReferenceArea } from "recharts";
 import { COVID_GAP_LABEL } from "@/lib/covid-gap";
 
-function HatchPatternSvg({ patternId }: { patternId: string }) {
-  return (
-    <defs>
-      <pattern
-        id={patternId}
-        width="7"
-        height="7"
-        patternUnits="userSpaceOnUse"
-        patternTransform="rotate(45)"
-      >
-        <rect width="7" height="7" fill="rgba(27, 67, 50, 0.05)" />
-        <line
-          x1="0"
-          y1="0"
-          x2="0"
-          y2="7"
-          stroke="rgba(27, 67, 50, 0.34)"
-          strokeWidth="2"
-        />
-      </pattern>
-    </defs>
-  );
-}
+type AreaShapeProps = {
+  x?: number;
+  y?: number;
+  width?: number;
+  height?: number;
+};
 
-/** Injects the hatch <defs> into the chart SVG via Customized. */
-export function CovidHatchDefs({ patternId = "covid-hatch" }: { patternId?: string }) {
+function HatchedGapShape({
+  x,
+  y,
+  width,
+  height,
+  label,
+  clipId,
+}: AreaShapeProps & { label: string; clipId: string }) {
+  if (
+    x == null ||
+    y == null ||
+    width == null ||
+    height == null ||
+    width <= 0 ||
+    height <= 0
+  ) {
+    return null;
+  }
+
+  const spacing = 7;
+  const lines: React.ReactNode[] = [];
+  // Diagonal strokes clipped to the category band (same width as other years).
+  for (let i = -height; i < width + height; i += spacing) {
+    lines.push(
+      <line
+        key={i}
+        x1={x + i}
+        y1={y + height}
+        x2={x + i + height}
+        y2={y}
+        stroke="rgba(27, 67, 50, 0.38)"
+        strokeWidth={1.75}
+      />,
+    );
+  }
+
   return (
-    <Customized
-      component={() => <HatchPatternSvg patternId={patternId} />}
-    />
+    <g className="covid-gap-hatch" aria-label={label}>
+      <defs>
+        <clipPath id={clipId}>
+          <rect x={x} y={y} width={width} height={height} />
+        </clipPath>
+      </defs>
+      <rect
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+        fill="rgba(27, 67, 50, 0.07)"
+        stroke="rgba(27, 67, 50, 0.35)"
+        strokeWidth={1}
+        strokeDasharray="3 2"
+      />
+      <g clipPath={`url(#${clipId})`}>{lines}</g>
+      <text
+        x={x + width / 2}
+        y={y + height / 2}
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fill="#3d5248"
+        fontSize={11}
+        fontStyle="italic"
+        fontWeight={600}
+        style={{ pointerEvents: "none" }}
+      >
+        {label}
+      </text>
+    </g>
   );
 }
 
 /**
- * Hatched band over the single compressed COVID gap tick.
- * Same x1/x2 uses the category band width in Recharts.
+ * One category-wide hatched band (same spacing as other year ticks)
+ * with the label centred in the area.
  */
 export function CovidGapReferenceArea({
   gapLabel = COVID_GAP_LABEL,
-  patternId = "covid-hatch",
+  areaLabel = "COVID gap",
 }: {
   gapLabel?: string;
-  patternId?: string;
+  areaLabel?: string;
 }) {
+  const clipId = useId().replace(/:/g, "");
+
   return (
     <ReferenceArea
       x1={gapLabel}
       x2={gapLabel}
-      fill={`url(#${patternId})`}
+      ifOverflow="visible"
+      stroke="none"
+      fill="none"
       fillOpacity={1}
-      stroke="rgba(27, 67, 50, 0.28)"
-      strokeWidth={1}
-      strokeDasharray="2 2"
-      label={{
-        value: "gap",
-        position: "insideTop",
-        fill: "#5c6f65",
-        fontSize: 10,
-        fontStyle: "italic",
-      }}
-      ifOverflow="hidden"
+      label={false}
+      shape={(props: AreaShapeProps) => (
+        <HatchedGapShape
+          {...props}
+          label={areaLabel}
+          clipId={`covid-gap-clip-${clipId}`}
+        />
+      )}
     />
   );
 }
 
-/** Compact x-axis tick: quieter styling on the COVID gap category. */
+/** X-axis tick: gap category uses the same slot; quieter label under the band. */
 export function CovidAwareYearTick(props: {
   x?: number;
   y?: number;
@@ -87,7 +134,8 @@ export function CovidAwareYearTick(props: {
       fontSize={isGap ? 10 : 12}
       fontStyle={isGap ? "italic" : undefined}
     >
-      {value}
+      {/* Keep a short axis label so the category retains equal year spacing. */}
+      {isGap ? "…" : value}
     </text>
   );
 }
