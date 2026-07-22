@@ -1,74 +1,90 @@
 "use client";
 
-import { Customized, ReferenceArea } from "recharts";
+import { useId } from "react";
+import { usePlotArea, useXAxisScale } from "recharts";
 import { COVID_GAP_LABEL } from "@/lib/covid-gap";
 
-function HatchPatternSvg({ patternId }: { patternId: string }) {
-  return (
-    <defs>
-      <pattern
-        id={patternId}
-        width="7"
-        height="7"
-        patternUnits="userSpaceOnUse"
-        patternTransform="rotate(45)"
-      >
-        <rect width="7" height="7" fill="rgba(27, 67, 50, 0.05)" />
-        <line
-          x1="0"
-          y1="0"
-          x2="0"
-          y2="7"
-          stroke="rgba(27, 67, 50, 0.34)"
-          strokeWidth="2"
-        />
-      </pattern>
-    </defs>
-  );
-}
-
-/** Injects the hatch <defs> into the chart SVG via Customized. */
-export function CovidHatchDefs({ patternId = "covid-hatch" }: { patternId?: string }) {
-  return (
-    <Customized
-      component={() => <HatchPatternSvg patternId={patternId} />}
-    />
-  );
-}
-
 /**
- * Hatched band over the single compressed COVID gap tick.
- * Same x1/x2 uses the category band width in Recharts.
+ * Draws a hatched band over the single COVID gap category.
+ * Uses Recharts 3 scale hooks so the band spans exactly one year-slot
+ * (same spacing as neighbouring year ticks) and always paints.
  */
-export function CovidGapReferenceArea({
+export function CovidGapBand({
   gapLabel = COVID_GAP_LABEL,
-  patternId = "covid-hatch",
+  areaLabel = "COVID gap",
 }: {
   gapLabel?: string;
-  patternId?: string;
+  areaLabel?: string;
 }) {
+  const plotArea = usePlotArea();
+  const xScale = useXAxisScale();
+  const reactId = useId().replace(/:/g, "");
+  const clipId = `covid-gap-clip-${reactId}`;
+
+  if (!plotArea || !xScale) return null;
+
+  const xStart = xScale(gapLabel, { position: "start" });
+  const xEnd = xScale(gapLabel, { position: "end" });
+  if (xStart == null || xEnd == null) return null;
+
+  const x = Math.min(xStart, xEnd);
+  const width = Math.abs(xEnd - xStart);
+  if (width <= 0) return null;
+
+  const y = plotArea.y;
+  const height = plotArea.height;
+  const spacing = 7;
+  const lines: React.ReactNode[] = [];
+  for (let i = -height; i < width + height; i += spacing) {
+    lines.push(
+      <line
+        key={i}
+        x1={x + i}
+        y1={y + height}
+        x2={x + i + height}
+        y2={y}
+        stroke="rgba(27, 67, 50, 0.4)"
+        strokeWidth={1.75}
+      />,
+    );
+  }
+
   return (
-    <ReferenceArea
-      x1={gapLabel}
-      x2={gapLabel}
-      fill={`url(#${patternId})`}
-      fillOpacity={1}
-      stroke="rgba(27, 67, 50, 0.28)"
-      strokeWidth={1}
-      strokeDasharray="2 2"
-      label={{
-        value: "gap",
-        position: "insideTop",
-        fill: "#5c6f65",
-        fontSize: 10,
-        fontStyle: "italic",
-      }}
-      ifOverflow="hidden"
-    />
+    <g className="covid-gap-hatch" aria-label={areaLabel}>
+      <defs>
+        <clipPath id={clipId}>
+          <rect x={x} y={y} width={width} height={height} />
+        </clipPath>
+      </defs>
+      <rect
+        x={x}
+        y={y}
+        width={width}
+        height={height}
+        fill="rgba(27, 67, 50, 0.08)"
+        stroke="rgba(27, 67, 50, 0.4)"
+        strokeWidth={1}
+        strokeDasharray="3 2"
+      />
+      <g clipPath={`url(#${clipId})`}>{lines}</g>
+      <text
+        x={x + width / 2}
+        y={y + height / 2}
+        textAnchor="middle"
+        dominantBaseline="middle"
+        fill="#3d5248"
+        fontSize={11}
+        fontStyle="italic"
+        fontWeight={600}
+        style={{ pointerEvents: "none" }}
+      >
+        {areaLabel}
+      </text>
+    </g>
   );
 }
 
-/** Compact x-axis tick: quieter styling on the COVID gap category. */
+/** X-axis tick: gap category keeps equal spacing; quiet mark under the band. */
 export function CovidAwareYearTick(props: {
   x?: number;
   y?: number;
@@ -87,7 +103,7 @@ export function CovidAwareYearTick(props: {
       fontSize={isGap ? 10 : 12}
       fontStyle={isGap ? "italic" : undefined}
     >
-      {value}
+      {isGap ? "…" : value}
     </text>
   );
 }
