@@ -227,7 +227,7 @@ export function buildAnalysis(
       id: "peers",
       title: "Where Bartley sits versus strong local peers",
       paragraphs: [
-        `To set a practical ambition beyond LA and national averages, the dashboard compares Bartley with the three highest-performing similar-size junior schools nearby: ${peerNames}. Selection used Hampshire junior schools (ages 7–11) with a Year 6 cohort within about 40% of Bartley’s ${peers.selection.bartleyLatestEligible} eligible pupils, in the SO40–SO53 / BH24 / SP6 vicinity, ranked by 2024/25 combined RWM.`,
+        `To set a practical ambition beyond LA and national averages, the dashboard compares Bartley with the three highest-performing similar-size state-funded junior schools nearby: ${peerNames}. Selection used Hampshire maintained and academy juniors (ages 7–11) with a Year 6 cohort within about 40% of Bartley’s ${peers.selection.bartleyLatestEligible} eligible pupils, in the SO40–SO53 / BH24 / SP6 vicinity, ranked by 2024/25 combined RWM. Independent (private/public) schools are excluded because they do not publish the same statutory KS2 performance-table measures.`,
         gapVsAvg !== null && gapVsTop !== null
           ? `On the latest combined measure, Bartley at ${fmtPct(latest?.schoolExpected)} sits ${Math.abs(gapVsAvg).toFixed(0)} pp ${gapVsAvg < 0 ? "below" : "above"} the top-three peer average (${fmtPct(peerAvg)}) and ${Math.abs(gapVsTop).toFixed(0)} pp ${gapVsTop < 0 ? "below" : "above"} the strongest peer (${top.short} at ${fmtPct(top.latest.rwmExpected)}). That is a clearer gap than the near-parity with England: Bartley is broadly average nationally, but not yet performing like the best local schools of a similar size.`
           : "Peer comparison figures are incomplete for the latest year.",
@@ -279,7 +279,7 @@ export function buildAnalysis(
       title: "Prior learning from feeder infants",
       paragraphs: [
         `Bartley’s intake is shaped by three named Church of England infant feeders: ${feederNames}. Together they average about ${fmtNum(feeders.feederAverage.pupilsOnRoll, 0)} pupils on roll, with FSM ever ${fmtPct(feeders.feederAverage.fsmEverPercent)}, overall absence ${fmtPct(feeders.feederAverage.absencePercent, 1)}, and persistent absence ${fmtPct(feeders.feederAverage.persistentAbsencePercent, 1)} in ${periodShort(feeders.period)}.`,
-        `School-level KS1 teacher assessment and phonics results are no longer published in Compare school performance open downloads, so governors cannot yet read feeder attainment from public tables. The dashboard therefore benchmarks feeders against the three strongest similar-size local Hampshire infants on the best published school-level quality signal — attendance: ${peerNamesInfant}. That peer pack averages absence ${fmtPct(feeders.peerAverage.absencePercent, 1)} and persistent absence ${fmtPct(feeders.peerAverage.persistentAbsencePercent, 1)}.`,
+        `School-level KS1 teacher assessment and phonics results are no longer published in Compare school performance open downloads, so governors cannot yet read feeder attainment from public tables. The dashboard therefore benchmarks feeders against the three strongest similar-size local state-funded Hampshire infants (independents excluded) on the best published school-level quality signal — attendance: ${peerNamesInfant}. That peer pack averages absence ${fmtPct(feeders.peerAverage.absencePercent, 1)} and persistent absence ${fmtPct(feeders.peerAverage.persistentAbsencePercent, 1)}.`,
         absGap != null && paGap != null
           ? `On those published signals the named feeders currently look stronger than the local infant peer average (overall absence ${fmtPp(absGap)}; persistent absence ${fmtPp(paGap)}). That is useful context for intake stability, but it is not a substitute for phonics or KS1 attainment. Hampshire Year 1 phonics sits at ${fmtPct(latestPhonics?.hampshireYear1)} versus England ${fmtPct(latestPhonics?.englandYear1)}; by end of Year 2, ${fmtPct(latestPhonics?.hampshireByEndYear2)} / ${fmtPct(latestPhonics?.englandByEndYear2)}. Asking for feeder ASP phonics/KS1 would let the board judge whether prior learning is genuinely high-quality before Bartley.`
           : "Attendance comparisons between feeders and local infant peers are incomplete for the latest year.",
@@ -441,10 +441,11 @@ export function buildAnalysis(
     "Progress measures are missing for recent cohorts without KS1 baselines.",
     "With a single junior-school Year 6 cohort, percentage-point swings can reflect a small number of pupils; always ask for pupil counts behind the percentages.",
     "This analysis uses DfE Compare school performance / Explore education statistics published figures only — it does not include internal tracking, Ofsted judgement text, or confidential ASP/IDSR detail.",
-    "Peer schools were selected as open Hampshire juniors of similar cohort size in the local postcode band, ranked by latest combined RWM — not by Ofsted grade, progress, or exact distance. Vicinity is approximate (postcode band), not crow-flies metres.",
+    "Peer schools were selected as open state-funded Hampshire juniors (maintained / academy) of similar cohort size in the local postcode band, ranked by latest combined RWM — not by Ofsted grade, progress, or exact distance. Vicinity is approximate (postcode band), not crow-flies metres.",
+    "Independent (private/public) schools are excluded from peer and feeder benchmarks because they do not publish the same statutory KS2 / performance-table measures as state-funded schools; mixing sectors would not be like-for-like with Bartley.",
     ...(feeders?.feeders?.length
       ? [
-          "School-level KS1 and phonics attainment are no longer in CSP open downloads; feeder/peer attainment columns are null until ASP or local figures are supplied. Infant “top 3” peers are ranked by published absence within a similar NOR band — a proxy, not an attainment league table.",
+          "School-level KS1 and phonics attainment are no longer in CSP open downloads; feeder/peer attainment columns are null until ASP or local figures are supplied. Infant “top 3” peers are ranked by published absence within a similar NOR band among state-funded schools only — a proxy, not an attainment league table.",
         ]
       : []),
   ];

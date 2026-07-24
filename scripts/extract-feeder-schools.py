@@ -31,6 +31,12 @@ FEEDERS = [
     ("116282", "Copythorne CofE Infant School", "Copythorne", "8503032"),
 ]
 FEEDER_URNS = {u for u, _, _, _ in FEEDERS}
+# GIAS MINORGROUP values treated as state-funded for like-for-like reporting.
+STATE_FUNDED_MINOR_GROUPS = {
+    "Maintained school",
+    "Academy",
+    "Free school",
+}
 LOCAL_PREFIXES = (
     "SO32",
     "SO40",
@@ -106,6 +112,37 @@ def avg(vals: list[float | None]) -> float | None:
     return round(sum(clean) / len(clean), 1)
 
 
+def classify_sector(minor_group: str | None, school_type: str | None) -> tuple[str, str]:
+    """Return (sector, sectorLabel). Independent/private are not like-for-like."""
+    minor = (minor_group or "").strip()
+    stype = (school_type or "").strip()
+    blob = f"{minor} {stype}".lower()
+    if any(
+        hint in blob
+        for hint in ("independent", "private", "non-maintained")
+    ):
+        return "independent", "Independent"
+    if minor in STATE_FUNDED_MINOR_GROUPS or "academy" in minor.lower() or "maintained" in minor.lower():
+        return "state-funded", "State-funded"
+    if any(
+        token in stype.lower()
+        for token in (
+            "community school",
+            "voluntary",
+            "foundation school",
+            "academy",
+            "free school",
+        )
+    ):
+        return "state-funded", "State-funded"
+    return "other", "Other"
+
+
+def is_state_funded(g: dict[str, str]) -> bool:
+    sector, _ = classify_sector(g.get("MINORGROUP"), g.get("SCHOOLTYPE"))
+    return sector == "state-funded"
+
+
 def download_zip(filters: str, dest_name: str) -> Path:
     CACHE.mkdir(parents=True, exist_ok=True)
     path = CACHE / dest_name
@@ -154,6 +191,9 @@ def school_obj(
     g = gias_by_urn[urn]
     c = census.get(urn, {})
     a = absence.get(urn, {})
+    minor = g.get("MINORGROUP") or ""
+    stype = g.get("SCHOOLTYPE") or ""
+    sector, sector_label = classify_sector(minor, stype)
     obj = {
         "urn": urn,
         "name": name,
@@ -162,7 +202,10 @@ def school_obj(
         "town": g.get("TOWN") or "",
         "postcode": g.get("POSTCODE") or "",
         "ageRange": f"{g.get('AGELOW')}-{g.get('AGEHIGH')}",
-        "schoolType": g.get("SCHOOLTYPE") or "",
+        "minorGroup": minor,
+        "schoolType": stype,
+        "sector": sector,
+        "sectorLabel": sector_label,
         "religiousDenomination": g.get("RELCHAR") or "",
         "compareUrl": f"https://www.compare-school-performance.service.gov.uk/school/{urn}",
         "latest": {
@@ -254,6 +297,9 @@ def main() -> None:
         urn = g["URN"]
         if urn in FEEDER_URNS:
             continue
+        # Independent / private schools do not publish the same performance data.
+        if not is_state_funded(g):
+            continue
         pc = (g.get("POSTCODE") or "").upper()
         if not any(pc.startswith(p) for p in LOCAL_PREFIXES):
             continue
@@ -285,10 +331,10 @@ def main() -> None:
     peers = []
     for i, c in enumerate(top3):
         reason = (
-            f"Ranked #{i + 1} among local similar-size Hampshire infants "
-            f"(ages 4–7, NOR within ~55% of feeder average) by lowest persistent "
-            f"absence then overall absence for 2024/25 — proxy quality signal while "
-            f"school-level KS1/phonics is unpublished."
+            f"Ranked #{i + 1} among local similar-size state-funded Hampshire infants "
+            f"(ages 4–7, NOR within ~55% of feeder average; independents excluded) by "
+            f"lowest persistent absence then overall absence for 2024/25 — proxy quality "
+            f"signal while school-level KS1/phonics is unpublished."
         )
         peers.append(
             school_obj(
@@ -315,12 +361,14 @@ def main() -> None:
                 "Copythorne 850/3032."
             ),
             "peers": (
-                "Hampshire open infant schools (ages 4–7) in SO32 / SO40–SO53 / "
-                "BH24 / SP6 vicinity, NOR within ~55% of feeder average, excluding "
-                "the three named feeders; ranked by lowest persistent absence then "
-                "overall absence — the strongest publicly published school-level "
-                "quality signal while school-level KS1/phonics attainment is no "
-                "longer released in Compare school performance downloads."
+                "State-funded Hampshire open infant schools (maintained / academy; "
+                "ages 4–7) in SO32 / SO40–SO53 / BH24 / SP6 vicinity, NOR within "
+                "~55% of feeder average, excluding the three named feeders and "
+                "independent (private/public) schools; ranked by lowest persistent "
+                "absence then overall absence — the strongest publicly published "
+                "school-level quality signal while school-level KS1/phonics "
+                "attainment is no longer released in Compare school performance "
+                "downloads."
             ),
             "ks1Note": (
                 "Statutory KS1 teacher assessments became optional and school-level "
@@ -329,6 +377,13 @@ def main() -> None:
                 "longer included in CSP open downloads (only LA/national EES tables). "
                 "Feeder/peer KS1 and phonics attainment fields are therefore null "
                 "pending ASP/local figures."
+            ),
+            "sector": "state-funded only",
+            "sectorNote": (
+                "Independent / private schools are excluded from feeder peer "
+                "benchmarks. They do not report the same statutory assessment and "
+                "performance-table data as state-funded infants, so comparisons "
+                "would not be like-for-like with Bartley’s named CofE feeders."
             ),
         },
         "feeders": feeders,

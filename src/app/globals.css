@@ -1014,6 +1014,32 @@ a:hover {
   line-height: 1.35;
 }
 
+.sector-pill {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  padding: 0.2rem 0.45rem;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
+.sector-pill.sector-state {
+  color: #1b4332;
+  background: rgba(27, 67, 50, 0.1);
+}
+
+.sector-pill.sector-independent {
+  color: #7c2d12;
+  background: rgba(154, 52, 18, 0.12);
+}
+
+.sector-pill.sector-other {
+  color: #3d5248;
+  background: rgba(61, 82, 72, 0.1);
+}
+
 .feeder-callout {
   margin-top: 2rem;
   padding: 1.35rem 1.5rem;

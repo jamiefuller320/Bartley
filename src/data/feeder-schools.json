@@ -4,8 +4,10 @@
   "purpose": "Prior-learning / feeder intake context for Bartley CofE Junior School governors.",
   "selection": {
     "feeders": "Named Bartley feeder infant schools by DfE number (LAESTAB): Netley Marsh 850/3110, St Michael and All Angels 850/3360, Copythorne 850/3032.",
-    "peers": "Hampshire open infant schools (ages 4\u20137) in SO32 / SO40\u2013SO53 / BH24 / SP6 vicinity, NOR within ~55% of feeder average, excluding the three named feeders; ranked by lowest persistent absence then overall absence \u2014 the strongest publicly published school-level quality signal while school-level KS1/phonics attainment is no longer released in Compare school performance downloads.",
-    "ks1Note": "Statutory KS1 teacher assessments became optional and school-level KS1 results were removed from performance-table downloads after 2022/23. Phonics remains statutory but school-level phonics is no longer included in CSP open downloads (only LA/national EES tables). Feeder/peer KS1 and phonics attainment fields are therefore null pending ASP/local figures."
+    "peers": "State-funded Hampshire open infant schools (maintained / academy; ages 4\u20137) in SO32 / SO40\u2013SO53 / BH24 / SP6 vicinity, NOR within ~55% of feeder average, excluding the three named feeders and independent (private/public) schools; ranked by lowest persistent absence then overall absence \u2014 the strongest publicly published school-level quality signal while school-level KS1/phonics attainment is no longer released in Compare school performance downloads.",
+    "ks1Note": "Statutory KS1 teacher assessments became optional and school-level KS1 results were removed from performance-table downloads after 2022/23. Phonics remains statutory but school-level phonics is no longer included in CSP open downloads (only LA/national EES tables). Feeder/peer KS1 and phonics attainment fields are therefore null pending ASP/local figures.",
+    "sector": "state-funded only",
+    "sectorNote": "Independent / private schools are excluded from feeder peer benchmarks. They do not report the same statutory assessment and performance-table data as state-funded infants, so attendance and census comparisons would not be like-for-like with Bartley\u2019s named CofE feeders."
   },
   "feeders": [
     {
@@ -39,7 +41,10 @@
         "ks1MathsExpected": null,
         "ks1ScienceExpected": null
       },
-      "role": "feeder"
+      "role": "feeder",
+      "minorGroup": "Maintained school",
+      "sector": "state-funded",
+      "sectorLabel": "State-funded"
     },
     {
       "urn": "116366",
@@ -72,7 +77,10 @@
         "ks1MathsExpected": null,
         "ks1ScienceExpected": null
       },
-      "role": "feeder"
+      "role": "feeder",
+      "minorGroup": "Maintained school",
+      "sector": "state-funded",
+      "sectorLabel": "State-funded"
     },
     {
       "urn": "116282",
@@ -105,7 +113,10 @@
         "ks1MathsExpected": null,
         "ks1ScienceExpected": null
       },
-      "role": "feeder"
+      "role": "feeder",
+      "minorGroup": "Maintained school",
+      "sector": "state-funded",
+      "sectorLabel": "State-funded"
     }
   ],
   "feederAverage": {
@@ -151,7 +162,10 @@
         "ks1ScienceExpected": null
       },
       "role": "peer",
-      "reason": "Ranked #1 among local similar-size Hampshire infants (ages 4\u20137, NOR within ~55% of feeder average) by lowest persistent absence then overall absence for 2024/25 \u2014 proxy quality signal while school-level KS1/phonics is unpublished."
+      "reason": "Ranked #1 among local similar-size Hampshire infants (ages 4\u20137, NOR within ~55% of feeder average) by lowest persistent absence then overall absence for 2024/25 \u2014 proxy quality signal while school-level KS1/phonics is unpublished.",
+      "minorGroup": "Maintained school",
+      "sector": "state-funded",
+      "sectorLabel": "State-funded"
     },
     {
       "urn": "141473",
@@ -185,7 +199,10 @@
         "ks1ScienceExpected": null
       },
       "role": "peer",
-      "reason": "Ranked #2 among local similar-size Hampshire infants (ages 4\u20137, NOR within ~55% of feeder average) by lowest persistent absence then overall absence for 2024/25 \u2014 proxy quality signal while school-level KS1/phonics is unpublished."
+      "reason": "Ranked #2 among local similar-size Hampshire infants (ages 4\u20137, NOR within ~55% of feeder average) by lowest persistent absence then overall absence for 2024/25 \u2014 proxy quality signal while school-level KS1/phonics is unpublished.",
+      "minorGroup": "Academy",
+      "sector": "state-funded",
+      "sectorLabel": "State-funded"
     },
     {
       "urn": "138242",
@@ -219,7 +236,10 @@
         "ks1ScienceExpected": null
       },
       "role": "peer",
-      "reason": "Ranked #3 among local similar-size Hampshire infants (ages 4\u20137, NOR within ~55% of feeder average) by lowest persistent absence then overall absence for 2024/25 \u2014 proxy quality signal while school-level KS1/phonics is unpublished."
+      "reason": "Ranked #3 among local similar-size Hampshire infants (ages 4\u20137, NOR within ~55% of feeder average) by lowest persistent absence then overall absence for 2024/25 \u2014 proxy quality signal while school-level KS1/phonics is unpublished.",
+      "minorGroup": "Maintained school",
+      "sector": "state-funded",
+      "sectorLabel": "State-funded"
     }
   ],
   "peerAverage": {

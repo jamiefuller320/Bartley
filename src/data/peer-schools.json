@@ -1,6 +1,6 @@
 {
   "selection": {
-    "method": "Hampshire LEA junior schools (ages 7\u201311), open, eligible cohort within ~40% of Bartley (81), postcodes in SO40\u2013SO53 / BH24 / SP6 vicinity; ranked by 2024/25 combined RWM expected standard.",
+    "method": "State-funded Hampshire junior schools (maintained / academy; ages 7\u201311), open, eligible cohort within ~40% of Bartley (81), postcodes in SO40\u2013SO53 / BH24 / SP6 vicinity; ranked by 2024/25 combined RWM expected standard. Independent (private/public) schools are excluded because they do not publish the same statutory KS2 performance-table measures.",
     "bartleyUrn": "116338",
     "bartleyLatestEligible": 81.0,
     "years": [
@@ -11,7 +11,9 @@
       "2022-2023",
       "2023-2024",
       "2024-2025"
-    ]
+    ],
+    "sector": "state-funded only",
+    "sectorNote": "Independent / private schools are omitted from peer comparisons: they are not required to publish the same Compare school performance KS2 attainment, progress and disadvantage tables as state-funded schools, so figures are not like-for-like with Bartley."
   },
   "peers": [
     {
@@ -49,7 +51,11 @@
         "pupilsAged11": 63.0,
         "disadvantagedPercent": 14.0
       },
-      "compareUrl": "https://www.compare-school-performance.service.gov.uk/school/116051"
+      "compareUrl": "https://www.compare-school-performance.service.gov.uk/school/116051",
+      "minorGroup": "Maintained school",
+      "schoolType": "Community school",
+      "sector": "state-funded",
+      "sectorLabel": "State-funded"
     },
     {
       "urn": "116007",
@@ -86,7 +92,11 @@
         "pupilsAged11": 95.0,
         "disadvantagedPercent": 11.0
       },
-      "compareUrl": "https://www.compare-school-performance.service.gov.uk/school/116007"
+      "compareUrl": "https://www.compare-school-performance.service.gov.uk/school/116007",
+      "minorGroup": "Maintained school",
+      "schoolType": "Community school",
+      "sector": "state-funded",
+      "sectorLabel": "State-funded"
     },
     {
       "urn": "115998",
@@ -123,7 +133,11 @@
         "pupilsAged11": 89.0,
         "disadvantagedPercent": 19.0
       },
-      "compareUrl": "https://www.compare-school-performance.service.gov.uk/school/115998"
+      "compareUrl": "https://www.compare-school-performance.service.gov.uk/school/115998",
+      "minorGroup": "Maintained school",
+      "schoolType": "Community school",
+      "sector": "state-funded",
+      "sectorLabel": "State-funded"
     }
   ],
   "peerAverageLatest": {
