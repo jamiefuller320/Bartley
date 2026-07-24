@@ -1,6 +1,10 @@
 import type { PeerSchoolsBundle, SchoolMonitorData } from "@/lib/types";
 import { fmtPct, fmtPp } from "@/lib/format";
 import { ppGap } from "@/lib/peers";
+import {
+  classifySchoolSector,
+  schoolSectorLabel,
+} from "@/lib/school-sector";
 
 export function PeerComparisonTable({
   peers,
@@ -19,6 +23,11 @@ export function PeerComparisonTable({
     (s) => s.subject === "Grammar, punctuation and spelling",
   );
 
+  const bartleySector = classifySchoolSector(
+    undefined,
+    bartley.profile.schoolTypeLabel ?? bartley.profile.schoolType,
+  );
+
   const rows = [
     {
       name: "Bartley",
@@ -31,6 +40,9 @@ export function PeerComparisonTable({
       maths: maths?.schoolExpected ?? null,
       gps: gps?.schoolExpected ?? null,
       disPct: bartley.profile.disadvantagedPercent ?? null,
+      sectorLabel: schoolSectorLabel(bartleySector),
+      schoolType:
+        bartley.profile.schoolTypeLabel ?? bartley.profile.schoolType ?? "—",
       highlight: true,
     },
     ...peers.peers.map((peer) => ({
@@ -44,6 +56,13 @@ export function PeerComparisonTable({
       maths: peer.latest.mathsExpected,
       gps: peer.latest.gpsExpected,
       disPct: peer.latest.disadvantagedPercent,
+      sectorLabel:
+        peer.sectorLabel ??
+        schoolSectorLabel(
+          peer.sector ??
+            classifySchoolSector(peer.minorGroup, peer.schoolType),
+        ),
+      schoolType: peer.schoolType ?? "—",
       highlight: false,
     })),
     {
@@ -57,6 +76,8 @@ export function PeerComparisonTable({
       maths: peers.peerAverageLatest.mathsExpected,
       gps: peers.peerAverageLatest.gpsExpected,
       disPct: null as number | null,
+      sectorLabel: "State-funded",
+      schoolType: "—",
       highlight: false,
     },
   ];
@@ -67,6 +88,7 @@ export function PeerComparisonTable({
         <thead>
           <tr>
             <th>School</th>
+            <th>Sector</th>
             <th>n</th>
             <th>RWM</th>
             <th>Reading</th>
@@ -81,7 +103,10 @@ export function PeerComparisonTable({
           {rows.map((row) => {
             const vsBartley = ppGap(row.rwm, rwm?.schoolExpected);
             return (
-              <tr key={row.name} className={row.highlight ? "row-focus" : undefined}>
+              <tr
+                key={row.name}
+                className={row.highlight ? "row-focus" : undefined}
+              >
                 <td>
                   {row.url ? (
                     <a href={row.url} target="_blank" rel="noreferrer">
@@ -90,6 +115,14 @@ export function PeerComparisonTable({
                   ) : (
                     row.short
                   )}
+                  {row.schoolType && row.schoolType !== "—" ? (
+                    <span className="feeder-meta">{row.schoolType}</span>
+                  ) : null}
+                </td>
+                <td>
+                  <span className="sector-pill sector-state">
+                    {row.sectorLabel}
+                  </span>
                 </td>
                 <td>{row.n ?? "—"}</td>
                 <td>{fmtPct(row.rwm)}</td>
@@ -109,6 +142,9 @@ export function PeerComparisonTable({
       <p className="chart-note">
         Latest published expected standard (%). Peer links open Compare school
         performance. {peers.selection.method}
+        {peers.selection.sectorNote
+          ? ` ${peers.selection.sectorNote}`
+          : ""}
       </p>
     </div>
   );

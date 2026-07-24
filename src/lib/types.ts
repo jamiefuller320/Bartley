@@ -171,6 +171,13 @@ export interface PeerSchool {
   town: string;
   ageRange: string;
   laEstab: string;
+  /** GIAS MINORGROUP, e.g. Maintained school / Academy / Independent school. */
+  minorGroup?: string;
+  /** GIAS SCHOOLTYPE, e.g. Community school / Academy converter. */
+  schoolType?: string;
+  /** Reporting sector for like-for-like comparisons. */
+  sector?: "state-funded" | "independent" | "other";
+  sectorLabel?: string;
   latest: PeerLatestSnapshot;
   compareUrl: string;
 }
@@ -193,6 +200,8 @@ export interface PeerSchoolsBundle {
     bartleyUrn: string;
     bartleyLatestEligible: number;
     years: string[];
+    sector?: string;
+    sectorNote?: string;
   };
   peers: PeerSchool[];
   peerAverageLatest: {
@@ -236,7 +245,10 @@ export interface FeederSchool {
   town: string;
   postcode: string;
   ageRange: string;
+  minorGroup?: string;
   schoolType: string;
+  sector?: "state-funded" | "independent" | "other";
+  sectorLabel?: string;
   religiousDenomination: string;
   compareUrl: string;
   latest: FeederLatestSnapshot;
@@ -272,6 +284,8 @@ export interface FeederSchoolsBundle {
     feeders: string;
     peers: string;
     ks1Note: string;
+    sector?: string;
+    sectorNote?: string;
   };
   feeders: FeederSchool[];
   feederAverage: FeederGroupAverage;
