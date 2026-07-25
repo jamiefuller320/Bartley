@@ -162,10 +162,11 @@ export default function HomePage() {
       <section className="section" id="equity">
         <div className="shell">
           <div className="section-intro">
-            <h2>Pupil group gaps</h2>
+            <h2>KS2 pupil group gaps</h2>
             <p>
-              Combined reading, writing and maths expected standard for key
-              pupil groups at Bartley, with pupil counts for the latest cohort.
+              Key Stage 2 combined reading, writing and maths expected standard
+              for key pupil groups at Bartley, with pupil counts for the latest
+              Year 6 cohort.
             </p>
           </div>
           <div className="split">
@@ -213,11 +214,11 @@ export default function HomePage() {
       <section className="section section-alt" id="progress">
         <div className="shell">
           <div className="section-intro">
-            <h2>Progress measures</h2>
+            <h2>KS2 progress measures</h2>
             <p>
-              KS2 progress scores are unavailable for 2024 and 2025 because
-              those cohorts did not sit KS1 tests. The chart shows the last
-              published confidence intervals.
+              Key Stage 1 to Key Stage 2 progress scores are unavailable for
+              2024 and 2025 because those cohorts did not sit KS1 tests. The
+              chart shows the last published confidence intervals.
             </p>
           </div>
           <ProgressChart progress={data.progress} />

@@ -21,6 +21,7 @@ export function HistoryTable({
 
   const showScaled = rows.some((r) => r.schoolScaled !== null);
   const showProgress = rows.some((r) => r.schoolProgress !== null);
+  const showHigher = rows.some((r) => r.schoolHigher !== null);
 
   return (
     <div className="table-wrap">
@@ -28,10 +29,10 @@ export function HistoryTable({
         <thead>
           <tr>
             <th>Year</th>
-            <th>School {shortSubject(subject)}</th>
+            <th>School KS2 {shortSubject(subject)}</th>
             <th>Hampshire</th>
             <th>England</th>
-            <th>Higher</th>
+            {showHigher ? <th>Higher</th> : null}
             {showScaled ? <th>Scaled</th> : null}
             {showProgress ? <th>Progress</th> : null}
           </tr>
@@ -43,7 +44,7 @@ export function HistoryTable({
               <td>{fmtPct(row.schoolExpected)}</td>
               <td>{fmtPct(row.hampshireExpected)}</td>
               <td>{fmtPct(row.englandExpected)}</td>
-              <td>{fmtPct(row.schoolHigher)}</td>
+              {showHigher ? <td>{fmtPct(row.schoolHigher)}</td> : null}
               {showScaled ? <td>{fmtNum(row.schoolScaled, 0)}</td> : null}
               {showProgress ? <td>{fmtNum(row.schoolProgress, 1)}</td> : null}
             </tr>
