@@ -183,6 +183,9 @@ function MetricsWorkbenchInner({
             . Peer average {fmtPct(peers.peerAverageLatest.rwmExpected)}.
           </p>
           <p className="peer-strip-note muted">{peers.selection.method}</p>
+          {peers.selection.sectorNote ? (
+            <p className="peer-strip-note muted">{peers.selection.sectorNote}</p>
+          ) : null}
         </div>
 
         <div className="history-tabs" role="tablist" aria-label="Subject">

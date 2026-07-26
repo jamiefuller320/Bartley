@@ -38,6 +38,11 @@ const TERMS = [
     definition:
       "Pupils known to be eligible for free school meals in the last 6 years (and some other groups) — the pupil premium cohort definition used in tables.",
   },
+  {
+    term: "State-funded vs independent",
+    definition:
+      "State-funded schools (maintained and academies) publish Compare school performance KS2 tables. Independent schools (also called private or public schools) do not report the same statutory measures, so Bartley Insight peer and feeder benchmarks exclude them to keep comparisons like-for-like.",
+  },
 ] as const;
 
 export function GlossaryPanel() {

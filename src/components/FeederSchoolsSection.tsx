@@ -1,7 +1,17 @@
 import type { FeederSchoolsBundle, FeederSchool } from "@/lib/types";
 import { fmtNum, fmtPct } from "@/lib/format";
 import { PhonicsBenchmarksChart } from "@/components/PhonicsBenchmarksChart";
+import {
+  classifySchoolSector,
+  schoolSectorLabel,
+} from "@/lib/school-sector";
 import Link from "next/link";
+
+function sectorClass(sector?: FeederSchool["sector"]): string {
+  if (sector === "independent") return "sector-pill sector-independent";
+  if (sector === "state-funded") return "sector-pill sector-state";
+  return "sector-pill sector-other";
+}
 
 function SchoolTable({
   schools,
@@ -20,6 +30,7 @@ function SchoolTable({
         <thead>
           <tr>
             <th>School</th>
+            <th>Sector</th>
             <th>DfE</th>
             <th>NOR</th>
             <th>FSM ever</th>
@@ -32,49 +43,62 @@ function SchoolTable({
           </tr>
         </thead>
         <tbody>
-          {schools.map((school) => (
-            <tr key={school.urn}>
-              <td>
-                <a href={school.compareUrl} target="_blank" rel="noreferrer">
-                  {school.short}
-                </a>
-                <span className="feeder-meta">
-                  {school.postcode}
-                  {showReason && school.reason ? (
-                    <>
-                      <br />
-                      <span className="muted feeder-reason">{school.reason}</span>
-                    </>
-                  ) : null}
-                </span>
-              </td>
-              <td>
-                {school.laEstab.slice(0, 3)}/{school.laEstab.slice(3)}
-              </td>
-              <td>{fmtNum(school.latest.pupilsOnRoll, 0)}</td>
-              <td>{fmtPct(school.latest.fsmEverPercent)}</td>
-              <td>{fmtPct(school.latest.senSupportPercent)}</td>
-              <td>{fmtPct(school.latest.ehcPercent)}</td>
-              <td>{fmtPct(school.latest.absencePercent, 1)}</td>
-              <td>{fmtPct(school.latest.persistentAbsencePercent, 1)}</td>
-              <td>{fmtPct(school.latest.phonicsYear1Expected)}</td>
-              <td>
-                {[
-                  school.latest.ks1ReadingExpected,
-                  school.latest.ks1WritingExpected,
-                  school.latest.ks1MathsExpected,
-                ].every((v) => v == null)
-                  ? "—"
-                  : [
-                      fmtPct(school.latest.ks1ReadingExpected),
-                      fmtPct(school.latest.ks1WritingExpected),
-                      fmtPct(school.latest.ks1MathsExpected),
-                    ].join(" / ")}
-              </td>
-            </tr>
-          ))}
+          {schools.map((school) => {
+            const sector =
+              school.sector ??
+              classifySchoolSector(school.minorGroup, school.schoolType);
+            return (
+              <tr key={school.urn}>
+                <td>
+                  <a href={school.compareUrl} target="_blank" rel="noreferrer">
+                    {school.short}
+                  </a>
+                  <span className="feeder-meta">
+                    {school.schoolType ? `${school.schoolType} · ` : ""}
+                    {school.postcode}
+                    {showReason && school.reason ? (
+                      <>
+                        <br />
+                        <span className="muted feeder-reason">
+                          {school.reason}
+                        </span>
+                      </>
+                    ) : null}
+                  </span>
+                </td>
+                <td>
+                  <span className={sectorClass(sector)}>
+                    {school.sectorLabel ?? schoolSectorLabel(sector)}
+                  </span>
+                </td>
+                <td>
+                  {school.laEstab.slice(0, 3)}/{school.laEstab.slice(3)}
+                </td>
+                <td>{fmtNum(school.latest.pupilsOnRoll, 0)}</td>
+                <td>{fmtPct(school.latest.fsmEverPercent)}</td>
+                <td>{fmtPct(school.latest.senSupportPercent)}</td>
+                <td>{fmtPct(school.latest.ehcPercent)}</td>
+                <td>{fmtPct(school.latest.absencePercent, 1)}</td>
+                <td>{fmtPct(school.latest.persistentAbsencePercent, 1)}</td>
+                <td>{fmtPct(school.latest.phonicsYear1Expected)}</td>
+                <td>
+                  {[
+                    school.latest.ks1ReadingExpected,
+                    school.latest.ks1WritingExpected,
+                    school.latest.ks1MathsExpected,
+                  ].every((v) => v == null)
+                    ? "—"
+                    : [
+                        fmtPct(school.latest.ks1ReadingExpected),
+                        fmtPct(school.latest.ks1WritingExpected),
+                        fmtPct(school.latest.ks1MathsExpected),
+                      ].join(" / ")}
+                </td>
+              </tr>
+            );
+          })}
           <tr className="row-focus">
-            <td colSpan={2}>{averageLabel}</td>
+            <td colSpan={3}>{averageLabel}</td>
             <td>{fmtNum(average.pupilsOnRoll, 0)}</td>
             <td>{fmtPct(average.fsmEverPercent)}</td>
             <td>{fmtPct(average.senSupportPercent)}</td>
@@ -105,9 +129,11 @@ export function FeederSchoolsSection({
           <h2>Feeder schools &amp; prior learning</h2>
           <p>
             Context on the quality of learning children bring into Bartley from
-            the three named infant feeders — Netley Marsh, St Michael and All
-            Angels, and Copythorne — with a benchmark against the three
-            strongest similar-size local infant schools on published signals.
+            the three named state-funded infant feeders — Netley Marsh, St
+            Michael and All Angels, and Copythorne — with a benchmark against
+            the three strongest similar-size local <em>state-funded</em> infant
+            schools on published signals. Independent (private/public) schools
+            are excluded because they do not report the same performance data.
           </p>
         </div>
 
@@ -199,6 +225,9 @@ export function FeederSchoolsSection({
         </div>
 
         <p className="chart-note muted">{feeders.selection.ks1Note}</p>
+        {feeders.selection.sectorNote ? (
+          <p className="chart-note muted">{feeders.selection.sectorNote}</p>
+        ) : null}
       </div>
     </section>
   );
