@@ -54,6 +54,11 @@ const TERMS = [
       "For infant feeders, the local ‘top 3’ benchmark is ranked by published persistent absence — an attendance signal, not a phonics or KS1 attainment league table.",
   },
   {
+    term: "State-funded vs independent",
+    definition:
+      "State-funded schools (maintained and academies) publish Compare school performance KS2 tables. Independent schools (also called private or public schools) do not report the same statutory measures, so Bartley Insight peer and feeder benchmarks exclude them to keep comparisons like-for-like.",
+  },
+  {
     term: "KS3 / KS4 / KS5",
     definition:
       "Secondary and post-16 stages. Bartley is a junior school (ages 7–11), so this monitor does not use KS3, KS4 or KS5 datasets.",
