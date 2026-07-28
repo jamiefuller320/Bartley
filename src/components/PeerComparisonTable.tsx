@@ -140,8 +140,9 @@ export function PeerComparisonTable({
         </tbody>
       </table>
       <p className="chart-note">
-        Latest published expected standard (%). Peer links open Compare school
-        performance. {peers.selection.method}
+        Latest published <strong>KS2</strong> expected standard (%). Peer links
+        open Compare school performance. Junior peers only (ages 7–11) — not
+        KS1, KS3, KS4 or KS5. {peers.selection.method}
         {peers.selection.sectorNote
           ? ` ${peers.selection.sectorNote}`
           : ""}

@@ -96,7 +96,7 @@ export function EquityHistoryChart({
   return (
     <div className="chart-frame">
       <p className="chart-note">
-        Combined RWM by pupil group · axis {domain[0]}–{domain[1]}%
+        KS2 combined RWM by pupil group · axis {domain[0]}–{domain[1]}%
         {gapRange ? ` · ${COVID_GAP_NOTE}` : ""}
       </p>
       <ResponsiveContainer width="100%" height={320}>

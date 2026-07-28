@@ -101,6 +101,14 @@ function MetricsWorkbenchInner({
     }
   }, [searchParams, peers.peers]);
 
+  // Science teacher assessment has no higher-standard measure in KS2 tables.
+  const higherAvailable = subject !== "Science";
+  useEffect(() => {
+    if (!higherAvailable && metric === "higher") {
+      setMetric("expected");
+    }
+  }, [higherAvailable, metric]);
+
   const changeMode = (next: ChartViewMode) => {
     setMode(next);
     if (typeof window === "undefined") return;
@@ -114,6 +122,7 @@ function MetricsWorkbenchInner({
     [history, subject],
   );
   const hasScaled = subjectHistory.some((row) => row.schoolScaled !== null);
+  const activeMetric = higherAvailable ? metric : "expected";
   const progressForSubject = progressHistory.filter(
     (row) => row.subject === subject,
   );
@@ -125,9 +134,9 @@ function MetricsWorkbenchInner({
         peers,
         peerOverlay,
         subject,
-        metric === "higher" ? "higher" : "expected",
+        activeMetric === "higher" ? "higher" : "expected",
       ),
-    [peers, peerOverlay, subject, metric],
+    [peers, peerOverlay, subject, activeMetric],
   );
   const peerScaledByPeriod = useMemo(
     () => peerMetricByPeriod(peers, peerOverlay, subject, "scaled"),
@@ -137,18 +146,18 @@ function MetricsWorkbenchInner({
     peers,
     peerOverlay,
     subject,
-    metric === "higher" ? "higher" : "expected",
+    activeMetric === "higher" ? "higher" : "expected",
   );
 
   return (
     <section className="section section-alt" id="charts">
       <div className="shell">
         <div className="section-intro">
-          <h2>Performance charts</h2>
+          <h2>KS2 performance charts</h2>
           <p>
             {mode === "compare"
-              ? `Latest year (${period.replace("/", "–")}) — Bartley against Hampshire and England. Optionally overlay a top local peer or the peer average.`
-              : "Bartley year-on-year history. Overlay Hampshire, England, and a selected peer school or peer average with the controls below. The hatched COVID band marks unpublished 2019/20–2021/22 performance-table years."}
+              ? `Key Stage 2 · latest year (${period.replace("/", "–")}) — Bartley against Hampshire and England. Optionally overlay a top local junior peer or the peer average.`
+              : "Key Stage 2 year-on-year history. Overlay Hampshire, England, and a selected junior peer school or peer average with the controls below. The hatched COVID band marks unpublished 2019/20–2021/22 performance-table years."}
           </p>
         </div>
 
@@ -206,19 +215,35 @@ function MetricsWorkbenchInner({
         <div className="metric-toggle" role="group" aria-label="Metric">
           <button
             type="button"
-            className={metric === "expected" ? "history-tab active" : "history-tab"}
+            className={
+              activeMetric === "expected" ? "history-tab active" : "history-tab"
+            }
             onClick={() => setMetric("expected")}
           >
             Expected standard
           </button>
           <button
             type="button"
-            className={metric === "higher" ? "history-tab active" : "history-tab"}
+            className={
+              activeMetric === "higher" ? "history-tab active" : "history-tab"
+            }
             onClick={() => setMetric("higher")}
+            disabled={!higherAvailable}
+            title={
+              higherAvailable
+                ? "Show higher standard"
+                : "Science has no higher-standard measure in KS2 tables"
+            }
           >
             Higher standard
           </button>
         </div>
+        {!higherAvailable ? (
+          <p className="chart-note muted">
+            Science is teacher assessment at the expected standard only — there
+            is no higher-standard measure to chart.
+          </p>
+        ) : null}
 
         <div
           className="overlay-toggles peer-overlay-panel"
@@ -261,14 +286,14 @@ function MetricsWorkbenchInner({
           <>
             <SubjectComparisonChart
               subjects={subjects.filter((row) => row.subject === subject)}
-              metric={metric}
+              metric={activeMetric}
               focused
               peerValue={peerCompareValue}
               peerSeriesName={peerLabel}
             />
             <ComparisonTable
               subjects={subjects.filter((row) => row.subject === subject)}
-              metric={metric}
+              metric={activeMetric}
               cohortSize={data.profile.eligiblePupils}
             />
           </>
@@ -296,7 +321,7 @@ function MetricsWorkbenchInner({
                 <span>Overlay England</span>
               </label>
               {sipTargets.targets.some(
-                (t) => t.subject === subject && t.metric === metric,
+                (t) => t.subject === subject && t.metric === activeMetric,
               ) ? (
                 <label className="overlay-check">
                   <input
@@ -314,7 +339,7 @@ function MetricsWorkbenchInner({
             <HistoryTrendChart
               history={history}
               subject={subject}
-              metric={metric === "higher" ? "higher" : "expected"}
+              metric={activeMetric === "higher" ? "higher" : "expected"}
               seriesMode="bartley"
               showHampshire={showHampshire}
               showEngland={showEngland}
@@ -357,8 +382,11 @@ function MetricsWorkbenchInner({
             {progressForSubject.length ? (
               <>
                 <div className="section-intro stacked">
-                  <h3>Progress by year</h3>
-                  <p>Published KS1–KS2 progress scores for Bartley.</p>
+                  <h3>Junior value-added (KS1–KS2 progress)</h3>
+                  <p>
+                    Published KS1–KS2 progress scores for Bartley — junior
+                    school value-added, not infant or secondary measures.
+                  </p>
                 </div>
                 <ProgressChart
                   progress={[...progressForSubject]

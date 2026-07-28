@@ -612,9 +612,14 @@ a:hover {
   transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
 }
 
-.history-tab:hover {
+.history-tab:hover:not(:disabled) {
   border-color: rgba(27, 67, 50, 0.35);
   color: var(--ink);
+}
+
+.history-tab:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
 }
 
 .history-tab.active {
