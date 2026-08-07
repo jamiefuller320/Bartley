@@ -7,6 +7,11 @@ import type {
 } from "@/lib/types";
 import { fmtNum, fmtPct, fmtPp, shortSubject } from "@/lib/format";
 import { ppGap } from "@/lib/peers";
+import {
+  formatPeriods,
+  localRollingEquityGap,
+  threeYearComparison,
+} from "@/lib/three-year";
 
 export type AnalysisSection = {
   id: string;
@@ -108,8 +113,23 @@ export function buildAnalysis(
     (s) => s.vsEngland !== null && s.vsEngland !== undefined && s.vsEngland <= -3,
   );
 
+  const rwm3 = threeYearComparison(
+    data.threeYearComparisons,
+    "Reading, writing and maths",
+  );
+  const genderRoll = localRollingEquityGap(data.equityHistory, "Girls", "Boys");
+  const disRoll = localRollingEquityGap(
+    data.equityHistory,
+    "Not disadvantaged",
+    "Disadvantaged",
+  );
+
   const headline = `${data.profile.name}: governing board analysis`;
-  const summary = `In ${periodShort(data.period)}, ${fmtPct(latest?.schoolExpected)} of pupils met the expected standard in reading, writing and maths combined — in line with England (${fmtPct(latest?.englandExpected)}) and ${fmtPp(latest?.vsHampshire)} versus Hampshire. The sharper story sits beneath that headline: a wide gender gap, a persistent disadvantage gap, writing as a relative strength, and combined attainment still below the school’s pre-pandemic peak.`;
+  const threeYearSummary =
+    rwm3?.schoolExpected != null
+      ? ` The DfE 3-year average is ${fmtPct(rwm3.schoolExpected)} versus England ${fmtPct(rwm3.englandExpected)} (${fmtPp(rwm3.vsEngland)}), which smooths single-cohort noise (n=${data.profile.threeYearEligible ?? "—"}) alongside the latest year.`
+      : "";
+  const summary = `In ${periodShort(data.period)}, ${fmtPct(latest?.schoolExpected)} of pupils met the expected standard in reading, writing and maths combined — in line with England (${fmtPct(latest?.englandExpected)}) and ${fmtPp(latest?.vsHampshire)} versus Hampshire.${threeYearSummary} The sharper story sits beneath that headline: a wide gender gap, a persistent disadvantage gap, writing as a relative strength, and combined attainment still below the school’s pre-pandemic peak.`;
 
   const sections: AnalysisSection[] = [
     {
@@ -117,13 +137,16 @@ export function buildAnalysis(
       title: "Overall attainment position",
       paragraphs: [
         `The school’s published combined RWM result of ${fmtPct(latest?.schoolExpected)} places Bartley with the national average and just below Hampshire (${fmtPct(latest?.hampshireExpected)}). That is a stable, not dramatic, headline: the school is neither an outlier of concern on the overall measure nor currently matching its strongest published years.`,
+        rwm3?.schoolExpected != null
+          ? `On the DfE published 3-year average (${rwm3.topic}), combined RWM is ${fmtPct(rwm3.schoolExpected)} against England ${fmtPct(rwm3.englandExpected)} and Hampshire ${fmtPct(rwm3.hampshireExpected)}. Board judgements should read latest and 3-year figures together: the latest year answers “what happened this cohort?”, while the 3-year average reduces volatility from a Year 6 of roughly ${data.profile.pupilsAged11 ?? data.profile.eligiblePupils ?? "—"} pupils.`
+          : "Where a published 3-year average is available, board judgements should read it alongside the latest year to separate cohort volatility from sustained patterns.",
         peak && last
           ? `Across the published performance-table years, combined RWM moved from ${fmtPct(first?.schoolExpected)} in ${periodShort(first?.period ?? "")} to ${fmtPct(last.schoolExpected)} in ${periodShort(last.period)}. The peak remains ${fmtPct(peak.schoolExpected)} in ${periodShort(peak.period)}. Recovery since 2022/23 has been modest (+2 pp from 2023/24 to 2024/25), while England has risen more steadily over the long run.`
           : "Longer-run published history shows combined attainment below the school’s strongest pre-pandemic years.",
       ],
       bullets: [
-        `Higher-standard combined RWM: ${fmtPct(latest?.schoolHigher)} (Hampshire ${fmtPct(latest?.hampshireHigher)}, England ${fmtPct(latest?.englandHigher)}).`,
-        `Year 6 cohort size: ${data.profile.pupilsAged11 ?? data.profile.eligiblePupils ?? "—"} eligible pupils — single-year percentages can move sharply with small numbers.`,
+        `Higher-standard combined RWM: ${fmtPct(latest?.schoolHigher)} latest (Hampshire ${fmtPct(latest?.hampshireHigher)}, England ${fmtPct(latest?.englandHigher)}); 3-year higher standard ${fmtPct(rwm3?.schoolHigher)}.`,
+        `Year 6 cohort size: ${data.profile.pupilsAged11 ?? data.profile.eligiblePupils ?? "—"} eligible pupils — single-year percentages can move sharply with small numbers; 3-year eligible pupil base is ${data.profile.threeYearEligible ?? "—"}.`,
         `Disadvantaged share of the cohort: ${fmtPct(data.profile.disadvantagedPercent)}; SEN (EHC or support): ${fmtPct(data.profile.senCombinedPercent)}; EAL: ${fmtPct(data.profile.ealPercent)}.`,
       ],
     },
@@ -150,10 +173,18 @@ export function buildAnalysis(
       title: "Equity and inclusion",
       paragraphs: [
         genderGap !== null
-          ? `The gender gap is the most urgent equity signal in the latest data: girls ${fmtPct(girls?.expected)} versus boys ${fmtPct(boys?.expected)} at combined expected standard (gap ${genderGap.toFixed(0)} pp). That is substantially wider than in several earlier published years — for example boys and girls were level at 70% in 2018/19, and the 2023/24 gap was only 5 pp.`
+          ? `The gender gap is the most urgent equity signal in the latest data: girls ${fmtPct(girls?.expected)} versus boys ${fmtPct(boys?.expected)} at combined expected standard (gap ${genderGap.toFixed(0)} pp). That is substantially wider than in several earlier published years — for example boys and girls were level at 70% in 2018/19, and the 2023/24 gap was only 5 pp.${
+              genderRoll.gap != null
+                ? ` The local three-year average gap is still ${genderRoll.gap.toFixed(0)} pp over ${formatPeriods(genderRoll.periods)}, so the issue is not only the latest spike.`
+                : ""
+            }`
           : "Gender comparison data is limited in the latest extract.",
         disGap !== null
-          ? `Disadvantaged pupils reached ${fmtPct(dis?.expected)} combined expected standard versus ${fmtPct(notDis?.expected)} for pupils not known to be disadvantaged (gap ${disGap.toFixed(0)} pp). No disadvantaged pupils reached the higher standard in the latest year. The 2023/24 disadvantaged figure (${fmtPct(disHist.find((d) => d.period === "2023/2024")?.expected)}) was especially low, with partial recovery in 2024/25 — still well below the 2018/19 disadvantaged result of ${fmtPct(disHist.find((d) => d.period === "2018/2019")?.expected)}.`
+          ? `Disadvantaged pupils reached ${fmtPct(dis?.expected)} combined expected standard versus ${fmtPct(notDis?.expected)} for pupils not known to be disadvantaged (gap ${disGap.toFixed(0)} pp). No disadvantaged pupils reached the higher standard in the latest year. The 2023/24 disadvantaged figure (${fmtPct(disHist.find((d) => d.period === "2023/2024")?.expected)}) was especially low, with partial recovery in 2024/25 — still well below the 2018/19 disadvantaged result of ${fmtPct(disHist.find((d) => d.period === "2018/2019")?.expected)}.${
+              disRoll.gap != null
+                ? ` Over ${formatPeriods(disRoll.periods)} the local three-year average gap remains about ${disRoll.gap.toFixed(0)} pp.`
+                : ""
+            }`
           : "Disadvantage comparison data is limited in the latest extract.",
         `With roughly one in five pupils disadvantaged and one in five identified with SEN, equity outcomes are not a marginal issue: they are central to whether the school’s published profile is socially just as well as statistically average.`,
       ],
@@ -183,9 +214,9 @@ export function buildAnalysis(
         "Taken together, the published evidence points to three board-level priorities rather than a general attainment crisis:",
       ],
       bullets: [
-        "Close the boys’ combined RWM gap without lowering girls’ strong outcomes — especially in reading and writing pathways that feed the combined measure.",
-        "Sustain and deepen the recovery for disadvantaged pupils so that 2023/24 does not become a repeated pattern; aim for higher-standard representation as well as expected standard.",
-        "Raise reading and GPS toward Hampshire/England while protecting writing strength and securing maths consistency.",
+        "Close the boys’ combined RWM gap without lowering girls’ strong outcomes — especially in reading and writing pathways that feed the combined measure. Use the three-year average gap as the smoothing check so one sharp year does not dominate the plan.",
+        "Sustain and deepen the recovery for disadvantaged pupils so that 2023/24 does not become a repeated pattern; the three-year average gap confirms this is sustained, not only a single-year swing. Aim for higher-standard representation as well as expected standard.",
+        "Raise reading and GPS toward Hampshire/England while protecting writing strength and securing maths consistency — reading’s 3-year scaled score can sit alongside the softer latest expected-standard figure.",
       ],
     },
   ];
@@ -439,7 +470,7 @@ export function buildAnalysis(
   const caveats = [
     "Published performance-table KS2 files are unavailable for 2019/20–2021/22 (COVID cancellation / not published in tables), so trend lines skip those years.",
     "Progress measures are missing for recent cohorts without KS1 baselines.",
-    "With a single junior-school Year 6 cohort, percentage-point swings can reflect a small number of pupils; always ask for pupil counts behind the percentages.",
+    "With a single junior-school Year 6 cohort, percentage-point swings can reflect a small number of pupils; always ask for pupil counts behind the percentages. Findings pair latest-year scores with DfE published 3-year averages (and local rolling means for equity gaps where no official 3-year figure exists).",
     "This analysis uses DfE Compare school performance / Explore education statistics published figures only — it does not include internal tracking, Ofsted judgement text, or confidential ASP/IDSR detail.",
     "Peer schools were selected as open state-funded Hampshire juniors (maintained / academy) of similar cohort size in the local postcode band, ranked by latest combined RWM — not by Ofsted grade, progress, or exact distance. Vicinity is approximate (postcode band), not crow-flies metres.",
     "Independent (private/public) schools are excluded from peer and feeder benchmarks because they do not publish the same statutory KS2 / performance-table measures as state-funded schools; mixing sectors would not be like-for-like with Bartley.",

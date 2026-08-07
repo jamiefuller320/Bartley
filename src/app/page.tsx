@@ -79,12 +79,16 @@ export default function HomePage() {
           <div className="section-intro">
             <h2>Evaluation snapshot</h2>
             <p>
-              Academic year {data.period.replace("/", "–")}. Combined reading,
-              writing and maths sits {fmtPp(score.vsEngland)} versus England
+              Academic year {data.period.replace("/", "–")}. Findings pair the
+              latest cohort with DfE 3-year averages for smoothing. Combined
+              reading, writing and maths sits {fmtPp(score.vsEngland)} versus
+              England
               {rolling.expected != null
                 ? `; three-year average ${fmtPct(rolling.expected)}`
                 : ""}
-              {yoy.delta != null ? `; ${fmtPp(yoy.delta)} versus prior published year` : ""}
+              {yoy.delta != null
+                ? `; ${fmtPp(yoy.delta)} versus prior published year`
+                : ""}
               .
             </p>
           </div>
@@ -123,10 +127,11 @@ export default function HomePage() {
               <span className="snapshot-label">3-year RWM average</span>
               <strong>{fmtPct(rolling.expected)}</strong>
               <span className="snapshot-sub">
-                {rolling.topic ?? "Across recent published years"}
+                {rolling.topic ?? "DfE published 3-year average"}
                 {data.profile.threeYearEligible != null
                   ? ` · n=${data.profile.threeYearEligible}`
                   : ""}
+                {" · used with latest year in findings"}
               </span>
             </div>
             <div className="snapshot-metric" role="listitem">

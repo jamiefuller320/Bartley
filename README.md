@@ -20,7 +20,7 @@ The workflow in `.github/workflows/deploy-pages.yml` builds a static export and 
 
 - Uses institution-level Key Stage 2 attainment from the **DfE Explore Education Statistics API** (the open data behind Compare school and college performance)
 - Compares Bartley with **Hampshire** and **England**
-- Surfaces automatic evaluation findings (strengths, watch points, priorities)
+- Surfaces automatic evaluation findings (strengths, watch points, priorities), pairing **latest-year scores** with **DfE 3-year averages** (and local rolling means for equity gaps) for smoothing
 - Visualises attainment, higher standard, pupil-group gaps, cohort context, and last available progress scores
 
 ## Run locally

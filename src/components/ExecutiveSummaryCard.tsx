@@ -14,9 +14,9 @@ export function ExecutiveSummaryCard({
         <div className="section-intro">
           <h2>Executive summary</h2>
           <p>
-            One-page board pack for {period.replace("/", "–")}: headline
-            metrics (including year-on-year movement and higher standard), top
-            risks, and the questions worth asking first.
+            One-page board pack for {period.replace("/", "–")}: latest-year
+            scores alongside the DfE 3-year average for smoothing, top risks,
+            and the questions worth asking first.
           </p>
         </div>
 
