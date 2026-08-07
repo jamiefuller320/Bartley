@@ -9,6 +9,11 @@ import type {
 } from "@/lib/types";
 import { fmtPct, fmtPp, shortSubject } from "@/lib/format";
 import { ppGap } from "@/lib/peers";
+import {
+  formatPeriods,
+  localRollingEquityGap,
+  threeYearComparison,
+} from "@/lib/three-year";
 
 export type ChartDeepLink = {
   href: string;
@@ -188,6 +193,10 @@ export function buildExecutiveSummary(
   const dis = data.equity.find((e) => e.group === "Disadvantaged");
   const notDis = data.equity.find((e) => e.group === "Not disadvantaged");
   const rolling = threeYearRwm(data.threeYear as ThreeYearRow[] | undefined);
+  const rwm3 = threeYearComparison(
+    data.threeYearComparisons,
+    "Reading, writing and maths",
+  );
   const peerAvg = peers?.peerAverageLatest.rwmExpected ?? null;
   const peerGap = ppGap(rwm?.schoolExpected, peerAvg);
   const cohortN = groupCount(data.profile, "All pupils");
@@ -205,16 +214,30 @@ export function buildExecutiveSummary(
     notDis?.expected != null && dis?.expected != null
       ? notDis.expected - dis.expected
       : null;
+  const genderRoll = localRollingEquityGap(data.equityHistory, "Girls", "Boys");
+  const disRoll = localRollingEquityGap(
+    data.equityHistory,
+    "Not disadvantaged",
+    "Disadvantaged",
+  );
 
   const risks: string[] = [];
   if (genderGap != null && genderGap >= 15) {
+    const roll =
+      genderRoll.gap != null
+        ? ` Three-year average gap ${genderRoll.gap.toFixed(0)} pp (${formatPeriods(genderRoll.periods)}).`
+        : "";
     risks.push(
-      `Boys’ combined RWM (${fmtPctWithN(boys?.expected, groupCount(data.profile, "Boys"))}) trails girls (${fmtPctWithN(girls?.expected, groupCount(data.profile, "Girls"))}) by ${genderGap.toFixed(0)} pp.`,
+      `Boys’ combined RWM (${fmtPctWithN(boys?.expected, groupCount(data.profile, "Boys"))}) trails girls (${fmtPctWithN(girls?.expected, groupCount(data.profile, "Girls"))}) by ${genderGap.toFixed(0)} pp latest.${roll}`,
     );
   }
   if (disGap != null && disGap >= 15) {
+    const roll =
+      disRoll.gap != null
+        ? ` Three-year average gap ${disRoll.gap.toFixed(0)} pp — a sustained pattern, not only a single-year swing.`
+        : "";
     risks.push(
-      `Disadvantaged pupils (${fmtPctWithN(dis?.expected, groupCount(data.profile, "Disadvantaged"))}) trail other pupils by ${disGap.toFixed(0)} pp; none reached the higher standard.`,
+      `Disadvantaged pupils (${fmtPctWithN(dis?.expected, groupCount(data.profile, "Disadvantaged"))}) trail other pupils by ${disGap.toFixed(0)} pp latest; none reached the higher standard.${roll}`,
     );
   }
   if (peerGap != null && peerGap <= -10) {
@@ -223,8 +246,13 @@ export function buildExecutiveSummary(
     );
   }
   if ((reading?.vsEngland ?? 0) <= -3 || (gps?.vsEngland ?? 0) <= -3) {
+    const reading3 = threeYearComparison(data.threeYearComparisons, "Reading");
+    const scaledNote =
+      reading3?.schoolScaled != null && reading3.englandScaled != null
+        ? ` Reading 3-year scaled score is ${reading3.schoolScaled} vs England ${reading3.englandScaled}.`
+        : "";
     risks.push(
-      `Reading (${fmtPct(reading?.schoolExpected)}) and GPS (${fmtPct(gps?.schoolExpected)}) are below England; writing (${fmtPct(writing?.schoolExpected)}) is the relative strength.`,
+      `Reading (${fmtPct(reading?.schoolExpected)}) and GPS (${fmtPct(gps?.schoolExpected)}) are below England on the latest year; writing (${fmtPct(writing?.schoolExpected)}) is the relative strength.${scaledNote}`,
     );
   }
   while (risks.length < 3) {
@@ -237,6 +265,19 @@ export function buildExecutiveSummary(
     }
     break;
   }
+
+  const threeYearDetailParts = [
+    rolling.topic ?? "DfE published 3-year average",
+    rwm3?.englandExpected != null
+      ? `England 3yr ${fmtPct(rwm3.englandExpected)}`
+      : null,
+    rwm3?.hampshireExpected != null
+      ? `Hampshire 3yr ${fmtPct(rwm3.hampshireExpected)}`
+      : null,
+    data.profile.threeYearEligible != null
+      ? `n=${data.profile.threeYearEligible}`
+      : null,
+  ].filter(Boolean);
 
   return {
     headlineMetrics: [
@@ -256,15 +297,22 @@ export function buildExecutiveSummary(
       },
       {
         label: "3-year RWM average",
-        value: fmtPct(rolling.expected),
-        detail:
-          rolling.topic ??
-          "Rolling average across recent published years (expected)",
+        value: fmtPct(rolling.expected ?? rwm3?.schoolExpected),
+        detail: threeYearDetailParts.join(" · "),
         delta:
-          rolling.higher != null
-            ? `Higher-standard 3yr ${fmtPct(rolling.higher)}`
-            : null,
-        deltaTone: "flat",
+          rolling.higher != null || rwm3?.schoolHigher != null
+            ? `Higher-standard 3yr ${fmtPct(rolling.higher ?? rwm3?.schoolHigher)}`
+            : rwm3?.vsEngland != null
+              ? `${fmtPp(rwm3.vsEngland)} vs England 3yr`
+              : null,
+        deltaTone:
+          rwm3?.vsEngland == null
+            ? "flat"
+            : rwm3.vsEngland >= 1
+              ? "up"
+              : rwm3.vsEngland <= -1
+                ? "down"
+                : "flat",
       },
       {
         label: "vs peer average",
@@ -276,8 +324,8 @@ export function buildExecutiveSummary(
     ],
     risks: risks.slice(0, 3),
     questions: [
-      "What forensic analysis explains the boys who missed combined RWM, and which barriers are most causal?",
-      "How is pupil premium mapped to current disadvantaged pupils below expected standard, with termly checkpoints?",
+      "What forensic analysis explains the boys who missed combined RWM, and which barriers are most causal — especially given the latest year versus the three-year average gap?",
+      "How is pupil premium mapped to current disadvantaged pupils below expected standard, with termly checkpoints against the sustained three-year gap?",
       peerGap != null
         ? `What would close even half the ${Math.abs(peerGap).toFixed(0)} pp gap to the top-three local peer average within three years?`
         : "Which similar Hampshire schools are practical benchmarks for the next three years?",

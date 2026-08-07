@@ -1,11 +1,14 @@
 import { fetchSchoolBundle, parseMetric, BARTLEY } from "@/lib/dfe-api";
 import { buildFindings } from "@/lib/evaluate";
+import { ppDiff } from "@/lib/three-year";
 import type {
   EquityHistoryRow,
   EquityRow,
   HistoryRow,
   SchoolMonitorData,
   SubjectComparison,
+  ThreeYearComparison,
+  ThreeYearRow,
 } from "@/lib/types";
 
 const SUBJECTS = [
@@ -155,6 +158,96 @@ function buildEquityHistory(school: Decoded[]): EquityHistoryRow[] {
   return rows;
 }
 
+function pickThreeYear(
+  rows: Decoded[],
+  subject: string,
+  period: string,
+  establishment?: string,
+): { topic: string; values: Record<string, number | null> } | null {
+  for (const row of rows) {
+    if (row.period !== period) continue;
+    if (row.filters.subject !== subject) continue;
+    if (row.filters.breakdown !== "3 year average") continue;
+    if (
+      establishment &&
+      row.filters.establishment_type_group &&
+      row.filters.establishment_type_group !== establishment
+    ) {
+      continue;
+    }
+    return {
+      topic: row.filters.breakdown_topic ?? "3 year average",
+      values: Object.fromEntries(
+        Object.entries(row.values).map(([k, v]) => [k, parseMetric(v)]),
+      ),
+    };
+  }
+  return null;
+}
+
+function buildThreeYearBundle(
+  school: Decoded[],
+  hampshire: Decoded[],
+  england: Decoded[],
+  period: string,
+): { threeYear: ThreeYearRow[]; comparisons: ThreeYearComparison[] } {
+  const threeYear: ThreeYearRow[] = [];
+  const comparisons: ThreeYearComparison[] = [];
+
+  for (const subject of SUBJECTS) {
+    const s = pickThreeYear(school, subject, period);
+    if (!s) continue;
+
+    threeYear.push({
+      subject,
+      breakdown: "3 year average",
+      topic: s.topic,
+      values: {
+        expected_standard_pupil_percent:
+          s.values.expected_standard_pupil_percent ?? null,
+        higher_standard_pupil_percent:
+          s.values.higher_standard_pupil_percent ?? null,
+        average_scaled_score: s.values.average_scaled_score ?? null,
+        progress_measure_score: s.values.progress_measure_score ?? null,
+        ...s.values,
+      },
+    });
+
+    let h =
+      pickThreeYear(hampshire, subject, period, "All state funded") ??
+      pickThreeYear(hampshire, subject, period, "All schools");
+    let e =
+      pickThreeYear(england, subject, period, "All state funded") ??
+      pickThreeYear(england, subject, period, "All schools");
+
+    const schoolExpected = s.values.expected_standard_pupil_percent ?? null;
+    const hampshireExpected =
+      h?.values.expected_standard_pupil_percent ?? null;
+    const englandExpected = e?.values.expected_standard_pupil_percent ?? null;
+    const schoolScaled = s.values.average_scaled_score ?? null;
+    const hampshireScaled = h?.values.average_scaled_score ?? null;
+    const englandScaled = e?.values.average_scaled_score ?? null;
+
+    comparisons.push({
+      subject,
+      topic: s.topic,
+      schoolExpected,
+      hampshireExpected,
+      englandExpected,
+      schoolHigher: s.values.higher_standard_pupil_percent ?? null,
+      hampshireHigher: h?.values.higher_standard_pupil_percent ?? null,
+      englandHigher: e?.values.higher_standard_pupil_percent ?? null,
+      schoolScaled,
+      hampshireScaled,
+      englandScaled,
+      vsHampshire: ppDiff(schoolExpected, hampshireExpected),
+      vsEngland: ppDiff(schoolExpected, englandExpected),
+    });
+  }
+
+  return { threeYear, comparisons };
+}
+
 export async function buildMonitorPayload(
   urn = BARTLEY.urn,
 ): Promise<SchoolMonitorData> {
@@ -292,6 +385,12 @@ export async function buildMonitorPayload(
 
   const history = buildHistory(bundle.perf, bundle.hampshire, bundle.england);
   const equityHistory = buildEquityHistory(bundle.perf);
+  const { threeYear, comparisons: threeYearComparisons } = buildThreeYearBundle(
+    bundle.perf,
+    bundle.hampshire,
+    bundle.england,
+    period,
+  );
 
   const info = bundle.info[0];
   const nft: Record<string, string> = {
@@ -302,8 +401,12 @@ export async function buildMonitorPayload(
 
   const boysCount = parseMetric(info?.values.belig);
   const girlsCount = parseMetric(info?.values.gelig);
+  const disadvantagedCount = parseMetric(info?.values.tfsm6cla1a);
+  const notDisadvantagedCount = parseMetric(info?.values.tnotfsm6cla1a);
+  const senSupportPercent = parseMetric(info?.values.psenelk);
+  const ehcPercent = parseMetric(info?.values.psenele);
 
-  return {
+  const payload: SchoolMonitorData = {
     source: {
       primarySite: `https://www.compare-school-performance.service.gov.uk/school/${urn}/bartley-church-of-england-junior-school`,
       api: "https://api.education.gov.uk/statistics",
@@ -313,7 +416,7 @@ export async function buildMonitorPayload(
         laPerformance: "019afee5-4791-7467-a788-c163fd9b57de",
       },
       release: "Key stage 2 attainment (Explore Education Statistics)",
-      note: "School-level figures mirror Compare school and college performance via the DfE Explore education statistics API. Institution-level history currently covers 2022/23 to 2024/25.",
+      note: "School-level figures mirror Compare school and college performance via the DfE Explore education statistics API. Institution-level history currently covers 2022/23 to 2024/25. Board findings use latest-year scores alongside DfE published 3-year averages (and local rolling means where official 3-year expected standards are unavailable).",
     },
     profile: {
       name: BARTLEY.name,
@@ -329,8 +432,14 @@ export async function buildMonitorPayload(
       ageRange: info?.filters.agerange,
       pupilsAged11: parseMetric(info?.values.tpupyear),
       disadvantagedPercent: parseMetric(info?.values.ptfsm6cla1a),
-      senSupportPercent: parseMetric(info?.values.psenelk),
-      ehcPercent: parseMetric(info?.values.psenele),
+      disadvantagedCount,
+      notDisadvantagedCount,
+      senSupportPercent,
+      ehcPercent,
+      senCombinedPercent:
+        senSupportPercent != null || ehcPercent != null
+          ? (senSupportPercent ?? 0) + (ehcPercent ?? 0)
+          : null,
       ealPercent: parseMetric(info?.values.ptealgrp2),
       nonMobilePercent: parseMetric(info?.values.ptmobn),
       boysPercent: parseMetric(info?.values.pbelig),
@@ -341,6 +450,7 @@ export async function buildMonitorPayload(
         boysCount !== null || girlsCount !== null
           ? (boysCount ?? 0) + (girlsCount ?? 0)
           : null,
+      threeYearEligible: parseMetric(info?.values.telig_3yr),
       period: info?.period,
     },
     period,
@@ -350,6 +460,11 @@ export async function buildMonitorPayload(
     equity,
     history,
     equityHistory,
-    findings: buildFindings({ subjects, equity, history }),
+    threeYear,
+    threeYearComparisons,
+    findings: [],
   };
+
+  payload.findings = buildFindings(payload);
+  return payload;
 }

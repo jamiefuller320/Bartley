@@ -120,6 +120,7 @@ export interface SchoolMonitorData {
   equityHistory?: EquityHistoryRow[];
   findings: Finding[];
   threeYear?: ThreeYearRow[];
+  threeYearComparisons?: ThreeYearComparison[];
 }
 
 export interface ThreeYearRow {
@@ -133,6 +134,23 @@ export interface ThreeYearRow {
     progress_measure_score?: number | null;
     [key: string]: number | null | undefined;
   };
+}
+
+/** DfE published 3-year averages with LA/national benchmarks for board comparisons. */
+export interface ThreeYearComparison {
+  subject: string;
+  topic: string;
+  schoolExpected: number | null;
+  hampshireExpected: number | null;
+  englandExpected: number | null;
+  schoolHigher: number | null;
+  hampshireHigher: number | null;
+  englandHigher: number | null;
+  schoolScaled: number | null;
+  hampshireScaled: number | null;
+  englandScaled: number | null;
+  vsHampshire: number | null;
+  vsEngland: number | null;
 }
 
 export interface PeerLatestSnapshot {
