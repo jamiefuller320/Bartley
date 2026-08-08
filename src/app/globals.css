@@ -1242,6 +1242,209 @@ a:hover {
   }
 }
 
+.data-entry-banner {
+  margin: 1.25rem 0 1rem;
+  padding: 1rem 1.15rem;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(27, 67, 50, 0.12);
+  border-radius: 12px;
+}
+
+.data-entry-banner p {
+  margin: 0 0 0.65rem;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.data-entry-banner p:last-child {
+  margin-bottom: 0;
+}
+
+.data-entry-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin: 1rem 0;
+}
+
+.data-entry-status {
+  margin: 0 0 1rem;
+  padding: 0.7rem 0.9rem;
+  border-radius: 8px;
+  background: var(--mist);
+  color: var(--forest);
+  font-size: 0.95rem;
+}
+
+.data-entry-panel {
+  margin-top: 1.25rem;
+  display: grid;
+  gap: 1.5rem;
+}
+
+.data-entry-block-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.data-entry-block h2,
+.data-entry-card h3 {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-display), Georgia, serif;
+  color: var(--forest);
+}
+
+.data-entry-card {
+  margin-top: 0.85rem;
+  padding: 1rem 1.1rem;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(27, 67, 50, 0.1);
+  border-radius: 12px;
+}
+
+.field,
+.field-grid {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 0.85rem;
+}
+
+.field span {
+  font-size: 0.82rem;
+  font-weight: 650;
+  color: var(--ink-soft);
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  border: 1px solid rgba(27, 67, 50, 0.18);
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+}
+
+.field-grid {
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 0.85rem;
+}
+
+.chip-fieldset {
+  border: 0;
+  margin: 0 0 0.85rem;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem 0.85rem;
+}
+
+.chip-fieldset legend {
+  font-size: 0.82rem;
+  font-weight: 650;
+  color: var(--ink-soft);
+  margin-bottom: 0.35rem;
+}
+
+.file-import {
+  cursor: pointer;
+}
+
+.btn-ghost.danger {
+  color: var(--tone-priority);
+  border-color: rgba(155, 44, 44, 0.25);
+}
+
+.sip-vision {
+  margin: 0 0 1.25rem;
+  padding: 1rem 1.2rem;
+  border-left: 4px solid var(--gold);
+  background: rgba(255, 255, 255, 0.72);
+  border-radius: 0 12px 12px 0;
+}
+
+.sip-vision p {
+  margin: 0;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.15rem;
+  line-height: 1.55;
+  color: var(--forest);
+}
+
+.sip-priority-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 1rem;
+}
+
+.sip-priority-index {
+  color: var(--sage);
+}
+
+.sip-sustain,
+.sip-calendar {
+  margin-top: 1.25rem;
+  padding: 1rem 1.15rem;
+  background: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(27, 67, 50, 0.1);
+  border-radius: 12px;
+}
+
+.sip-sustain h3 {
+  margin: 0 0 0.55rem;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.1rem;
+  color: var(--forest);
+}
+
+.sip-sustain ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.sip-sustain li + li {
+  margin-top: 0.45rem;
+}
+
+.sip-calendar p {
+  margin: 0.35rem 0 0;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.sip-calendar p:first-child {
+  margin-top: 0;
+}
+
+.sip-priority-list li {
+  padding: 1rem 1.15rem;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(27, 67, 50, 0.1);
+  border-radius: 12px;
+}
+
+.sip-priority-list h3 {
+  margin: 0 0 0.4rem;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: 1.2rem;
+  color: var(--forest);
+}
+
+.sip-priority-list p {
+  margin: 0.35rem 0 0;
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
 @media print {
   .meeting-pack-charts,
   .print-chart-block,

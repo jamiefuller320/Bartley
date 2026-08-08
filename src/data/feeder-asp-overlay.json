@@ -1,5 +1,5 @@
 {
-  "note": "Manual ASP / local fill-in for feeder (and optional infant peer) phonics and KS1 attainment. School-level phonics/KS1 are no longer in CSP open downloads. Leave values null until figures are supplied from Analyse School Performance or the school. This file is merged into feeder-schools.json by scripts/extract-feeder-schools.py on every refresh.",
+  "note": "Manual ASP / local fill-in for feeder phonics and KS1 attainment. School-level phonics/KS1 are no longer in CSP open downloads. Edit via the /data-entry page (download JSON) or by hand, then run npm run refresh-feeders to merge into feeder-schools.json.",
   "confidentiality": "Do not paste IDSR narrative or pupil-level data here — attainment percentages only, suitable for the public board pack.",
   "period": "2024/2025",
   "updatedAt": null,

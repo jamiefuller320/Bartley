@@ -385,8 +385,8 @@ def main() -> None:
         "KS1 results were removed from performance-table downloads after "
         "2022/23. Phonics remains statutory but school-level phonics is no "
         "longer included in CSP open downloads (only LA/national EES tables). "
-        "Fill phonics/KS1 percentages in src/data/feeder-asp-overlay.json "
-        "(ASP or local figures); they are merged into this file on refresh."
+        "Fill phonics/KS1 percentages via /data-entry or "
+        "src/data/feeder-asp-overlay.json; they are merged on refresh."
     )
     if filled:
         ks1_note += (

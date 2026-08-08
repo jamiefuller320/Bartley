@@ -302,6 +302,7 @@ export interface FeederSchoolsBundle {
     feeders: string;
     peers: string;
     ks1Note: string;
+    aspOverlay?: string;
     sector?: string;
     sectorNote?: string;
   };

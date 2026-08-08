@@ -1,34 +1,116 @@
 {
-  "note": "Edit these school improvement plan ambitions locally. They appear as optional overlays on year-on-year charts.",
+  "note": "Bartley Church of England Junior School Improvement Plan 2025–26. Priority text is taken from the GovernorHub SIP. Numeric chart overlays are provisional board tools — SIP 1.2 asks SLT to define excellence versus national/local data (aspiration: in line with and above local/national averages). Edit via /data-entry.",
+  "sourceUrl": "https://app.governorhub.com/document/69691cd1ffcc4db7df83f5f4/view",
+  "sourceTitle": "School Improvement Plan 2025–26 (GovernorHub)",
+  "updatedAt": "2026-08-08",
+  "period": "2025/2026",
+  "vision": "We are committed to providing excellence every day so each child can achieve, be happy and be successful in everything they do. Our Christian values foster love for ourselves and each other.",
   "enabledByDefault": false,
+  "calendar": {
+    "fgbMeetings": [
+      "2025-09-16",
+      "2025-10-21",
+      "2025-11-25",
+      "2026-01-20",
+      "2026-03-10",
+      "2026-05-19",
+      "2026-06-30"
+    ],
+    "insetDays": [
+      "2025-09-03",
+      "2025-10-24",
+      "2025-11-03",
+      "2026-02-13",
+      "2026-06-01"
+    ]
+  },
+  "priorities": [
+    {
+      "id": "leadership-shared-ambition",
+      "title": "Strengthen leadership at all levels so school improvement is a shared ambition",
+      "detail": "To effect school improvement, all staff need to understand their role as leaders and use this to improve pupil outcomes. Includes sharing the vision, agreeing what excellent outcomes look like versus national and local data, collaborating with the Improving Standards Team and Solent Maths Hub, aligning appraisal to the SIP, research/CPD/visits, expanding collaborative coaching, tightening the monitoring cycle, refining strategic documents, and sustaining consistent writing teaching.",
+      "focusGroups": ["All pupils"],
+      "subjects": ["Reading, writing and maths", "Writing", "Maths", "Reading"],
+      "byPeriod": "2025/2026"
+    },
+    {
+      "id": "focus-group-outcomes",
+      "title": "Improve outcomes for identified focus groups so that they can succeed now and in the next stage of their education",
+      "detail": "Disadvantaged pupils and children with SEND are performing below county and national averages, and this is a trend over time. Actions cover identifying vulnerable pupils and barriers, frequent assessment and adapted planning, research and school visits, leadership focus on disadvantaged pupils, Pupil Premium and SEND funding review, integrating Resourced Provision, ordinarily available provision, evidence-based interventions, parental engagement, inclusive/trauma-informed CPD, attendance of vulnerable pupils, and pupil voice for disadvantaged and SEND children.",
+      "focusGroups": ["Disadvantaged"],
+      "subjects": ["Reading, writing and maths"],
+      "byPeriod": "2025/2026"
+    },
+    {
+      "id": "resilience-self-regulation",
+      "title": "Grow children’s resilience and capacity to self-regulate so that they can access learning with increasing independence",
+      "detail": "There are inconsistencies in how confidently children regulate their own behaviour for learning. Directly teaching children to identify factors that lead to dysregulation benefits all. Actions include consistent language and phrases (including the 5Cs and ‘Good for me, good for you, good for everyone’), redrafting the Positive Behaviour Policy around co-regulation and restorative practice, regulation stations/calm corners, co-regulation plans, reflective practice, and embedding pupil and parent voice in relational practice.",
+      "focusGroups": ["All pupils"],
+      "subjects": [],
+      "byPeriod": "2025/2026"
+    }
+  ],
+  "previousPriorities": [
+    {
+      "id": "2024-25-writing",
+      "title": "To improve standards in writing across all areas of the curriculum",
+      "detail": "Sustain — consistency in all year groups across the planning and teaching of Writing.",
+      "focusGroups": ["All pupils"],
+      "subjects": ["Writing"],
+      "byPeriod": "2024/2025"
+    },
+    {
+      "id": "2024-25-coaching",
+      "title": "For teaching staff to further develop and refine their teaching skills through a coaching/collaborative approach",
+      "detail": "Sustain — explicit identification of teaching skills in a teaching and learning policy; roll-out that positively impacts all areas of the school and develops a learning community for all staff.",
+      "focusGroups": [],
+      "subjects": [],
+      "byPeriod": "2024/2025"
+    },
+    {
+      "id": "2024-25-inclusion",
+      "title": "To further develop the understanding of all stakeholders of inclusivity, equality and diversity",
+      "detail": "Sustain — continue to monitor participation of all groups to ensure there is equity and excellence for all.",
+      "focusGroups": ["Disadvantaged"],
+      "subjects": [],
+      "byPeriod": "2024/2025"
+    }
+  ],
   "targets": [
     {
       "subject": "Reading, writing and maths",
       "metric": "expected",
-      "label": "SIP RWM ambition",
-      "value": 70,
-      "byPeriod": "2026/2027"
+      "label": "Provisional RWM aspiration (in line / above national)",
+      "value": 65,
+      "byPeriod": "2025/2026"
     },
     {
       "subject": "Reading, writing and maths",
       "metric": "higher",
-      "label": "SIP higher-standard ambition",
-      "value": 15,
-      "byPeriod": "2026/2027"
+      "label": "Provisional higher-standard aspiration",
+      "value": 12,
+      "byPeriod": "2025/2026"
     },
     {
       "subject": "Reading",
       "metric": "expected",
-      "label": "SIP reading ambition",
-      "value": 80,
-      "byPeriod": "2026/2027"
+      "label": "Provisional reading aspiration",
+      "value": 76,
+      "byPeriod": "2025/2026"
     },
     {
       "subject": "Grammar, punctuation and spelling",
       "metric": "expected",
-      "label": "SIP GPS ambition",
+      "label": "Provisional GPS aspiration",
+      "value": 73,
+      "byPeriod": "2025/2026"
+    },
+    {
+      "subject": "Writing",
+      "metric": "expected",
+      "label": "Provisional writing sustain / strengthen",
       "value": 78,
-      "byPeriod": "2026/2027"
+      "byPeriod": "2025/2026"
     }
   ]
 }

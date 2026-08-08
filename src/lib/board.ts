@@ -60,10 +60,32 @@ export type SipTarget = {
   byPeriod?: string | null;
 };
 
+export type SipPriority = {
+  id: string;
+  title: string;
+  detail: string;
+  focusGroups: string[];
+  subjects: string[];
+  byPeriod?: string | null;
+};
+
+export type SipCalendar = {
+  fgbMeetings?: string[];
+  insetDays?: string[];
+};
+
 export type SipTargetsBundle = {
   note: string;
   enabledByDefault: boolean;
   targets: SipTarget[];
+  sourceUrl?: string | null;
+  sourceTitle?: string | null;
+  updatedAt?: string | null;
+  period?: string | null;
+  vision?: string | null;
+  calendar?: SipCalendar | null;
+  priorities?: SipPriority[];
+  previousPriorities?: SipPriority[];
 };
 
 export function groupCount(
