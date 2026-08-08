@@ -26,16 +26,16 @@ export default function DataEntryPage() {
           <div className="section-intro">
             <h1>Manual data entry</h1>
             <p>
-              Insert feeder KS1 / phonics percentages and SIP priorities that
-              are not available from open DfE downloads. Start from the{" "}
+              Insert feeder KS1 / phonics percentages and maintain the{" "}
               <a
                 href="https://app.governorhub.com/document/69691cd1ffcc4db7df83f5f4/view"
                 target="_blank"
                 rel="noreferrer"
               >
-                current Bartley SIP on GovernorHub
-              </a>
-              , then download JSON into the repo.
+                School Improvement Plan 2025–26
+              </a>{" "}
+              priorities, vision, and calendar. Download JSON into the repo when
+              ready to publish.
             </p>
             <p className="muted">
               Prefer the dashboard?{" "}

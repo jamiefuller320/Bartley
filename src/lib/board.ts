@@ -69,6 +69,11 @@ export type SipPriority = {
   byPeriod?: string | null;
 };
 
+export type SipCalendar = {
+  fgbMeetings?: string[];
+  insetDays?: string[];
+};
+
 export type SipTargetsBundle = {
   note: string;
   enabledByDefault: boolean;
@@ -76,7 +81,11 @@ export type SipTargetsBundle = {
   sourceUrl?: string | null;
   sourceTitle?: string | null;
   updatedAt?: string | null;
+  period?: string | null;
+  vision?: string | null;
+  calendar?: SipCalendar | null;
   priorities?: SipPriority[];
+  previousPriorities?: SipPriority[];
 };
 
 export function groupCount(

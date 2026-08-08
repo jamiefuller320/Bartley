@@ -16,8 +16,9 @@ Living list of product ideas and improvement work. Status: `open` · `in progres
 | ID | Idea | Status | Notes |
 |----|------|--------|-------|
 | P01 | IDSR / confidential Ofsted data integration | parked | Useful for inspection prep; keep out of public Pages feed |
-| P03 | SIP targets ownership / board review workflow | in progress | Data-entry page unblocks editing; still need real SIP text from GovernorHub (login required) |
-| P04 | Auto-import SIP from GovernorHub | parked | Document is behind auth; needs export/paste from a governor |
+| P03 | SIP targets ownership / board review workflow | done | SIP 2025–26 vision, priorities, calendar loaded from governor paste; editable via /data-entry |
+| P04 | Auto-import SIP from GovernorHub | parked | Document is behind auth; manual paste remains the path |
+| P05 | SLT excellence criteria → exact % chart targets (SIP 1.2) | open | Numeric overlays are provisional until SLT define excellence vs national/local |
 
 ## How to use
 

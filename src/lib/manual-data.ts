@@ -28,12 +28,18 @@ export type SipPriority = {
   byPeriod?: string | null;
 };
 
-export type SipBundle = SipTargetsBundle & {
-  sourceUrl?: string | null;
-  sourceTitle?: string | null;
-  updatedAt?: string | null;
-  priorities?: SipPriority[];
-};
+export type SipBundle = SipTargetsBundle;
+
+export function formatSipDate(iso: string): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  if (!y || !m || !d) return iso;
+  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  });
+}
 
 export const SIP_SUBJECTS = [
   "Reading, writing and maths",

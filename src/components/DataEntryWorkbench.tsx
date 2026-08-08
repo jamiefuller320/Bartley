@@ -178,8 +178,7 @@ export function DataEntryWorkbench({
             <a href={sip.sourceUrl} target="_blank" rel="noreferrer">
               {sip.sourceTitle ?? "GovernorHub SIP"}
             </a>
-            . Paste real priority wording from that document — placeholders are
-            seeded from open-data themes until the SIP text is supplied.
+            {sip.period ? ` (${sip.period.replace("/", "–")})` : ""}.
           </p>
         ) : null}
       </div>
@@ -247,7 +246,17 @@ export function DataEntryWorkbench({
       {tab === "sip" ? (
         <div className="data-entry-panel">
           <section className="data-entry-block">
-            <h2>Source</h2>
+            <h2>Source &amp; vision</h2>
+            <label className="field">
+              <span>SIP period</span>
+              <input
+                value={sip.period ?? ""}
+                onChange={(e) =>
+                  setSip((prev) => ({ ...prev, period: e.target.value }))
+                }
+                placeholder="2025/2026"
+              />
+            </label>
             <label className="field">
               <span>Source title</span>
               <input
@@ -267,12 +276,58 @@ export function DataEntryWorkbench({
               />
             </label>
             <label className="field">
+              <span>Vision</span>
+              <textarea
+                rows={3}
+                value={sip.vision ?? ""}
+                onChange={(e) =>
+                  setSip((prev) => ({ ...prev, vision: e.target.value }))
+                }
+              />
+            </label>
+            <label className="field">
               <span>Note</span>
               <textarea
                 rows={3}
                 value={sip.note}
                 onChange={(e) =>
                   setSip((prev) => ({ ...prev, note: e.target.value }))
+                }
+              />
+            </label>
+            <label className="field">
+              <span>FGB meeting dates (YYYY-MM-DD, comma-separated)</span>
+              <input
+                value={(sip.calendar?.fgbMeetings ?? []).join(", ")}
+                onChange={(e) =>
+                  setSip((prev) => ({
+                    ...prev,
+                    calendar: {
+                      ...prev.calendar,
+                      fgbMeetings: e.target.value
+                        .split(",")
+                        .map((part) => part.trim())
+                        .filter(Boolean),
+                    },
+                  }))
+                }
+              />
+            </label>
+            <label className="field">
+              <span>INSET days (YYYY-MM-DD, comma-separated)</span>
+              <input
+                value={(sip.calendar?.insetDays ?? []).join(", ")}
+                onChange={(e) =>
+                  setSip((prev) => ({
+                    ...prev,
+                    calendar: {
+                      ...prev.calendar,
+                      insetDays: e.target.value
+                        .split(",")
+                        .map((part) => part.trim())
+                        .filter(Boolean),
+                    },
+                  }))
                 }
               />
             </label>
