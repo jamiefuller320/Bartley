@@ -47,7 +47,14 @@ function SchoolTable({
 
   return (
     <div className="table-wrap">
+      <p className="table-scroll-hint muted">
+        Scroll sideways on smaller screens to see all columns.
+      </p>
       <table className="data-table peer-table feeder-table">
+        <caption className="sr-only">
+          Feeder infant schools and local infant peers with census, absence, and
+          optional ASP phonics or KS1 attainment overlays.
+        </caption>
         <thead>
           <tr>
             <th>School</th>

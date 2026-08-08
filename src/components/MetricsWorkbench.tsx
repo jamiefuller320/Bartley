@@ -22,7 +22,11 @@ import {
   peerOverlayLabel,
   type PeerOverlaySelection,
 } from "@/lib/peers";
-import { subjectFromSlug, type SipTargetsBundle } from "@/lib/board";
+import {
+  subjectFromSlug,
+  subjectSlug,
+  type SipTargetsBundle,
+} from "@/lib/board";
 import type { SchoolMonitorData } from "@/lib/types";
 
 const SUBJECTS = [
@@ -109,12 +113,48 @@ function MetricsWorkbenchInner({
     }
   }, [higherAvailable, metric]);
 
-  const changeMode = (next: ChartViewMode) => {
-    setMode(next);
+  const syncUrl = (next: {
+    mode?: ChartViewMode;
+    subject?: SubjectOption;
+    metric?: "expected" | "higher";
+    peerOverlay?: PeerOverlaySelection;
+  }) => {
     if (typeof window === "undefined") return;
     const url = new URL(window.location.href);
-    url.searchParams.set("view", next);
-    window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash || "#charts"}`);
+    const nextMode = next.mode ?? mode;
+    const nextSubject = next.subject ?? subject;
+    const nextMetric = next.metric ?? metric;
+    const nextPeer = next.peerOverlay ?? peerOverlay;
+    url.searchParams.set("view", nextMode);
+    url.searchParams.set("subject", subjectSlug(nextSubject));
+    url.searchParams.set("metric", nextMetric);
+    if (nextPeer === "none") url.searchParams.delete("peer");
+    else url.searchParams.set("peer", nextPeer);
+    window.history.replaceState(
+      {},
+      "",
+      `${url.pathname}${url.search}${url.hash || "#charts"}`,
+    );
+  };
+
+  const changeMode = (next: ChartViewMode) => {
+    setMode(next);
+    syncUrl({ mode: next });
+  };
+
+  const changeSubject = (next: SubjectOption) => {
+    setSubject(next);
+    syncUrl({ subject: next });
+  };
+
+  const changeMetric = (next: "expected" | "higher") => {
+    setMetric(next);
+    syncUrl({ metric: next });
+  };
+
+  const changePeerOverlay = (next: PeerOverlaySelection) => {
+    setPeerOverlay(next);
+    syncUrl({ peerOverlay: next });
   };
 
   const subjectHistory = useMemo(
@@ -205,7 +245,7 @@ function MetricsWorkbenchInner({
               role="tab"
               aria-selected={subject === item}
               className={subject === item ? "history-tab active" : "history-tab"}
-              onClick={() => setSubject(item)}
+              onClick={() => changeSubject(item)}
             >
               {shortSubject(item)}
             </button>
@@ -218,7 +258,7 @@ function MetricsWorkbenchInner({
             className={
               activeMetric === "expected" ? "history-tab active" : "history-tab"
             }
-            onClick={() => setMetric("expected")}
+            onClick={() => changeMetric("expected")}
           >
             Expected standard
           </button>
@@ -227,7 +267,7 @@ function MetricsWorkbenchInner({
             className={
               activeMetric === "higher" ? "history-tab active" : "history-tab"
             }
-            onClick={() => setMetric("higher")}
+            onClick={() => changeMetric("higher")}
             disabled={!higherAvailable}
             title={
               higherAvailable
@@ -256,7 +296,7 @@ function MetricsWorkbenchInner({
               type="radio"
               name="peer-overlay"
               checked={peerOverlay === "none"}
-              onChange={() => setPeerOverlay("none")}
+              onChange={() => changePeerOverlay("none")}
             />
             <span>None</span>
           </label>
@@ -265,7 +305,7 @@ function MetricsWorkbenchInner({
               type="radio"
               name="peer-overlay"
               checked={peerOverlay === "average"}
-              onChange={() => setPeerOverlay("average")}
+              onChange={() => changePeerOverlay("average")}
             />
             <span>Peer average</span>
           </label>
@@ -275,7 +315,7 @@ function MetricsWorkbenchInner({
                 type="radio"
                 name="peer-overlay"
                 checked={peerOverlay === school.urn}
-                onChange={() => setPeerOverlay(school.urn)}
+                onChange={() => changePeerOverlay(school.urn)}
               />
               <span>{school.short}</span>
             </label>

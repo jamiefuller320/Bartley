@@ -279,6 +279,11 @@
       "severity": "positive",
       "title": "Writing above Hampshire",
       "detail": "Latest Writing expected standard 78% vs Hampshire 74% (+4 pp)."
+    },
+    {
+      "severity": "watch",
+      "title": "Grammar, punctuation and spelling below England",
+      "detail": "Latest Grammar, punctuation and spelling expected standard 68% vs England 73% (-5 pp). Local 3-year mean is 68% vs England 72.3% (-4.3 pp)."
     }
   ],
   "periods": [
