@@ -148,7 +148,13 @@ export function buildFindings(
     });
   }
 
-  for (const subject of ["Writing", "Maths", "Reading", "Science"] as const) {
+  for (const subject of [
+    "Writing",
+    "Maths",
+    "Reading",
+    "Grammar, punctuation and spelling",
+    "Science",
+  ] as const) {
     const row = data.subjects.find((s) => s.subject === subject);
     const roll = threeYearComparison(data.threeYearComparisons, subject);
     const localSchool = localRollingFromHistory(

@@ -40,13 +40,40 @@ npm run build:pages    # with /Bartley base path for GitHub Pages
 npm start              # serves the `out/` folder
 ```
 
+### Quality checks
+
+```bash
+npm run lint    # TypeScript
+npm test        # unit tests (findings, 3-year helpers, change-log)
+npm run build
+```
+
 ### Refresh data from DfE
 
 ```bash
-npm run refresh-data
+npm run refresh-all
 ```
 
-Writes an updated snapshot to `src/data/bartley-2024-25.json`.
+Runs, in order:
+
+1. `refresh-csp-history` — CSP multi-year KS2 extract → `bartley-csp-history.json`
+2. `refresh-data` — EES API latest + merge CSP history + regenerate findings
+3. `refresh-peers` — **re-select** top-3 similar local juniors and refresh metrics
+4. `refresh-feeders` — feeder infants + infant peers; merges `feeder-asp-overlay.json`
+
+Or run steps individually (`npm run refresh-data`, etc.).
+
+### Feeder ASP / phonics–KS1 overlay
+
+School-level phonics and KS1 are no longer in open CSP downloads. Supply percentages in:
+
+`src/data/feeder-asp-overlay.json`
+
+Then run `npm run refresh-feeders` (or `refresh-all`). Do not paste confidential IDSR narrative — attainment percentages only.
+
+### Ideas backlog
+
+See [`IDEAS.md`](./IDEAS.md) for tracked improvements, parked ideas (including IDSR), and status.
 
 ## Governor analysis
 

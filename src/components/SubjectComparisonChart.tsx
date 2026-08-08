@@ -55,10 +55,26 @@ export function SubjectComparisonChart({
     ? focusedDomain(domainValues(data, keys), "percent")
     : ([0, 100] as [number, number]);
 
+  const summary = data
+    .map((row) => {
+      const bits = [
+        `Bartley ${row.Bartley ?? "—"}%`,
+        `Hampshire ${row.Hampshire ?? "—"}%`,
+        `England ${row.England ?? "—"}%`,
+      ];
+      if (showPeer) bits.push(`${peerKey} ${peerValue ?? "—"}%`);
+      return `${row.subject}: ${bits.join(", ")}`;
+    })
+    .join(". ");
+
   return (
     <div className="chart-frame">
       <p className="chart-note">
         Axis range {domain[0]}–{domain[1]}% (zoomed to the values on display).
+      </p>
+      <p className="sr-only">
+        {metric === "higher" ? "Higher standard" : "Expected standard"} chart
+        values. {summary}
       </p>
       <ResponsiveContainer width="100%" height={340}>
         <BarChart

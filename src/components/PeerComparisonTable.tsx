@@ -84,12 +84,20 @@ export function PeerComparisonTable({
 
   return (
     <div className="table-wrap" id="peers">
+      <p className="table-scroll-hint muted">
+        Scroll sideways on smaller screens to see all columns.
+      </p>
       <table className="data-table peer-table">
+        <caption className="sr-only">
+          Latest KS2 expected standard percentages for Bartley and the top three
+          similar local junior peers, including sector, cohort size, subject
+          scores, gap versus Bartley RWM, and disadvantage share.
+        </caption>
         <thead>
           <tr>
             <th>School</th>
             <th>Sector</th>
-            <th>n</th>
+            <th>Pupils</th>
             <th>RWM</th>
             <th>Reading</th>
             <th>Writing</th>

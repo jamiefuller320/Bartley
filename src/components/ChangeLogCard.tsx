@@ -8,7 +8,17 @@ export function ChangeLogCard({ changeLog }: { changeLog: ChangeLog }) {
       <div className="shell">
         <div className="section-intro">
           <h2>What changed</h2>
-          <p>{changeLog.summary}</p>
+          <p>
+            {changeLog.summary} Figures compare the previous seed refresh
+            {changeLog.previousRefreshedAt
+              ? ` (${changeLog.previousRefreshedAt})`
+              : ""}{" "}
+            with the current seed
+            {changeLog.currentRefreshedAt
+              ? ` (${changeLog.currentRefreshedAt})`
+              : ""}
+            — not necessarily consecutive published academic years.
+          </p>
         </div>
         <div className="table-wrap">
           <table className="data-table">

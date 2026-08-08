@@ -141,7 +141,30 @@ export function buildAnalysis(
           ? `On the DfE published 3-year average (${rwm3.topic}), combined RWM is ${fmtPct(rwm3.schoolExpected)} against England ${fmtPct(rwm3.englandExpected)} and Hampshire ${fmtPct(rwm3.hampshireExpected)}. Board judgements should read latest and 3-year figures together: the latest year answers “what happened this cohort?”, while the 3-year average reduces volatility from a Year 6 of roughly ${data.profile.pupilsAged11 ?? data.profile.eligiblePupils ?? "—"} pupils.`
           : "Where a published 3-year average is available, board judgements should read it alongside the latest year to separate cohort volatility from sustained patterns.",
         peak && last
-          ? `Across the published performance-table years, combined RWM moved from ${fmtPct(first?.schoolExpected)} in ${periodShort(first?.period ?? "")} to ${fmtPct(last.schoolExpected)} in ${periodShort(last.period)}. The peak remains ${fmtPct(peak.schoolExpected)} in ${periodShort(peak.period)}. Recovery since 2022/23 has been modest (+2 pp from 2023/24 to 2024/25), while England has risen more steadily over the long run.`
+          ? (() => {
+              const prior = rwm.length >= 2 ? rwm[rwm.length - 2] : null;
+              const yoy =
+                prior?.schoolExpected != null && last.schoolExpected != null
+                  ? last.schoolExpected - prior.schoolExpected
+                  : null;
+              const postCovid = rwm.filter((row) => row.period >= "2022/2023");
+              const postDelta =
+                postCovid.length >= 2 &&
+                postCovid[0].schoolExpected != null &&
+                postCovid[postCovid.length - 1].schoolExpected != null
+                  ? (postCovid[postCovid.length - 1].schoolExpected as number) -
+                    (postCovid[0].schoolExpected as number)
+                  : null;
+              const yoyNote =
+                yoy != null && prior
+                  ? ` Latest year-on-year movement is ${fmtPp(yoy)} from ${periodShort(prior.period)} to ${periodShort(last.period)}.`
+                  : "";
+              const postNote =
+                postDelta != null && postCovid.length >= 2
+                  ? ` Since ${periodShort(postCovid[0].period)} the school has moved ${fmtPp(postDelta)} on combined RWM.`
+                  : "";
+              return `Across the published performance-table years, combined RWM moved from ${fmtPct(first?.schoolExpected)} in ${periodShort(first?.period ?? "")} to ${fmtPct(last.schoolExpected)} in ${periodShort(last.period)}. The peak remains ${fmtPct(peak.schoolExpected)} in ${periodShort(peak.period)}.${yoyNote}${postNote} England’s long-run published line has risen more steadily than the school’s over the same span.`;
+            })()
           : "Longer-run published history shows combined attainment below the school’s strongest pre-pandemic years.",
       ],
       bullets: [
@@ -173,18 +196,72 @@ export function buildAnalysis(
       title: "Equity and inclusion",
       paragraphs: [
         genderGap !== null
-          ? `The gender gap is the most urgent equity signal in the latest data: girls ${fmtPct(girls?.expected)} versus boys ${fmtPct(boys?.expected)} at combined expected standard (gap ${genderGap.toFixed(0)} pp). That is substantially wider than in several earlier published years — for example boys and girls were level at 70% in 2018/19, and the 2023/24 gap was only 5 pp.${
-              genderRoll.gap != null
-                ? ` The local three-year average gap is still ${genderRoll.gap.toFixed(0)} pp over ${formatPeriods(genderRoll.periods)}, so the issue is not only the latest spike.`
-                : ""
-            }`
+          ? (() => {
+              const paired = boysHist
+                .map((b) => {
+                  const g = girlsHist.find((row) => row.period === b.period);
+                  if (b.expected == null || g?.expected == null) return null;
+                  return { period: b.period, gap: g.expected - b.expected };
+                })
+                .filter((row): row is { period: string; gap: number } => row != null);
+              const priorGap =
+                paired.length >= 2 ? paired[paired.length - 2] : null;
+              const levelYear = paired.find((row) => Math.abs(row.gap) < 1);
+              const priorNote = priorGap
+                ? ` The previous published gap was ${priorGap.gap.toFixed(0)} pp in ${periodShort(priorGap.period)}.`
+                : "";
+              const levelNote = levelYear
+                ? ` Boys and girls were essentially level in ${periodShort(levelYear.period)}.`
+                : "";
+              const rollNote =
+                genderRoll.gap != null
+                  ? ` The local three-year average gap is still ${genderRoll.gap.toFixed(0)} pp over ${formatPeriods(genderRoll.periods)}, so the issue is not only the latest spike.`
+                  : "";
+              return `The gender gap is the most urgent equity signal in the latest data: girls ${fmtPct(girls?.expected)} versus boys ${fmtPct(boys?.expected)} at combined expected standard (gap ${genderGap.toFixed(0)} pp).${priorNote}${levelNote}${rollNote}`;
+            })()
           : "Gender comparison data is limited in the latest extract.",
         disGap !== null
-          ? `Disadvantaged pupils reached ${fmtPct(dis?.expected)} combined expected standard versus ${fmtPct(notDis?.expected)} for pupils not known to be disadvantaged (gap ${disGap.toFixed(0)} pp). No disadvantaged pupils reached the higher standard in the latest year. The 2023/24 disadvantaged figure (${fmtPct(disHist.find((d) => d.period === "2023/2024")?.expected)}) was especially low, with partial recovery in 2024/25 — still well below the 2018/19 disadvantaged result of ${fmtPct(disHist.find((d) => d.period === "2018/2019")?.expected)}.${
-              disRoll.gap != null
-                ? ` Over ${formatPeriods(disRoll.periods)} the local three-year average gap remains about ${disRoll.gap.toFixed(0)} pp.`
-                : ""
-            }`
+          ? (() => {
+              const sorted = [...disHist].sort((a, b) =>
+                a.period.localeCompare(b.period),
+              );
+              const prior = sorted.length >= 2 ? sorted[sorted.length - 2] : null;
+              const trough = sorted.reduce<(typeof sorted)[number] | null>(
+                (best, row) =>
+                  row.expected != null &&
+                  (best?.expected == null || row.expected < best.expected)
+                    ? row
+                    : best,
+                null,
+              );
+              const peakDis = sorted.reduce<(typeof sorted)[number] | null>(
+                (best, row) =>
+                  row.expected != null &&
+                  (best?.expected == null || row.expected > best.expected)
+                    ? row
+                    : best,
+                null,
+              );
+              const priorNote =
+                prior?.expected != null
+                  ? ` The previous published disadvantaged result was ${fmtPct(prior.expected)} in ${periodShort(prior.period)}.`
+                  : "";
+              const troughNote =
+                trough?.expected != null &&
+                dis?.expected != null &&
+                trough.period !== data.period
+                  ? ` The trough in the published series is ${fmtPct(trough.expected)} in ${periodShort(trough.period)}.`
+                  : "";
+              const peakNote =
+                peakDis?.expected != null && peakDis.period !== data.period
+                  ? ` The strongest published disadvantaged result remains ${fmtPct(peakDis.expected)} in ${periodShort(peakDis.period)}.`
+                  : "";
+              const rollNote =
+                disRoll.gap != null
+                  ? ` Over ${formatPeriods(disRoll.periods)} the local three-year average gap remains about ${disRoll.gap.toFixed(0)} pp.`
+                  : "";
+              return `Disadvantaged pupils reached ${fmtPct(dis?.expected)} combined expected standard versus ${fmtPct(notDis?.expected)} for pupils not known to be disadvantaged (gap ${disGap.toFixed(0)} pp). No disadvantaged pupils reached the higher standard in the latest year.${priorNote}${troughNote}${peakNote}${rollNote}`;
+            })()
           : "Disadvantage comparison data is limited in the latest extract.",
         `With roughly one in five pupils disadvantaged and one in five identified with SEN, equity outcomes are not a marginal issue: they are central to whether the school’s published profile is socially just as well as statistically average.`,
       ],

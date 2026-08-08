@@ -1,0 +1,36 @@
+{
+  "note": "Manual ASP / local fill-in for feeder (and optional infant peer) phonics and KS1 attainment. School-level phonics/KS1 are no longer in CSP open downloads. Leave values null until figures are supplied from Analyse School Performance or the school. This file is merged into feeder-schools.json by scripts/extract-feeder-schools.py on every refresh.",
+  "confidentiality": "Do not paste IDSR narrative or pupil-level data here — attainment percentages only, suitable for the public board pack.",
+  "period": "2024/2025",
+  "updatedAt": null,
+  "source": null,
+  "byUrn": {
+    "116302": {
+      "short": "Netley Marsh",
+      "phonicsYear1Expected": null,
+      "phonicsByEndYear2Expected": null,
+      "ks1ReadingExpected": null,
+      "ks1WritingExpected": null,
+      "ks1MathsExpected": null,
+      "ks1ScienceExpected": null
+    },
+    "116366": {
+      "short": "St Michael & All Angels",
+      "phonicsYear1Expected": null,
+      "phonicsByEndYear2Expected": null,
+      "ks1ReadingExpected": null,
+      "ks1WritingExpected": null,
+      "ks1MathsExpected": null,
+      "ks1ScienceExpected": null
+    },
+    "116282": {
+      "short": "Copythorne",
+      "phonicsYear1Expected": null,
+      "phonicsByEndYear2Expected": null,
+      "ks1ReadingExpected": null,
+      "ks1WritingExpected": null,
+      "ks1MathsExpected": null,
+      "ks1ScienceExpected": null
+    }
+  }
+}

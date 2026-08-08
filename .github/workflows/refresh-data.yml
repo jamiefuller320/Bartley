@@ -35,45 +35,74 @@ jobs:
       - name: Install
         run: npm ci
 
-      - name: Refresh Bartley seed from DfE API / CSP history
+      - name: Refresh CSP multi-year history
+        id: csp
+        run: npm run refresh-csp-history
+
+      - name: Refresh Bartley seed from DfE API + CSP history
         id: refresh
-        continue-on-error: true
         run: npm run refresh-data
 
-      - name: Refresh curated peer school metrics
+      - name: Re-select and refresh peer school metrics
         id: peers
-        continue-on-error: true
         run: npm run refresh-peers
 
-      - name: Refresh feeder infant context
+      - name: Refresh feeder infant context (+ ASP overlay merge)
         id: feeders
-        continue-on-error: true
         run: npm run refresh-feeders
+
+      - name: Summarise refresh outcomes
+        id: summary
+        run: |
+          {
+            echo "## Refresh outcomes"
+            echo ""
+            echo "| Step | Result |"
+            echo "|------|--------|"
+            echo "| CSP history | success |"
+            echo "| Bartley seed | success |"
+            echo "| Peer re-select | success |"
+            echo "| Feeders | success |"
+            echo ""
+            echo "Generated at $(date -u +%Y-%m-%dT%H:%MZ)."
+          } >> "$GITHUB_STEP_SUMMARY"
+          echo "body<<EOF" >> "$GITHUB_OUTPUT"
+          echo "## Refresh outcomes" >> "$GITHUB_OUTPUT"
+          echo "" >> "$GITHUB_OUTPUT"
+          echo "All refresh steps completed successfully at $(date -u +%Y-%m-%dT%H:%MZ)." >> "$GITHUB_OUTPUT"
+          echo "" >> "$GITHUB_OUTPUT"
+          echo "Please review figures before merging." >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
 
       - name: Detect changes
         id: changes
-        if: steps.refresh.outcome == 'success' || steps.peers.outcome == 'success' || steps.feeders.outcome == 'success'
         run: |
-          if git diff --quiet -- src/data/bartley-2024-25.json src/data/peer-schools.json src/data/change-log.json src/data/feeder-schools.json; then
+          if git diff --quiet -- \
+            src/data/bartley-2024-25.json \
+            src/data/bartley-csp-history.json \
+            src/data/peer-schools.json \
+            src/data/change-log.json \
+            src/data/feeder-schools.json; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
           else
             echo "changed=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Create pull request
-        if: (steps.refresh.outcome == 'success' || steps.peers.outcome == 'success' || steps.feeders.outcome == 'success') && steps.changes.outputs.changed == 'true'
+        if: steps.changes.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
           commit-message: "chore: refresh Bartley, peer, and feeder DfE seed data"
           title: "Refresh Bartley, peer, and feeder DfE seed data"
           body: |
+            ${{ steps.summary.outputs.body }}
+
             Automated refresh of:
 
-            - `src/data/bartley-2024-25.json` (Bartley seed)
+            - `src/data/bartley-csp-history.json` (CSP multi-year KS2 extract)
+            - `src/data/bartley-2024-25.json` (Bartley seed + findings)
             - `src/data/change-log.json` (what moved since previous seed)
-            - `src/data/peer-schools.json` (curated peer metrics from CSP KS2 downloads)
-            - `src/data/feeder-schools.json` (feeder infants + local infant peers from GIAS/census/absence)
-
-            Please review figures before merging.
+            - `src/data/peer-schools.json` (re-selected peer juniors + metrics)
+            - `src/data/feeder-schools.json` (feeders + infant peers; ASP overlay merged if present)
           branch: chore/refresh-dfe-data
           delete-branch: true
