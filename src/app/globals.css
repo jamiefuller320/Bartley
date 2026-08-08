@@ -1005,6 +1005,7 @@ a:hover {
   text-decoration: underline;
 }
 
+.peer-table .feeder-meta,
 .feeder-table .feeder-meta {
   display: block;
   margin-top: 0.2rem;
