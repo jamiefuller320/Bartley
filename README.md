@@ -40,6 +40,22 @@ npm run build:pages    # with /Bartley base path for GitHub Pages
 npm start              # serves the `out/` folder
 ```
 
+### Manual data entry (KS1 + SIP)
+
+Open **`/data-entry`** to insert:
+
+- Feeder **KS1 / phonics** percentages (saved as `src/data/feeder-asp-overlay.json`)
+- **SIP priorities** and numeric chart ambitions (saved as `src/data/sip-targets.json`)
+
+Because the site is a static GitHub Pages export, the form downloads JSON for you to commit into the repo. After updating the KS1 overlay, run:
+
+```bash
+npm run refresh-feeders
+```
+
+The current Bartley SIP on GovernorHub is linked from the page:
+`https://app.governorhub.com/document/69691cd1ffcc4db7df83f5f4/view`
+
 ### Refresh data from DfE
 
 ```bash

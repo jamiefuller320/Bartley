@@ -22,8 +22,18 @@ UA = "Mozilla/5.0 (compatible; BartleyInsight/1.0)"
 ROOT = Path(__file__).resolve().parents[1]
 CACHE = Path("/tmp/csp-feeder")
 OUT = ROOT / "src/data/feeder-schools.json"
+OVERLAY = ROOT / "src/data/feeder-asp-overlay.json"
 YEAR = "2024-2025"
 PERIOD = "2024/2025"
+
+ATTAINMENT_KEYS = (
+    "phonicsYear1Expected",
+    "phonicsByEndYear2Expected",
+    "ks1ReadingExpected",
+    "ks1WritingExpected",
+    "ks1MathsExpected",
+    "ks1ScienceExpected",
+)
 
 FEEDERS = [
     ("116302", "Netley Marsh Church of England Infant School", "Netley Marsh", "8503110"),
@@ -250,6 +260,25 @@ def group_avg(schools: list[dict], label: str) -> dict:
     }
 
 
+def apply_asp_overlay(schools: list[dict]) -> tuple[int, dict | None]:
+    """Merge manual ASP/local phonics & KS1 percentages into school latest blocks."""
+    if not OVERLAY.exists():
+        return 0, None
+    overlay = json.loads(OVERLAY.read_text(encoding="utf-8"))
+    by_urn = overlay.get("byUrn") or {}
+    filled = 0
+    for school in schools:
+        entry = by_urn.get(school["urn"])
+        if not entry:
+            continue
+        latest = school.setdefault("latest", {})
+        for key in ATTAINMENT_KEYS:
+            if key in entry and entry[key] is not None:
+                latest[key] = entry[key]
+                filled += 1
+    return filled, overlay
+
+
 def short_name(name: str) -> str:
     for suffix in (
         " Church of England Infant School",
@@ -350,8 +379,25 @@ def main() -> None:
             )
         )
 
+    filled, overlay = apply_asp_overlay(feeders + peers)
+    ks1_note = (
+        "Statutory KS1 teacher assessments became optional and school-level "
+        "KS1 results were removed from performance-table downloads after "
+        "2022/23. Phonics remains statutory but school-level phonics is no "
+        "longer included in CSP open downloads (only LA/national EES tables). "
+        "Fill phonics/KS1 percentages via /data-entry or "
+        "src/data/feeder-asp-overlay.json; they are merged on refresh."
+    )
+    if filled:
+        ks1_note += (
+            f" Overlay currently supplies {filled} non-null attainment field(s)"
+            f" for period {overlay.get('period') if overlay else PERIOD}."
+        )
+
+    from datetime import date
+
     out = {
-        "generatedAt": "2026-07-16",
+        "generatedAt": date.today().isoformat(),
         "period": PERIOD,
         "purpose": "Prior-learning / feeder intake context for Bartley CofE Junior School governors.",
         "selection": {
@@ -370,14 +416,8 @@ def main() -> None:
                 "attainment is no longer released in Compare school performance "
                 "downloads."
             ),
-            "ks1Note": (
-                "Statutory KS1 teacher assessments became optional and school-level "
-                "KS1 results were removed from performance-table downloads after "
-                "2022/23. Phonics remains statutory but school-level phonics is no "
-                "longer included in CSP open downloads (only LA/national EES tables). "
-                "Feeder/peer KS1 and phonics attainment fields are therefore null "
-                "pending ASP/local figures."
-            ),
+            "ks1Note": ks1_note,
+            "aspOverlay": "src/data/feeder-asp-overlay.json",
             "sector": "state-funded only",
             "sectorNote": (
                 "Independent / private schools are excluded from feeder peer "
@@ -408,6 +448,7 @@ def main() -> None:
 
     OUT.write_text(json.dumps(out, indent=2) + "\n", encoding="utf-8")
     print(f"Wrote {OUT} with {len(feeders)} feeders and {len(peers)} peers")
+    print(f"ASP overlay fields filled: {filled}")
     for p in peers:
         print(
             f"  peer {p['short']}: NOR={p['latest']['pupilsOnRoll']} "
