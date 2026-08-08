@@ -5,6 +5,7 @@ import {
   getChangeLog,
   getFeederSchoolsData,
   getPeerSchoolsData,
+  getSipTargets,
 } from "@/lib/data";
 import { buildAnalysis } from "@/lib/analysis";
 import { buildExecutiveSummary } from "@/lib/board";
@@ -13,6 +14,7 @@ import { PrintButton } from "@/components/PrintButton";
 import { MeetingPackCharts } from "@/components/MeetingPackCharts";
 import { GlossaryPanel } from "@/components/GlossaryPanel";
 import { ChangeLogCard } from "@/components/ChangeLogCard";
+import { SipPrioritiesCard } from "@/components/SipPrioritiesCard";
 
 export const metadata: Metadata = {
   title: "Analysis & governor questions · Bartley Insight",
@@ -27,6 +29,7 @@ export default function AnalysisPage() {
   const analysis = buildAnalysis(data, peers, feeders);
   const summary = buildExecutiveSummary(data, peers);
   const changeLog = getChangeLog();
+  const sipTargets = getSipTargets();
 
   const themes = Array.from(
     new Set(analysis.questions.map((q) => q.theme)),
@@ -115,6 +118,7 @@ export default function AnalysisPage() {
       </section>
 
       <ChangeLogCard changeLog={changeLog} />
+      <SipPrioritiesCard sip={sipTargets} />
       <MeetingPackCharts data={data} peers={peers} />
       <GlossaryPanel />
 

@@ -3,7 +3,11 @@
 import { useEffect, useId, useState } from "react";
 import Link from "next/link";
 
-export function SiteHeader({ active }: { active?: "home" | "analysis" }) {
+export function SiteHeader({
+  active,
+}: {
+  active?: "home" | "analysis" | "data-entry";
+}) {
   const [open, setOpen] = useState(false);
   const menuId = useId();
 
@@ -60,8 +64,18 @@ export function SiteHeader({ active }: { active?: "home" | "analysis" }) {
           >
             Analysis
           </Link>
+          <Link
+            href="/data-entry"
+            className={active === "data-entry" ? "nav-active" : undefined}
+            onClick={close}
+          >
+            Data entry
+          </Link>
           <Link href="/#summary" onClick={close}>
             Summary
+          </Link>
+          <Link href="/#sip" onClick={close}>
+            SIP
           </Link>
           <Link href="/#changes" onClick={close}>
             Changes

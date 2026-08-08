@@ -1,6 +1,35 @@
 {
-  "note": "Edit these school improvement plan ambitions locally. They appear as optional overlays on year-on-year charts.",
+  "note": "School improvement plan priorities and chart ambitions. Edit via /data-entry (download JSON) or by hand. Numeric targets can be overlaid on year-on-year charts. Priority text appears on the dashboard and analysis page.",
+  "sourceUrl": "https://app.governorhub.com/document/69691cd1ffcc4db7df83f5f4/view",
+  "sourceTitle": "Bartley SIP (GovernorHub)",
+  "updatedAt": null,
   "enabledByDefault": false,
+  "priorities": [
+    {
+      "id": "boys-rwm",
+      "title": "Close the boys’ combined RWM gap",
+      "detail": "Placeholder — replace with wording from the current Bartley SIP on GovernorHub. Focus on boys’ pathways into combined expected standard without lowering girls’ outcomes.",
+      "focusGroups": ["Boys"],
+      "subjects": ["Reading, writing and maths", "Reading", "Writing"],
+      "byPeriod": "2026/2027"
+    },
+    {
+      "id": "disadvantaged-rwm",
+      "title": "Sustain recovery for disadvantaged pupils",
+      "detail": "Placeholder — replace with SIP wording. Aim for expected-standard recovery and higher-standard representation for disadvantaged pupils.",
+      "focusGroups": ["Disadvantaged"],
+      "subjects": ["Reading, writing and maths"],
+      "byPeriod": "2026/2027"
+    },
+    {
+      "id": "reading-gps",
+      "title": "Raise reading and GPS toward Hampshire / England",
+      "detail": "Placeholder — replace with SIP wording. Protect writing strength while closing reading and GPS shortfalls that drag on combined RWM.",
+      "focusGroups": [],
+      "subjects": ["Reading", "Grammar, punctuation and spelling"],
+      "byPeriod": "2026/2027"
+    }
+  ],
   "targets": [
     {
       "subject": "Reading, writing and maths",

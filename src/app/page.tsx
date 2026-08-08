@@ -25,6 +25,7 @@ import { ExecutiveSummaryCard } from "@/components/ExecutiveSummaryCard";
 import { ChangeLogCard } from "@/components/ChangeLogCard";
 import { GlossaryPanel } from "@/components/GlossaryPanel";
 import { FeederSchoolsSection } from "@/components/FeederSchoolsSection";
+import { SipPrioritiesCard } from "@/components/SipPrioritiesCard";
 import { SiteHeader } from "@/components/SiteHeader";
 import Link from "next/link";
 
@@ -72,6 +73,7 @@ export default function HomePage() {
       </section>
 
       <ExecutiveSummaryCard summary={summary} period={data.period} />
+      <SipPrioritiesCard sip={sipTargets} />
       <ChangeLogCard changeLog={changeLog} />
 
       <section className="section section-alt" id="evaluation">
@@ -270,12 +272,13 @@ export default function HomePage() {
                   year: "numeric",
                 })
               : "date not recorded"}
-            . SIP ambitions live in{" "}
-            <code>src/data/sip-targets.json</code> and can be overlaid on
-            year-on-year charts. Peer overlays and the peer table compare
-            Bartley with the top three similar-size local juniors. The feeder
-            section uses census/absence for named infants plus LA/national
-            phonics; school-level KS1/phonics columns await ASP figures.
+            . SIP priorities and chart ambitions are edited on the{" "}
+            <Link href="/data-entry">manual data entry</Link> page (JSON in{" "}
+            <code>src/data/sip-targets.json</code>). Peer overlays compare
+            Bartley with the top three similar-size local juniors. Feeder
+            KS1/phonics come from{" "}
+            <code>src/data/feeder-asp-overlay.json</code> via the same data
+            entry page.
           </p>
         </div>
       </section>
