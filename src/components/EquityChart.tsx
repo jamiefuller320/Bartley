@@ -25,7 +25,7 @@ export function EquityChart({
     .map((e) => {
       const count = profile ? groupCount(profile, e.group) : null;
       return {
-        group: count != null ? `${e.group} (n=${count})` : e.group,
+        group: count != null ? `${e.group} (of ${count})` : e.group,
         expected: e.expected,
         higher: e.higher,
       };
