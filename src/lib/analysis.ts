@@ -127,7 +127,7 @@ export function buildAnalysis(
   const headline = `${data.profile.name}: governing board analysis`;
   const threeYearSummary =
     rwm3?.schoolExpected != null
-      ? ` The DfE 3-year average is ${fmtPct(rwm3.schoolExpected)} versus England ${fmtPct(rwm3.englandExpected)} (${fmtPp(rwm3.vsEngland)}), which smooths single-cohort noise (n=${data.profile.threeYearEligible ?? "—"}) alongside the latest year.`
+      ? ` The DfE 3-year average is ${fmtPct(rwm3.schoolExpected)} versus England ${fmtPct(rwm3.englandExpected)} (${fmtPp(rwm3.vsEngland)}), which smooths single-cohort noise across ${data.profile.threeYearEligible ?? "—"} pupils alongside the latest year.`
       : "";
   const summary = `In ${periodShort(data.period)}, ${fmtPct(latest?.schoolExpected)} of pupils met the expected standard in reading, writing and maths combined — in line with England (${fmtPct(latest?.englandExpected)}) and ${fmtPp(latest?.vsHampshire)} versus Hampshire.${threeYearSummary} The sharper story sits beneath that headline: a wide gender gap, a persistent disadvantage gap, writing as a relative strength, and combined attainment still below the school’s pre-pandemic peak.`;
 

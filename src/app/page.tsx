@@ -129,7 +129,7 @@ export default function HomePage() {
               <span className="snapshot-sub">
                 {rolling.topic ?? "DfE published 3-year average"}
                 {data.profile.threeYearEligible != null
-                  ? ` · n=${data.profile.threeYearEligible}`
+                  ? ` · of ${data.profile.threeYearEligible}`
                   : ""}
                 {" · used with latest year in findings"}
               </span>

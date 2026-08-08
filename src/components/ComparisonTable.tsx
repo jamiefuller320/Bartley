@@ -19,7 +19,7 @@ export function ComparisonTable({
             <th>Subject</th>
             <th>
               School
-              {cohortSize != null ? ` (n=${cohortSize})` : ""}
+              {cohortSize != null ? ` (of ${cohortSize})` : ""}
             </th>
             <th>Hampshire</th>
             <th>England</th>

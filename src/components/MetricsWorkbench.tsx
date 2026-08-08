@@ -186,7 +186,7 @@ function MetricsWorkbenchInner({
             {peers.peers
               .map(
                 (p) =>
-                  `${p.short} ${fmtPct(p.latest.rwmExpected)} (n=${p.latest.eligiblePupils ?? "—"})`,
+                  `${p.short} ${fmtPct(p.latest.rwmExpected)} (of ${p.latest.eligiblePupils ?? "—"})`,
               )
               .join(" · ")}
             . Peer average {fmtPct(peers.peerAverageLatest.rwmExpected)}.

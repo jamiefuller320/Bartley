@@ -92,7 +92,7 @@ export function fmtPctWithN(
 ): string {
   const pct = fmtPct(value);
   if (n == null) return pct;
-  return `${pct} (n=${n})`;
+  return `${pct} (of ${n})`;
 }
 
 export function ppPerPupil(n: number | null | undefined): number | null {
@@ -103,7 +103,7 @@ export function ppPerPupil(n: number | null | undefined): number | null {
 export function volatilityNote(n: number | null | undefined): string | null {
   const pp = ppPerPupil(n);
   if (pp == null || n == null) return null;
-  return `At n=${n}, one pupil ≈ ${pp} pp on percentages — treat single-year swings smaller than ~${(pp * 2).toFixed(1)} pp with caution.`;
+  return `With ${n} pupils, one pupil ≈ ${pp} pp on percentages — treat single-year swings smaller than ~${(pp * 2).toFixed(1)} pp with caution.`;
 }
 
 export function threeYearRwm(
@@ -275,7 +275,7 @@ export function buildExecutiveSummary(
       ? `Hampshire 3yr ${fmtPct(rwm3.hampshireExpected)}`
       : null,
     data.profile.threeYearEligible != null
-      ? `n=${data.profile.threeYearEligible}`
+      ? `of ${data.profile.threeYearEligible}`
       : null,
   ].filter(Boolean);
 
