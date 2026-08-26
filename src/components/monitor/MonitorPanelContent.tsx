@@ -12,6 +12,7 @@ import {
   yearOnYear,
 } from "@/lib/board";
 import { fmtPct, fmtPp } from "@/lib/format";
+import { schoolOfferingLabel } from "@/lib/schoolOffering";
 import { FindingsList } from "@/components/FindingsList";
 import { EquityChart } from "@/components/EquityChart";
 import { EquityHistoryChart } from "@/components/EquityHistoryChart";
@@ -216,7 +217,7 @@ export function MonitorPanelContent({
               {peers.peers
                 .map(
                   (p) =>
-                    `${p.short} ${fmtPct(p.latest.rwmExpected)} (of ${p.latest.eligiblePupils ?? "—"})`,
+                    `${p.short} (${schoolOfferingLabel(p.ageRange)}) ${fmtPct(p.latest.rwmExpected)} (of ${p.latest.eligiblePupils ?? "—"})`,
                 )
                 .join(" · ")}
               . Peer average {fmtPct(peers.peerAverageLatest.rwmExpected)}.

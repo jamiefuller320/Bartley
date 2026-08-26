@@ -2031,12 +2031,16 @@ html:has(.monitor-chapter-binder) {
   margin-top: 0.65rem;
 }
 
+/* Panel sub-tabs stay in flow — sticky sub-tabs covered the first lines of sheet content. */
 .monitor-panel-binder > .binder-tabs {
-  position: sticky;
-  top: calc(var(--sticky-header-offset) + var(--monitor-chapter-rail-height));
-  z-index: 23;
+  position: relative;
+  z-index: 2;
   background: rgba(255, 255, 255, 0.55);
   border-radius: 0.65rem 0.65rem 0 0;
+}
+
+.monitor-panel-binder .binder-sheet-body {
+  padding-top: 0.15rem;
 }
 
 .monitor-panel-head h4 {
@@ -2073,16 +2077,19 @@ html:has(.monitor-chapter-binder) {
   color: var(--sea-deep);
 }
 
+/*
+ * Off-screen at print width — not clipped to 1px (Recharts needs a real width;
+ * WebKit prints blank when the clone comes from visibility:hidden / clip).
+ */
 .monitor-print-pack-anchor {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
+  position: fixed;
+  left: -10000px;
+  top: 0;
+  width: 210mm;
+  max-width: 100vw;
+  pointer-events: none;
+  z-index: -1;
+  overflow: visible;
 }
 
 .monitor-print-pack .monitor-pack-sheet {
@@ -2124,35 +2131,6 @@ html:has(.monitor-chapter-binder) {
 
   .binder-tab-label {
     font-size: 0.72rem;
-  }
-}
-
-@media print {
-  html.monitor-print-active .site-header,
-  html.monitor-print-active .hero,
-  html.monitor-print-active .monitor-stage,
-  html.monitor-print-active .site-footer,
-  html.monitor-print-active .view-dock,
-  html.monitor-print-active .no-print {
-    display: none !important;
-  }
-
-  html.monitor-print-active .monitor-print-pack-anchor {
-    position: static;
-    width: auto;
-    height: auto;
-    margin: 0;
-    overflow: visible;
-    clip: auto;
-    white-space: normal;
-  }
-
-  html.monitor-print-active .monitor-print-pack {
-    display: block !important;
-  }
-
-  html.monitor-print-active body {
-    background: #fff !important;
   }
 }
 
