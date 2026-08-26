@@ -24,7 +24,7 @@ export function SiteFooter({
           <p className="site-footer-nav-label">On this site</p>
           <ul>
             <li>
-              <Link href="/#summary">Summary</Link>
+              <Link href="/?chapter=summary&panel=summary-overview">Summary</Link>
             </li>
             <li>
               <Link href="/analysis">Analysis</Link>
@@ -33,10 +33,10 @@ export function SiteFooter({
               <Link href="/data-entry">Data entry</Link>
             </li>
             <li>
-              <Link href="/#charts">Charts</Link>
+              <Link href="/?chapter=charts&panel=charts-latest">Charts</Link>
             </li>
             <li>
-              <Link href="/#source">Source</Link>
+              <Link href="/?chapter=reference&panel=reference-source">Source</Link>
             </li>
           </ul>
         </nav>

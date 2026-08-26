@@ -1690,3 +1690,469 @@ a:hover {
     display: none !important;
   }
 }
+
+/* Shared ring-binder chrome (hero setup, chapter nav, path tabs). */
+.binder {
+  --binder-fill: rgba(7, 58, 80, 0.55);
+  --binder-stroke: rgba(255, 255, 255, 0.28);
+  --binder-tab-fill: rgba(7, 58, 80, 0.42);
+  --binder-tab-stroke: rgba(255, 255, 255, 0.24);
+  --binder-tab-color: rgba(247, 251, 255, 0.82);
+  --binder-tab-color-active: #f7fbff;
+  --binder-tab-hover: rgba(7, 58, 80, 0.5);
+  --binder-step-fill: rgba(247, 251, 255, 0.12);
+  --binder-step-stroke: rgba(255, 255, 255, 0.22);
+  --binder-head-line: rgba(255, 255, 255, 0.14);
+  --binder-head-color: #f7fbff;
+  --binder-head-muted: rgba(247, 251, 255, 0.72);
+  --binder-shadow: 0 16px 36px rgba(7, 58, 80, 0.28);
+  --seam-gap-start: 0px;
+  --seam-gap-end: 0px;
+  margin: 0.35rem 0 0;
+  position: relative;
+}
+
+.binder[data-leading="true"] {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.binder-rail {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.55rem 0.75rem;
+  position: relative;
+  z-index: 2;
+}
+
+.binder-leading {
+  flex: 0 0 auto;
+  padding: 0 0 0.2rem;
+}
+
+.binder[data-leading="true"] .binder-tabs {
+  flex: 1 1 12rem;
+  min-width: 0;
+  padding-inline: 0.15rem 0.35rem;
+}
+
+.binder[data-leading="true"] .binder-sheet {
+  width: 100%;
+}
+
+.binder[data-tone="paper"] {
+  --binder-fill: rgba(255, 255, 255, 0.72);
+  --binder-stroke: rgba(11, 79, 108, 0.18);
+  --binder-tab-fill: rgba(232, 238, 242, 0.92);
+  --binder-tab-stroke: rgba(11, 79, 108, 0.16);
+  --binder-tab-color: var(--ink-soft);
+  --binder-tab-color-active: var(--sea-deep);
+  --binder-tab-hover: rgba(255, 255, 255, 0.9);
+  --binder-step-fill: rgba(11, 79, 108, 0.08);
+  --binder-step-stroke: rgba(11, 79, 108, 0.18);
+  --binder-head-line: rgba(11, 79, 108, 0.12);
+  --binder-head-color: var(--sea-deep);
+  --binder-head-muted: var(--ink-soft);
+  --binder-shadow: 0 12px 28px rgba(20, 35, 58, 0.06);
+}
+
+.binder-tabs {
+  display: grid;
+  grid-template-columns: repeat(var(--binder-tab-count, 5), minmax(0, 1fr));
+  align-items: end;
+  gap: 0.3rem;
+  padding: 0 0.55rem;
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  width: 100%;
+}
+
+.binder-tab {
+  appearance: none;
+  position: relative;
+  width: 100%;
+  min-width: 0;
+  min-height: 2.45rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0.48rem 0.45rem 0.55rem;
+  border: 1px solid var(--binder-tab-stroke);
+  border-bottom: none;
+  border-radius: 0.65rem 0.65rem 0 0;
+  /*
+    Keep the tab’s own fill, then blend quickly into the chapter/sheet colour
+    so the join into the panel reads soft rather than a hard shelf.
+  */
+  background: linear-gradient(
+    180deg,
+    var(--binder-tab-fill) 0%,
+    var(--binder-tab-fill) 62%,
+    var(--binder-fill) 100%
+  );
+  color: var(--binder-tab-color);
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 650;
+  line-height: 1.15;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transform: none;
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+}
+
+.binder-tab:hover {
+  color: var(--binder-tab-color-active);
+  background: linear-gradient(
+    180deg,
+    var(--binder-tab-hover) 0%,
+    var(--binder-tab-hover) 58%,
+    var(--binder-fill) 100%
+  );
+}
+
+.binder-tab.is-active {
+  z-index: 3;
+  color: var(--binder-tab-color-active);
+  /* Solid sheet fill; seam gap under the tab opens the join. */
+  background: var(--binder-fill);
+  border-color: var(--binder-stroke);
+  box-shadow: none;
+}
+
+/*
+  Active tab side strokes stop at the sheet join — no extensions past the
+  rounded sheet corners.
+*/
+.binder[data-mode="sheet"] .binder-tab.is-active::before,
+.binder[data-mode="sheet"] .binder-tab.is-active::after {
+  content: none;
+}
+
+.binder[data-mode="tabs"] .binder-tab.is-active {
+  /* Tabs-only strips sit on a rail — keep a flush bottom edge. */
+  border-bottom: 1px solid var(--binder-fill);
+}
+
+.binder[data-mode="tabs"] .binder-tab.is-active::before,
+.binder[data-mode="tabs"] .binder-tab.is-active::after {
+  content: none;
+}
+
+.binder-tab.is-done:not(.is-active) {
+  border-color: rgba(176, 137, 45, 0.45);
+}
+
+.binder-tab-step {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 0.3rem;
+  background: var(--binder-step-fill);
+  border: 1px solid var(--binder-step-stroke);
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.binder-tab.is-active .binder-tab-step {
+  background: var(--pin);
+  border-color: var(--pin);
+  color: #fffdf8;
+}
+
+.binder-tab-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.binder-tab-badge {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 999px;
+  background: var(--pin);
+  flex: 0 0 auto;
+}
+
+.binder-tab.is-active .binder-tab-badge {
+  background: var(--pin-bright);
+}
+
+.binder-sheet {
+  position: relative;
+  z-index: 1;
+  padding: 0.85rem 0.95rem 1rem;
+  border: 1px solid var(--binder-stroke);
+  border-top: none;
+  /* Flat top under tabs; round only the free corners so strokes don't overshoot. */
+  border-radius: 0 0 0.85rem 0.85rem;
+  background: var(--binder-fill);
+  box-shadow: var(--binder-shadow);
+  overflow: hidden;
+}
+
+/*
+  When pinned tabs leave their sheet, close the open bottoms with a light
+  edge — keep the harbour wash visible (no solid plate behind the strip).
+*/
+.binder[data-mode="sheet"][data-stuck="true"] > .binder-rail,
+.binder[data-mode="sheet"][data-stuck="true"] > .binder-tabs {
+  padding-bottom: 0.2rem;
+  border-bottom: 1px solid var(--binder-stroke);
+  background: transparent;
+  box-shadow: none;
+}
+
+.binder[data-mode="sheet"][data-stuck="true"] .binder-tab {
+  border-bottom: 1px solid var(--binder-tab-stroke);
+  /* Keep the usual top-only radius; just close the open bottom for the edge. */
+  background: linear-gradient(
+    180deg,
+    var(--binder-tab-fill) 0%,
+    var(--binder-tab-fill) 62%,
+    var(--binder-fill) 100%
+  );
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.binder[data-mode="sheet"][data-stuck="true"] .binder-tab:hover {
+  background: linear-gradient(
+    180deg,
+    var(--binder-tab-hover) 0%,
+    var(--binder-tab-hover) 58%,
+    var(--binder-fill) 100%
+  );
+}
+
+.binder[data-mode="sheet"][data-stuck="true"] .binder-tab.is-active {
+  border-color: var(--binder-stroke);
+  border-bottom-color: var(--binder-stroke);
+  background: var(--binder-fill);
+  box-shadow: none;
+}
+
+/* Full top stroke on the sheet once the seam tab has floated away. */
+.binder[data-mode="sheet"][data-stuck="true"] .binder-sheet {
+  border-top: 1px solid var(--binder-stroke);
+}
+
+.binder[data-mode="sheet"][data-stuck="true"] .binder-sheet::before {
+  content: none;
+}
+
+.binder-sheet::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    var(--binder-stroke) 0,
+    var(--binder-stroke) var(--seam-gap-start),
+    transparent var(--seam-gap-start),
+    transparent var(--seam-gap-end),
+    var(--binder-stroke) var(--seam-gap-end),
+    var(--binder-stroke) 100%
+  );
+}
+
+.binder[data-tone="paper"] .binder-sheet::before {
+  background: linear-gradient(
+    to right,
+    var(--binder-stroke) 0,
+    var(--binder-stroke) var(--seam-gap-start),
+    rgba(11, 79, 108, 0) var(--seam-gap-start),
+    rgba(11, 79, 108, 0) var(--seam-gap-end),
+    var(--binder-stroke) var(--seam-gap-end),
+    var(--binder-stroke) 100%
+  );
+}
+
+.binder-sheet-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.35rem 0.85rem;
+  margin: 0 0 0.35rem;
+  padding: 0 0 0.45rem;
+  border-bottom: 1px solid var(--binder-head-line);
+}
+
+.binder-sheet-head h3 {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 650;
+  color: var(--binder-head-color);
+}
+
+.binder-sheet-head p {
+  margin: 0;
+  font-size: 0.84rem;
+  color: var(--binder-head-muted);
+}
+
+.hero-binder {
+  margin: 0.35rem 0 0;
+}
+
+
+:root {
+  --monitor-chapter-rail-height: 2.85rem;
+}
+
+html:has(.monitor-chapter-binder) {
+  scroll-padding-top: calc(var(--sticky-header-offset) + var(--monitor-chapter-rail-height));
+}
+
+.monitor-stage {
+  padding-top: 1.35rem;
+}
+
+.monitor-chapter-binder > .binder-rail {
+  position: sticky;
+  top: var(--sticky-header-offset);
+  z-index: 24;
+  padding-top: 0.15rem;
+  background: var(--glass-strong);
+}
+
+.monitor-panel-binder {
+  margin-top: 0.65rem;
+}
+
+.monitor-panel-binder > .binder-tabs {
+  position: sticky;
+  top: calc(var(--sticky-header-offset) + var(--monitor-chapter-rail-height));
+  z-index: 23;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 0.65rem 0.65rem 0 0;
+}
+
+.monitor-panel-head h4 {
+  margin: 0;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 0.98rem;
+  font-weight: 650;
+  color: var(--sea-deep);
+}
+
+.monitor-panel-lead {
+  margin: 0.25rem 0 0;
+  flex: 1 1 100%;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  line-height: 1.45;
+}
+
+.monitor-panel-body {
+  color: var(--ink);
+}
+
+.monitor-print-btn {
+  color: var(--sea-deep);
+  border: 1px solid rgba(11, 79, 108, 0.22);
+  background: rgba(255, 255, 255, 0.72);
+  min-height: 2.35rem;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.88rem;
+}
+
+.monitor-print-btn:hover {
+  background: #fff;
+  color: var(--sea-deep);
+}
+
+.monitor-print-pack-anchor {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.monitor-print-pack .monitor-pack-sheet {
+  padding: 1rem 0;
+}
+
+.monitor-pack-head h2 {
+  margin: 0 0 0.35rem;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 1.35rem;
+  color: var(--sea-deep);
+}
+
+.monitor-pack-kicker {
+  margin: 0 0 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pin);
+}
+
+.monitor-pack-section {
+  margin: 1.25rem 0;
+  break-inside: avoid;
+}
+
+.monitor-pack-section h3,
+.monitor-pack-section h4 {
+  margin: 0 0 0.65rem;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  color: var(--sea-deep);
+}
+
+@media (max-width: 900px) {
+  .binder-tabs {
+    grid-template-columns: repeat(var(--binder-tab-count, 5), minmax(4.5rem, 1fr));
+  }
+
+  .binder-tab-label {
+    font-size: 0.72rem;
+  }
+}
+
+@media print {
+  html.monitor-print-active .site-header,
+  html.monitor-print-active .hero,
+  html.monitor-print-active .monitor-stage,
+  html.monitor-print-active .site-footer,
+  html.monitor-print-active .view-dock,
+  html.monitor-print-active .no-print {
+    display: none !important;
+  }
+
+  html.monitor-print-active .monitor-print-pack-anchor {
+    position: static;
+    width: auto;
+    height: auto;
+    margin: 0;
+    overflow: visible;
+    clip: auto;
+    white-space: normal;
+  }
+
+  html.monitor-print-active .monitor-print-pack {
+    display: block !important;
+  }
+
+  html.monitor-print-active body {
+    background: #fff !important;
+  }
+}
+

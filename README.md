@@ -119,4 +119,16 @@ Next.js (static export) · TypeScript · Tailwind CSS · Recharts · GitHub Page
 
 ## Visual system
 
-The Pages UI uses the same harbour design tokens and short-section layout language as [School Compass](https://schoolcompass.uk) (`jamiefuller320/Comparison-tool`): Figtree + Fraunces, sea/pin palette, compact harbour heroes, sticky chapter nav, and one-job sections — so this board pack can merge into schoolcompass.uk later without an obvious style reset.
+The Pages UI uses the same harbour design tokens and **ring-binder tab layout** as [School Compass](https://schoolcompass.uk) (`jamiefuller320/Comparison-tool`): Figtree + Fraunces, sea/pin palette, compact harbour heroes, and a two-tier tab strip (chapters → panels) driven by `src/lib/monitorSections.ts` and `src/lib/monitorPack.ts` so any school's data can plug into the same structure later.
+
+### Board pack tabs
+
+| Chapter | Panels |
+| --- | --- |
+| **Summary** (first) | Overview · Changes · SIP |
+| **Findings** | Cohort snapshot · Evaluation list |
+| **Performance charts** | Latest vs benchmarks · Year-on-year history |
+| **Comparison data** | Peers · Equity · Cohort · Progress · Feeders |
+| **Reference** | Glossary · Data source |
+
+Deep links: `/?chapter=summary&panel=summary-overview`. **Print board pack** mirrors the Comparison-tool visit pack module.

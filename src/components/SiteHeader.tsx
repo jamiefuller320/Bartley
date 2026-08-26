@@ -3,6 +3,14 @@
 import { useEffect, useId, useState } from "react";
 import Link from "next/link";
 
+const CHAPTER_LINKS = [
+  { href: "/?chapter=summary&panel=summary-overview", label: "Summary" },
+  { href: "/?chapter=findings&panel=findings-list", label: "Findings" },
+  { href: "/?chapter=charts&panel=charts-latest", label: "Charts" },
+  { href: "/?chapter=comparison&panel=comparison-peers", label: "Compare" },
+  { href: "/?chapter=reference&panel=reference-glossary", label: "Reference" },
+] as const;
+
 export function SiteHeader({
   active,
 }: {
@@ -71,24 +79,11 @@ export function SiteHeader({
           >
             Data entry
           </Link>
-          <Link href="/#summary" onClick={close}>
-            Summary
-          </Link>
-          <Link href="/#charts" onClick={close}>
-            Charts
-          </Link>
-          <Link href="/#equity" onClick={close}>
-            Equity
-          </Link>
-          <Link href="/#feeders" onClick={close}>
-            Feeders
-          </Link>
-          <Link href="/#sip" onClick={close}>
-            SIP
-          </Link>
-          <Link href="/#source" onClick={close}>
-            Source
-          </Link>
+          {CHAPTER_LINKS.map((link) => (
+            <Link key={link.href} href={link.href} onClick={close}>
+              {link.label}
+            </Link>
+          ))}
         </nav>
       </div>
     </header>

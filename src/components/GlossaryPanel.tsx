@@ -65,10 +65,10 @@ const TERMS = [
   },
 ] as const;
 
-export function GlossaryPanel() {
-  return (
-    <section className="section" id="glossary">
-      <div className="shell">
+export function GlossaryPanel({ embedded = false }: { embedded?: boolean }) {
+  const inner = (
+    <>
+      {!embedded ? (
         <div className="section-head">
           <h2>60-second stage glossary</h2>
           <p>
@@ -76,15 +76,25 @@ export function GlossaryPanel() {
             infant feeder context where published.
           </p>
         </div>
-        <dl className="glossary-grid">
-          {TERMS.map((item) => (
-            <div key={item.term} className="glossary-item">
-              <dt>{item.term}</dt>
-              <dd>{item.definition}</dd>
-            </div>
-          ))}
-        </dl>
-      </div>
+      ) : null}
+      <dl className="glossary-grid">
+        {TERMS.map((item) => (
+          <div key={item.term} className="glossary-item">
+            <dt>{item.term}</dt>
+            <dd>{item.definition}</dd>
+          </div>
+        ))}
+      </dl>
+    </>
+  );
+
+  if (embedded) {
+    return <div className="monitor-panel-body">{inner}</div>;
+  }
+
+  return (
+    <section className="section" id="glossary">
+      <div className="shell">{inner}</div>
     </section>
   );
 }
