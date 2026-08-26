@@ -47,6 +47,8 @@ function MetricsWorkbenchInner({
   peers,
   data,
   sipTargets,
+  embedded = false,
+  forcedMode,
 }: {
   subjects: SubjectComparison[];
   history: HistoryRow[];
@@ -55,9 +57,11 @@ function MetricsWorkbenchInner({
   peers: PeerSchoolsBundle;
   data: SchoolMonitorData;
   sipTargets: SipTargetsBundle;
+  embedded?: boolean;
+  forcedMode?: ChartViewMode;
 }) {
   const searchParams = useSearchParams();
-  const [mode, setMode] = useState<ChartViewMode>("compare");
+  const [mode, setMode] = useState<ChartViewMode>(forcedMode ?? "compare");
   const [subject, setSubject] = useState<SubjectOption>(
     "Reading, writing and maths",
   );
@@ -71,6 +75,10 @@ function MetricsWorkbenchInner({
     useState<PeerOverlaySelection>("none");
 
   useEffect(() => {
+    if (forcedMode) {
+      setMode(forcedMode);
+      return;
+    }
     const view = searchParams.get("view");
     if (view === "history" || view === "compare") setMode(view);
 
@@ -102,7 +110,7 @@ function MetricsWorkbenchInner({
       );
       if (match) setPeerOverlay(match.urn);
     }
-  }, [searchParams, peers.peers]);
+  }, [searchParams, peers.peers, forcedMode]);
 
   // Science teacher assessment has no higher-standard measure in KS2 tables.
   const higherAvailable = subject !== "Science";
@@ -188,9 +196,9 @@ function MetricsWorkbenchInner({
     activeMetric === "higher" ? "higher" : "expected",
   );
 
-  return (
-    <section className="section section-alt" id="charts">
-      <div className="shell">
+  const body = (
+    <>
+      {!embedded ? (
         <div className="section-head">
           <h2>KS2 performance charts</h2>
           <p>
@@ -199,7 +207,9 @@ function MetricsWorkbenchInner({
               : "Key Stage 2 year-on-year history. Overlay Hampshire, England, and a selected junior peer school or peer average with the controls below. The hatched COVID band marks unpublished 2019/20–2021/22 performance-table years."}
           </p>
         </div>
+      ) : null}
 
+      {!embedded && !forcedMode ? (
         <div className="chart-view-toggle" role="group" aria-label="Chart view">
           <button
             type="button"
@@ -218,6 +228,7 @@ function MetricsWorkbenchInner({
             Year-on-year history
           </button>
         </div>
+      ) : null}
 
         <div className="history-tabs" role="tablist" aria-label="Subject">
           {SUBJECTS.map((item) => (
@@ -427,8 +438,25 @@ function MetricsWorkbenchInner({
             ) : null}
           </>
         )}
-      </div>
+    </>
+  );
 
+  if (embedded) {
+    return (
+      <div className="monitor-panel-body monitor-charts-panel">
+        {body}
+        {!forcedMode ? (
+          <ViewModeDock mode={mode} onChange={changeMode} />
+        ) : null}
+      </div>
+    );
+  }
+
+  return (
+    <section className="section section-alt" id="charts">
+      <div className="shell">
+        {body}
+      </div>
       <ViewModeDock mode={mode} onChange={changeMode} />
     </section>
   );
@@ -442,6 +470,8 @@ export function MetricsWorkbench(props: {
   peers: PeerSchoolsBundle;
   data: SchoolMonitorData;
   sipTargets: SipTargetsBundle;
+  embedded?: boolean;
+  forcedMode?: ChartViewMode;
 }) {
   return (
     <Suspense

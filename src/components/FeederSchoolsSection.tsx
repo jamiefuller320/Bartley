@@ -156,15 +156,17 @@ function SchoolTable({
 
 export function FeederSchoolsSection({
   feeders,
+  embedded = false,
 }: {
   feeders: FeederSchoolsBundle;
+  embedded?: boolean;
 }) {
   const latestPhonics = feeders.phonicsBenchmarks[feeders.phonicsBenchmarks.length - 1];
   const ctx = feeders.bartleyPriorLearningContext;
 
-  return (
-    <section className="section" id="feeders">
-      <div className="shell">
+  const inner = (
+    <>
+      {!embedded ? (
         <div className="section-head">
           <h2>Feeder schools &amp; prior learning</h2>
           <p>
@@ -178,6 +180,7 @@ export function FeederSchoolsSection({
             excluded because they do not report the same performance data.
           </p>
         </div>
+      ) : null}
 
         <div className="snapshot-row" role="list">
           <div className="snapshot-metric" role="listitem">
@@ -268,7 +271,10 @@ export function FeederSchoolsSection({
             ): reading {fmtNum(ctx.readingProgress)}, writing{" "}
             {fmtNum(ctx.writingProgress)}, maths {fmtNum(ctx.mathsProgress)}.
             See also the{" "}
-            <a href="#progress">progress measures</a> chart. On published
+            <Link href="/?chapter=comparison&panel=comparison-progress">
+              progress measures
+            </Link>{" "}
+            panel. On published
             absence, the named feeders currently look stronger than the local
             similar-size infant attendance peer pack — but without school-level
             phonics/KS1 the board cannot yet quantify prior-learning attainment
@@ -284,7 +290,16 @@ export function FeederSchoolsSection({
         {feeders.selection.sectorNote ? (
           <p className="chart-note muted">{feeders.selection.sectorNote}</p>
         ) : null}
-      </div>
+    </>
+  );
+
+  if (embedded) {
+    return <div className="monitor-panel-body">{inner}</div>;
+  }
+
+  return (
+    <section className="section" id="feeders">
+      <div className="shell">{inner}</div>
     </section>
   );
 }

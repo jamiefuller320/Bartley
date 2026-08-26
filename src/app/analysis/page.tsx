@@ -56,7 +56,7 @@ export default function AnalysisPage() {
           </p>
           <div className="hero-actions analysis-actions no-print">
             <PrintButton />
-            <Link className="btn btn-primary" href="/#summary">
+            <Link className="btn btn-primary" href="/?chapter=summary&panel=summary-overview">
               One-page summary
             </Link>
           </div>

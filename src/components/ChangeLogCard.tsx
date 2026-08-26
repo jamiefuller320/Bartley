@@ -1,11 +1,17 @@
 import type { ChangeLog } from "@/lib/board";
 
-export function ChangeLogCard({ changeLog }: { changeLog: ChangeLog }) {
+export function ChangeLogCard({
+  changeLog,
+  embedded = false,
+}: {
+  changeLog: ChangeLog;
+  embedded?: boolean;
+}) {
   if (!changeLog.items.length) return null;
 
-  return (
-    <section className="section section-alt" id="changes">
-      <div className="shell">
+  const inner = (
+    <>
+      {!embedded ? (
         <div className="section-head">
           <h2>What changed</h2>
           <p>
@@ -20,7 +26,8 @@ export function ChangeLogCard({ changeLog }: { changeLog: ChangeLog }) {
             — not necessarily consecutive published academic years.
           </p>
         </div>
-        <div className="table-wrap">
+      ) : null}
+      <div className="table-wrap">
           <table className="data-table">
             <thead>
               <tr>
@@ -59,7 +66,16 @@ export function ChangeLogCard({ changeLog }: { changeLog: ChangeLog }) {
           After each automated data refresh, this table is rewritten from the
           live seed diff.
         </p>
-      </div>
+    </>
+  );
+
+  if (embedded) {
+    return <div className="monitor-panel-body">{inner}</div>;
+  }
+
+  return (
+    <section className="section section-alt" id="changes">
+      <div className="shell">{inner}</div>
     </section>
   );
 }

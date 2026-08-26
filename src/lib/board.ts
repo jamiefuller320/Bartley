@@ -354,19 +354,19 @@ export function buildExecutiveSummary(
     ],
     chartLinks: [
       {
-        href: "/?view=history&subject=rwm#charts",
+        href: "/?chapter=charts&panel=charts-history",
         label: "RWM year-on-year",
       },
       {
-        href: "/#equity",
+        href: "/?chapter=comparison&panel=comparison-equity",
         label: "Equity gaps",
       },
       {
-        href: "/?view=compare&subject=reading&peer=average#charts",
+        href: "/?chapter=charts&panel=charts-latest&subject=reading&peer=average",
         label: "Reading vs peer average",
       },
       {
-        href: "/?view=history&subject=gps&peer=average#charts",
+        href: "/?chapter=charts&panel=charts-history&subject=gps&peer=average",
         label: "GPS vs peer average",
       },
     ],
