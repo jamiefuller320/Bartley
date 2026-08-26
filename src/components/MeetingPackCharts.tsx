@@ -24,7 +24,7 @@ export function MeetingPackCharts({
   return (
     <section className="section meeting-pack-charts" id="meeting-charts">
       <div className="shell">
-        <div className="section-intro">
+        <div className="section-head">
           <h2>Meeting pack charts</h2>
           <p>
             Fixed evidence pages for board packs: RWM trend (with peer average),

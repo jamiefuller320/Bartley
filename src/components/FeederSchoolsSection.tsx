@@ -165,7 +165,7 @@ export function FeederSchoolsSection({
   return (
     <section className="section" id="feeders">
       <div className="shell">
-        <div className="section-intro">
+        <div className="section-head">
           <h2>Feeder schools &amp; prior learning</h2>
           <p>
             Infant-stage context (ages 4–7) for the quality of learning children
@@ -213,7 +213,7 @@ export function FeederSchoolsSection({
           </div>
         </div>
 
-        <div className="section-intro stacked">
+        <div className="section-head stacked">
           <h3>Named Bartley feeders</h3>
           <p>
             Infant census and absence from Compare school performance (
@@ -227,7 +227,7 @@ export function FeederSchoolsSection({
           average={feeders.feederAverage}
         />
 
-        <div className="section-intro stacked">
+        <div className="section-head stacked">
           <h3>
             Local infant attendance benchmark (top 3 similar size)
           </h3>
@@ -245,7 +245,7 @@ export function FeederSchoolsSection({
           showReason
         />
 
-        <div className="section-intro stacked">
+        <div className="section-head stacked">
           <h3>Phonics context (Hampshire &amp; England)</h3>
           <p>
             Open data still publishes LA and national phonics only — not

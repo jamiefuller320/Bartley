@@ -12,7 +12,7 @@ export function SipPrioritiesCard({ sip }: { sip: SipBundle }) {
   return (
     <section className="section" id="sip">
       <div className="shell">
-        <div className="section-intro">
+        <div className="section-head">
           <h2>
             SIP priorities
             {sip.period ? ` ${sip.period.replace("/", "–")}` : ""}

@@ -64,7 +64,7 @@ export function ProgressChart({ progress }: { progress: ProgressRow[] }) {
             axisLine={false}
             tickLine={false}
           />
-          <ReferenceLine y={0} stroke="#c9a227" strokeDasharray="4 4" />
+          <ReferenceLine y={0} stroke="#b0892d" strokeDasharray="4 4" />
           <Tooltip
             formatter={(value) =>
               typeof value === "number" ? value.toFixed(1) : "—"
@@ -75,8 +75,8 @@ export function ProgressChart({ progress }: { progress: ProgressRow[] }) {
               borderRadius: 8,
             }}
           />
-          <Scatter data={data} fill="#1b4332">
-            <ErrorBar dataKey="error" width={6} stroke="#52796f" />
+          <Scatter data={data} fill="#0b4f6c">
+            <ErrorBar dataKey="error" width={6} stroke="#3d4f66" />
           </Scatter>
         </ScatterChart>
       </ResponsiveContainer>

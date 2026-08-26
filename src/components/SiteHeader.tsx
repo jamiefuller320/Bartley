@@ -30,10 +30,10 @@ export function SiteHeader({
   const close = () => setOpen(false);
 
   return (
-    <header className="site-header">
+    <header className="site-header" role="banner">
       <div className="shell header-inner">
-        <Link href="/" className="tool-mark" onClick={close}>
-          Bartley Insight
+        <Link href="/" className="brand" onClick={close}>
+          Bartley <span className="brand-mark">Insight</span>
         </Link>
         <button
           type="button"
@@ -43,7 +43,7 @@ export function SiteHeader({
           onClick={() => setOpen((value) => !value)}
         >
           <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
-          <span aria-hidden="true">{open ? "✕" : "Menu"}</span>
+          <span aria-hidden="true">{open ? "Close" : "Menu"}</span>
         </button>
         <nav
           id={menuId}
@@ -74,12 +74,6 @@ export function SiteHeader({
           <Link href="/#summary" onClick={close}>
             Summary
           </Link>
-          <Link href="/#sip" onClick={close}>
-            SIP
-          </Link>
-          <Link href="/#changes" onClick={close}>
-            Changes
-          </Link>
           <Link href="/#charts" onClick={close}>
             Charts
           </Link>
@@ -89,8 +83,8 @@ export function SiteHeader({
           <Link href="/#feeders" onClick={close}>
             Feeders
           </Link>
-          <Link href="/#glossary" onClick={close}>
-            Glossary
+          <Link href="/#sip" onClick={close}>
+            SIP
           </Link>
           <Link href="/#source" onClick={close}>
             Source

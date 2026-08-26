@@ -109,9 +109,9 @@ export function SubjectComparisonChart({
             }}
           />
           <Legend />
-          <Bar dataKey="Bartley" fill="#1b4332" radius={[4, 4, 0, 0]} />
-          <Bar dataKey="Hampshire" fill="#52796f" radius={[4, 4, 0, 0]} />
-          <Bar dataKey="England" fill="#c9a227" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="Bartley" fill="#0b4f6c" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="Hampshire" fill="#3d4f66" radius={[4, 4, 0, 0]} />
+          <Bar dataKey="England" fill="#b0892d" radius={[4, 4, 0, 0]} />
           {showPeer ? (
             <Bar dataKey={peerKey} fill="#0e7490" radius={[4, 4, 0, 0]} />
           ) : null}

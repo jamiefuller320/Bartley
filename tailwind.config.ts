@@ -11,17 +11,24 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
-        forest: {
-          DEFAULT: "#1b4332",
-          mid: "#2d6a4f",
-          soft: "#52796f",
+        sea: {
+          DEFAULT: "#0b4f6c",
+          deep: "#073a50",
         },
-        mist: "#e7f0ea",
-        gold: "#c9a227",
+        foam: "#e8f3f7",
+        pin: "#b0892d",
+        // Keep forest aliases so any residual Tailwind classes still resolve.
+        forest: {
+          DEFAULT: "#073a50",
+          mid: "#0b4f6c",
+          soft: "#5a6b7d",
+        },
+        mist: "#e8f3f7",
+        gold: "#b0892d",
       },
       fontFamily: {
         display: ["var(--font-display)", "Georgia", "serif"],
-        sans: ["var(--font-sans)", "Manrope", "sans-serif"],
+        sans: ["var(--font-sans)", "Figtree", "system-ui", "sans-serif"],
       },
     },
   },

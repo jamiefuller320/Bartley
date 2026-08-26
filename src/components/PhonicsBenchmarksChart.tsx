@@ -42,11 +42,11 @@ export function PhonicsBenchmarksChart({
             }
           />
           <Legend />
-          <Bar dataKey="Hampshire Y1" fill="#1b4332" radius={[2, 2, 0, 0]} />
+          <Bar dataKey="Hampshire Y1" fill="#0b4f6c" radius={[2, 2, 0, 0]} />
           <Bar dataKey="England Y1" fill="#95a99a" radius={[2, 2, 0, 0]} />
           <Bar
             dataKey="Hampshire by end Y2"
-            fill="#c9a227"
+            fill="#b0892d"
             radius={[2, 2, 0, 0]}
           />
           <Bar

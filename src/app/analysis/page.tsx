@@ -10,6 +10,7 @@ import {
 import { buildAnalysis } from "@/lib/analysis";
 import { buildExecutiveSummary } from "@/lib/board";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
 import { PrintButton } from "@/components/PrintButton";
 import { MeetingPackCharts } from "@/components/MeetingPackCharts";
 import { GlossaryPanel } from "@/components/GlossaryPanel";
@@ -36,17 +37,17 @@ export default function AnalysisPage() {
   );
 
   return (
-    <main className="analysis-print-root">
+    <main id="main" className="analysis-print-root">
       <SiteHeader active="analysis" />
 
-      <section className="analysis-hero">
+      <section className="analysis-hero area-hero">
         <div className="shell">
-          <p className="hero-kicker">Governing board briefing</p>
+          <p className="hero-kicker">Bartley Insight</p>
           <h1>{analysis.headline}</h1>
           <p className="analysis-lede">{analysis.summary}</p>
           <p className="analysis-meta">
-            Based on published Compare school performance / DfE statistics for{" "}
-            {data.period.replace("/", "–")}
+            Governing board briefing from published Compare school performance /
+            DfE statistics for {data.period.replace("/", "–")}
             {data.source.refreshedAt
               ? ` (dataset refreshed ${data.source.refreshedAt})`
               : ""}
@@ -55,7 +56,7 @@ export default function AnalysisPage() {
           </p>
           <div className="hero-actions analysis-actions no-print">
             <PrintButton />
-            <Link className="btn-primary" href="/#summary">
+            <Link className="btn btn-primary" href="/#summary">
               One-page summary
             </Link>
           </div>
@@ -64,7 +65,7 @@ export default function AnalysisPage() {
 
       <section className="section print-pack-summary">
         <div className="shell">
-          <div className="section-intro">
+          <div className="section-head">
             <h2>Meeting pack snapshot</h2>
             <p>
               Print this page for a paper pack. Snapshot, glossary, narrative,
@@ -212,14 +213,10 @@ export default function AnalysisPage() {
         </div>
       </section>
 
-      <footer className="site-footer">
-        <div className="shell footer-inner">
-          <p>Bartley Insight · governor analysis</p>
-          <p className="no-print">
-            <Link href="/">Back to dashboard</Link>
-          </p>
-        </div>
-      </footer>
+      <SiteFooter
+        urn={data.profile.urn}
+        refreshedAt={data.source.refreshedAt}
+      />
     </main>
   );
 }

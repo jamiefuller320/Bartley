@@ -76,7 +76,7 @@ export function EquityChart({
           <Bar
             dataKey="expected"
             name="Expected standard"
-            fill="#2d6a4f"
+            fill="#0b4f6c"
             radius={[0, 4, 4, 0]}
             barSize={22}
           />

@@ -116,3 +116,7 @@ The Explore Education Statistics API institution dataset only goes back to 2022/
 ## Stack
 
 Next.js (static export) · TypeScript · Tailwind CSS · Recharts · GitHub Pages
+
+## Visual system
+
+The Pages UI uses the same harbour design tokens and short-section layout language as [School Compass](https://schoolcompass.uk) (`jamiefuller320/Comparison-tool`): Figtree + Fraunces, sea/pin palette, compact harbour heroes, sticky chapter nav, and one-job sections — so this board pack can merge into schoolcompass.uk later without an obvious style reset.
