@@ -77,7 +77,9 @@ export function MonitorPrintPack({ pack }: { pack: SchoolMonitorPack }) {
             <h3>Evaluation findings</h3>
             <FindingsList findings={data.findings.slice(0, 6)} />
           </section>
+        </div>
 
+        <div className="monitor-pack-sheet visit-pack-sheet">
           <section className="monitor-pack-section print-chart-block">
             <h3>Combined RWM over time</h3>
             <HistoryTrendChart
@@ -91,13 +93,15 @@ export function MonitorPrintPack({ pack }: { pack: SchoolMonitorPack }) {
               peerSeriesName={PEER_AVERAGE_LABEL}
             />
           </section>
+        </div>
 
+        <div className="monitor-pack-sheet visit-pack-sheet">
           <section className="monitor-pack-section print-chart-block">
             <h3>Latest equity gaps</h3>
             <EquityChart equity={data.equity} profile={data.profile} />
           </section>
 
-          <section className="monitor-pack-section print-chart-block">
+          <section className="monitor-pack-section">
             <h3>Peer comparison</h3>
             <PeerComparisonTable peers={peers} bartley={data} />
           </section>

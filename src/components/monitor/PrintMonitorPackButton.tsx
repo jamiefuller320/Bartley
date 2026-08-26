@@ -1,5 +1,7 @@
 "use client";
 
+import { printMonitorPackElement } from "@/lib/printMonitorPack";
+
 export function PrintMonitorPackButton({
   className = "btn btn-ghost monitor-print-btn",
 }: {
@@ -12,13 +14,10 @@ export function PrintMonitorPackButton({
       data-tour="print-monitor-pack"
       onClick={() => {
         const host = document.querySelector<HTMLElement>(
-          '[data-monitor-pack="board"] .monitor-print-pack',
+          '[data-monitor-pack="board"]',
         );
         if (!host) return;
-        const root = document.documentElement;
-        root.classList.add("monitor-print-active");
-        window.print();
-        window.setTimeout(() => root.classList.remove("monitor-print-active"), 500);
+        printMonitorPackElement(host);
       }}
     >
       Print board pack

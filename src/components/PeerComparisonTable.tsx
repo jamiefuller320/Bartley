@@ -5,6 +5,7 @@ import {
   classifySchoolSector,
   schoolSectorLabel,
 } from "@/lib/school-sector";
+import { schoolOfferingMeta } from "@/lib/schoolOffering";
 
 export function PeerComparisonTable({
   peers,
@@ -41,8 +42,10 @@ export function PeerComparisonTable({
       gps: gps?.schoolExpected ?? null,
       disPct: bartley.profile.disadvantagedPercent ?? null,
       sectorLabel: schoolSectorLabel(bartleySector),
-      schoolType:
-        bartley.profile.schoolTypeLabel ?? bartley.profile.schoolType ?? "—",
+      offeringMeta: schoolOfferingMeta(
+        bartley.profile.ageRange,
+        bartley.profile.schoolTypeLabel ?? bartley.profile.schoolType,
+      ),
       highlight: true,
     },
     ...peers.peers.map((peer) => ({
@@ -62,7 +65,7 @@ export function PeerComparisonTable({
           peer.sector ??
             classifySchoolSector(peer.minorGroup, peer.schoolType),
         ),
-      schoolType: peer.schoolType ?? "—",
+      offeringMeta: schoolOfferingMeta(peer.ageRange, peer.schoolType),
       highlight: false,
     })),
     {
@@ -77,7 +80,7 @@ export function PeerComparisonTable({
       gps: peers.peerAverageLatest.gpsExpected,
       disPct: null as number | null,
       sectorLabel: "State-funded",
-      schoolType: "—",
+      offeringMeta: "Junior · KS2",
       highlight: false,
     },
   ];
@@ -123,8 +126,8 @@ export function PeerComparisonTable({
                   ) : (
                     row.short
                   )}
-                  {row.schoolType && row.schoolType !== "—" ? (
-                    <span className="feeder-meta">{row.schoolType}</span>
+                  {row.offeringMeta && row.offeringMeta !== "—" ? (
+                    <span className="feeder-meta">{row.offeringMeta}</span>
                   ) : null}
                 </td>
                 <td>
