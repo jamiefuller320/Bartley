@@ -51,7 +51,7 @@ export function HistoryExplorer({
 
       {hasScaled ? (
         <>
-          <div className="section-intro stacked">
+          <div className="section-head stacked">
             <h3>Average scaled score</h3>
             <p>Published scaled scores for {shortLabel(subject)} over time.</p>
           </div>
@@ -61,7 +61,7 @@ export function HistoryExplorer({
 
       {progressForSubject.length ? (
         <>
-          <div className="section-intro stacked">
+          <div className="section-head stacked">
             <h3>Progress scores by year</h3>
             <p>
               KS1–KS2 progress where published. Missing for cohorts without KS1

@@ -6,7 +6,7 @@ export function ChangeLogCard({ changeLog }: { changeLog: ChangeLog }) {
   return (
     <section className="section section-alt" id="changes">
       <div className="shell">
-        <div className="section-intro">
+        <div className="section-head">
           <h2>What changed</h2>
           <p>
             {changeLog.summary} Figures compare the previous seed refresh

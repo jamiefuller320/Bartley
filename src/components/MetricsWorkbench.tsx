@@ -14,8 +14,7 @@ import { ComparisonTable } from "@/components/ComparisonTable";
 import { HistoryTrendChart } from "@/components/HistoryTrendChart";
 import { HistoryTable } from "@/components/HistoryTable";
 import { ProgressChart } from "@/components/ProgressChart";
-import { PeerComparisonTable } from "@/components/PeerComparisonTable";
-import { shortSubject, fmtPct } from "@/lib/format";
+import { shortSubject } from "@/lib/format";
 import {
   peerLatestValue,
   peerMetricByPeriod,
@@ -192,7 +191,7 @@ function MetricsWorkbenchInner({
   return (
     <section className="section section-alt" id="charts">
       <div className="shell">
-        <div className="section-intro">
+        <div className="section-head">
           <h2>KS2 performance charts</h2>
           <p>
             {mode === "compare"
@@ -218,23 +217,6 @@ function MetricsWorkbenchInner({
           >
             Year-on-year history
           </button>
-        </div>
-
-        <div className="peer-strip" aria-label="Similar top-performing peers">
-          <p className="peer-strip-lead">
-            Top 3 similar-size juniors nearby (2024/25 RWM):{" "}
-            {peers.peers
-              .map(
-                (p) =>
-                  `${p.short} ${fmtPct(p.latest.rwmExpected)} (of ${p.latest.eligiblePupils ?? "—"})`,
-              )
-              .join(" · ")}
-            . Peer average {fmtPct(peers.peerAverageLatest.rwmExpected)}.
-          </p>
-          <p className="peer-strip-note muted">{peers.selection.method}</p>
-          {peers.selection.sectorNote ? (
-            <p className="peer-strip-note muted">{peers.selection.sectorNote}</p>
-          ) : null}
         </div>
 
         <div className="history-tabs" role="tablist" aria-label="Subject">
@@ -392,7 +374,7 @@ function MetricsWorkbenchInner({
 
             {hasScaled ? (
               <>
-                <div className="section-intro stacked">
+                <div className="section-head stacked">
                   <h3>Average scaled score</h3>
                   <p>
                     Bartley scaled scores over time for {shortSubject(subject)}
@@ -421,7 +403,7 @@ function MetricsWorkbenchInner({
 
             {progressForSubject.length ? (
               <>
-                <div className="section-intro stacked">
+                <div className="section-head stacked">
                   <h3>Junior value-added (KS1–KS2 progress)</h3>
                   <p>
                     Published KS1–KS2 progress scores for Bartley — junior
@@ -445,16 +427,6 @@ function MetricsWorkbenchInner({
             ) : null}
           </>
         )}
-
-        <div className="section-intro stacked">
-          <h3>Peer comparison table</h3>
-          <p>
-            Latest expected-standard figures for Bartley and the top three
-            similar-size local juniors, with links to Compare school
-            performance.
-          </p>
-        </div>
-        <PeerComparisonTable peers={peers} bartley={data} />
       </div>
 
       <ViewModeDock mode={mode} onChange={changeMode} />

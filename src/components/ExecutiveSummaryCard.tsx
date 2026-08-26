@@ -11,7 +11,7 @@ export function ExecutiveSummaryCard({
   return (
     <section className="section" id="summary">
       <div className="shell">
-        <div className="section-intro">
+        <div className="section-head">
           <h2>Executive summary</h2>
           <p>
             One-page board pack for {period.replace("/", "–")}: latest-year

@@ -218,9 +218,9 @@ export function HistoryTrendChart({
           <Line
             type="monotone"
             dataKey="Bartley"
-            stroke="#1b4332"
+            stroke="#0b4f6c"
             strokeWidth={3}
-            dot={{ r: 4, fill: "#1b4332" }}
+            dot={{ r: 4, fill: "#0b4f6c" }}
             connectNulls={false}
             isAnimationActive={false}
           />
@@ -228,10 +228,10 @@ export function HistoryTrendChart({
             <Line
               type="monotone"
               dataKey="Hampshire"
-              stroke="#52796f"
+              stroke="#3d4f66"
               strokeWidth={2}
               strokeDasharray="4 4"
-              dot={{ r: 3, fill: "#52796f" }}
+              dot={{ r: 3, fill: "#3d4f66" }}
               connectNulls={false}
               isAnimationActive={false}
             />
@@ -240,9 +240,9 @@ export function HistoryTrendChart({
             <Line
               type="monotone"
               dataKey="England"
-              stroke="#c9a227"
+              stroke="#b0892d"
               strokeWidth={2}
-              dot={{ r: 3, fill: "#c9a227" }}
+              dot={{ r: 3, fill: "#b0892d" }}
               connectNulls={false}
               isAnimationActive={false}
             />

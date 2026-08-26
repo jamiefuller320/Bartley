@@ -29,8 +29,8 @@ function periodLabel(period: string): string {
 
 const GROUPS = ["Boys", "Girls", "Disadvantaged", "Not disadvantaged"] as const;
 const COLORS: Record<(typeof GROUPS)[number], string> = {
-  Boys: "#1b4332",
-  Girls: "#2d6a4f",
+  Boys: "#0b4f6c",
+  Girls: "#1a6578",
   Disadvantaged: "#9b2c2c",
   "Not disadvantaged": "#0e7490",
 };

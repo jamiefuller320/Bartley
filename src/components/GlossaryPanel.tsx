@@ -69,7 +69,7 @@ export function GlossaryPanel() {
   return (
     <section className="section" id="glossary">
       <div className="shell">
-        <div className="section-intro">
+        <div className="section-head">
           <h2>60-second stage glossary</h2>
           <p>
             Quick definitions for governors — mainly KS2 for Bartley, plus

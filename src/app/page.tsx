@@ -21,12 +21,15 @@ import { EquityHistoryChart } from "@/components/EquityHistoryChart";
 import { ProgressChart } from "@/components/ProgressChart";
 import { CohortProfile } from "@/components/CohortProfile";
 import { MetricsWorkbench } from "@/components/MetricsWorkbench";
+import { PeerComparisonTable } from "@/components/PeerComparisonTable";
 import { ExecutiveSummaryCard } from "@/components/ExecutiveSummaryCard";
 import { ChangeLogCard } from "@/components/ChangeLogCard";
 import { GlossaryPanel } from "@/components/GlossaryPanel";
 import { FeederSchoolsSection } from "@/components/FeederSchoolsSection";
 import { SipPrioritiesCard } from "@/components/SipPrioritiesCard";
 import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
+import { DashboardChapterNav } from "@/components/DashboardChapterNav";
 import Link from "next/link";
 
 export default function HomePage() {
@@ -48,38 +51,39 @@ export default function HomePage() {
   const volatility = volatilityNote(cohortN);
 
   return (
-    <main>
+    <main id="main">
       <SiteHeader active="home" />
 
-      <section className="hero">
+      <section className="hero area-hero">
         <div className="hero-atmosphere" aria-hidden="true" />
         <div className="shell hero-copy">
-          <p className="hero-kicker">School performance monitor</p>
+          <p className="hero-kicker">Bartley Insight</p>
           <h1>{data.profile.name}</h1>
           <p className="hero-lede">
-            Evaluate Key Stage 2 outcomes against Hampshire and England using
-            the same DfE statistics published on Compare school and college
-            performance.
+            Key Stage 2 outcomes against Hampshire and England, using the same
+            DfE statistics published on Compare school and college performance —
+            laid out in short sections that match the School Compass visual
+            system.
           </p>
           <div className="hero-actions">
-            <a className="btn-primary" href="#summary">
+            <a className="btn btn-primary" href="#summary">
               Board summary
             </a>
-            <Link className="btn-ghost" href="/analysis">
+            <Link className="btn btn-ghost" href="/analysis">
               Governor analysis
             </Link>
           </div>
         </div>
       </section>
 
-      <ExecutiveSummaryCard summary={summary} period={data.period} />
-      <SipPrioritiesCard sip={sipTargets} />
-      <ChangeLogCard changeLog={changeLog} />
+      <DashboardChapterNav />
 
-      <section className="section section-alt" id="evaluation">
+      <ExecutiveSummaryCard summary={summary} period={data.period} />
+
+      <section className="section section-alt" id="findings">
         <div className="shell">
-          <div className="section-intro">
-            <h2>Evaluation snapshot</h2>
+          <div className="section-head">
+            <h2>Evaluation findings</h2>
             <p>
               Academic year {data.period.replace("/", "–")}. Findings pair the
               latest cohort with DfE 3-year averages for smoothing. Combined
@@ -133,7 +137,6 @@ export default function HomePage() {
                 {data.profile.threeYearEligible != null
                   ? ` · of ${data.profile.threeYearEligible}`
                   : ""}
-                {" · used with latest year in findings"}
               </span>
             </div>
             <div className="snapshot-metric" role="listitem">
@@ -166,61 +169,91 @@ export default function HomePage() {
         sipTargets={sipTargets}
       />
 
-      <section className="section" id="equity">
+      <section className="section" id="peers">
         <div className="shell">
-          <div className="section-intro">
-            <h2>KS2 pupil group gaps</h2>
+          <div className="section-head">
+            <h2>Peer comparison</h2>
             <p>
-              Key Stage 2 combined reading, writing and maths expected standard
-              for key pupil groups at Bartley, with pupil counts for the latest
-              Year 6 cohort.
+              Latest expected-standard figures for Bartley and the top three
+              similar-size local juniors, with links to Compare school
+              performance.
             </p>
           </div>
-          <div className="split">
-            <div>
-              <EquityChart equity={data.equity} profile={data.profile} />
-            </div>
-            <div>
-              <div className="section-intro">
-                <h3>Cohort context</h3>
-                <p>
-                  Characteristics of the assessed cohort help interpret gaps and
-                  comparisons.
-                </p>
-              </div>
-              <CohortProfile profile={data.profile} />
-              <p className="profile-meta">
-                {[
-                  data.profile.schoolTypeLabel,
-                  data.profile.religiousDenomination,
-                  data.profile.ageRange ? `Ages ${data.profile.ageRange}` : null,
-                  data.profile.address,
-                ]
-                  .filter(Boolean)
-                  .join(" · ")}
-              </p>
-            </div>
+          <div className="peer-strip" aria-label="Similar top-performing peers">
+            <p className="peer-strip-lead">
+              Top 3 similar-size juniors nearby (2024/25 RWM):{" "}
+              {peers.peers
+                .map(
+                  (p) =>
+                    `${p.short} ${fmtPct(p.latest.rwmExpected)} (of ${p.latest.eligiblePupils ?? "—"})`,
+                )
+                .join(" · ")}
+              . Peer average {fmtPct(peers.peerAverageLatest.rwmExpected)}.
+            </p>
+            <p className="peer-strip-note muted">{peers.selection.method}</p>
+            {peers.selection.sectorNote ? (
+              <p className="peer-strip-note muted">{peers.selection.sectorNote}</p>
+            ) : null}
           </div>
-
-          {(data.equityHistory?.length ?? 0) > 0 ? (
-            <>
-              <div className="section-intro stacked">
-                <h3>Equity over time</h3>
-                <p>
-                  Boys, girls, and disadvantage gaps across published years —
-                  with a compressed hatched band for the COVID performance-table
-                  gap.
-                </p>
-              </div>
-              <EquityHistoryChart equityHistory={data.equityHistory ?? []} />
-            </>
-          ) : null}
+          <PeerComparisonTable peers={peers} bartley={data} />
         </div>
       </section>
 
-      <section className="section section-alt" id="progress">
+      <section className="section section-alt" id="equity">
         <div className="shell">
-          <div className="section-intro">
+          <div className="section-head">
+            <h2>KS2 pupil group gaps</h2>
+            <p>
+              Combined reading, writing and maths expected standard for key
+              pupil groups at Bartley, with pupil counts for the latest Year 6
+              cohort.
+            </p>
+          </div>
+          <EquityChart equity={data.equity} profile={data.profile} />
+        </div>
+      </section>
+
+      <section className="section" id="cohort">
+        <div className="shell">
+          <div className="section-head">
+            <h2>Cohort context</h2>
+            <p>
+              Characteristics of the assessed cohort help interpret gaps and
+              comparisons.
+            </p>
+          </div>
+          <CohortProfile profile={data.profile} />
+          <p className="profile-meta">
+            {[
+              data.profile.schoolTypeLabel,
+              data.profile.religiousDenomination,
+              data.profile.ageRange ? `Ages ${data.profile.ageRange}` : null,
+              data.profile.address,
+            ]
+              .filter(Boolean)
+              .join(" · ")}
+          </p>
+        </div>
+      </section>
+
+      {(data.equityHistory?.length ?? 0) > 0 ? (
+        <section className="section section-alt" id="equity-history">
+          <div className="shell">
+            <div className="section-head">
+              <h2>Equity over time</h2>
+              <p>
+                Boys, girls, and disadvantage gaps across published years — with
+                a compressed hatched band for the COVID performance-table gap.
+              </p>
+            </div>
+            <EquityHistoryChart equityHistory={data.equityHistory ?? []} />
+          </div>
+        </section>
+      ) : null}
+
+      <section className="section" id="progress">
+        <div className="shell">
+          <div className="section-head">
             <h2>KS2 progress measures</h2>
             <p>
               Key Stage 1 to Key Stage 2 progress scores are unavailable for
@@ -233,12 +266,13 @@ export default function HomePage() {
       </section>
 
       <FeederSchoolsSection feeders={feeders} />
-
+      <SipPrioritiesCard sip={sipTargets} />
+      <ChangeLogCard changeLog={changeLog} />
       <GlossaryPanel />
 
       <section className="section section-alt" id="source">
         <div className="shell source-block">
-          <div className="section-intro">
+          <div className="section-head">
             <h2>Data source</h2>
             <p>{data.source.note}</p>
           </div>
@@ -273,27 +307,17 @@ export default function HomePage() {
                 })
               : "date not recorded"}
             . SIP priorities and chart ambitions are edited on the{" "}
-            <Link href="/data-entry">manual data entry</Link> page (JSON in{" "}
-            <code>src/data/sip-targets.json</code>). Peer overlays compare
-            Bartley with the top three similar-size local juniors. Feeder
-            KS1/phonics come from{" "}
-            <code>src/data/feeder-asp-overlay.json</code> via the same data
-            entry page.
+            <Link href="/data-entry">manual data entry</Link> page. Peer
+            overlays compare Bartley with the top three similar-size local
+            juniors. Feeder KS1/phonics come from the same data entry page.
           </p>
         </div>
       </section>
 
-      <footer className="site-footer">
-        <div className="shell footer-inner">
-          <p>Bartley Insight · school performance evaluation</p>
-          <p>
-            URN {data.profile.urn} · Hampshire
-            {data.source.refreshedAt
-              ? ` · refreshed ${data.source.refreshedAt}`
-              : ""}
-          </p>
-        </div>
-      </footer>
+      <SiteFooter
+        urn={data.profile.urn}
+        refreshedAt={data.source.refreshedAt}
+      />
     </main>
   );
 }

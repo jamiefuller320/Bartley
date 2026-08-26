@@ -71,7 +71,7 @@ function HatchedGapShape({
         y={y + height / 2}
         textAnchor="middle"
         dominantBaseline="middle"
-        fill="#1b4332"
+        fill="#0b4f6c"
         fontSize={11}
         fontStyle="italic"
         fontWeight={700}
