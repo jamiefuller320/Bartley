@@ -21,6 +21,7 @@ import { CohortProfile } from "@/components/CohortProfile";
 import { MetricsWorkbench } from "@/components/MetricsWorkbench";
 import { PeerComparisonTable } from "@/components/PeerComparisonTable";
 import { ChangeLogCard } from "@/components/ChangeLogCard";
+import { SummaryHistoryPanel } from "@/components/SummaryHistoryPanel";
 import { SipPrioritiesCard } from "@/components/SipPrioritiesCard";
 import { FeederSchoolsSection } from "@/components/FeederSchoolsSection";
 import { GlossaryPanel } from "@/components/GlossaryPanel";
@@ -104,6 +105,9 @@ export function MonitorPanelContent({
           </p>
         </div>
       );
+
+    case "summary-history":
+      return <SummaryHistoryPanel data={data} peers={peers} />;
 
     case "summary-changes":
       return <ChangeLogCard changeLog={changeLog} embedded />;

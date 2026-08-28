@@ -1465,6 +1465,12 @@ a:hover {
   color: var(--forest);
 }
 
+.summary-history-section + .summary-history-section {
+  margin-top: 2rem;
+  padding-top: 0.25rem;
+  border-top: 1px solid rgba(11, 79, 108, 0.1);
+}
+
 @media (max-width: 900px) {
   .glossary-grid {
     grid-template-columns: 1fr;

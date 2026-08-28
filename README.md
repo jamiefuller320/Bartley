@@ -125,7 +125,7 @@ The Pages UI uses the same harbour design tokens and **ring-binder tab layout** 
 
 | Chapter | Panels |
 | --- | --- |
-| **Summary** (first) | Overview · Changes · SIP |
+| **Summary** (first) | Overview · History · Changes · SIP |
 | **Findings** | Cohort snapshot · Evaluation list |
 | **Performance charts** | Latest vs benchmarks · Year-on-year history |
 | **Comparison data** | Peers · Equity · Cohort · Progress · Feeders |
