@@ -1,4 +1,5 @@
 import type { ChangeLog } from "@/lib/board";
+import { ChangeLogTable } from "@/components/ChangeLogTable";
 
 export function ChangeLogCard({
   changeLog,
@@ -27,45 +28,14 @@ export function ChangeLogCard({
           </p>
         </div>
       ) : null}
-      <div className="table-wrap">
-          <table className="data-table">
-            <thead>
-              <tr>
-                <th>Measure</th>
-                <th>Previous</th>
-                <th>Current</th>
-                <th>Change</th>
-              </tr>
-            </thead>
-            <tbody>
-              {changeLog.items.map((item) => (
-                <tr key={item.label}>
-                  <td>{item.label}</td>
-                  <td>{item.previous}</td>
-                  <td>{item.current}</td>
-                  <td
-                    className={
-                      item.tone === "up"
-                        ? "delta-up"
-                        : item.tone === "down"
-                          ? "delta-down"
-                          : "delta-flat"
-                    }
-                  >
-                    {item.delta}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <p className="chart-note">
-          {changeLog.previousRefreshedAt && changeLog.currentRefreshedAt
-            ? `Comparing ${changeLog.previousRefreshedAt} → ${changeLog.currentRefreshedAt}. `
-            : ""}
-          After each automated data refresh, this table is rewritten from the
-          live seed diff.
-        </p>
+      <ChangeLogTable changeLog={changeLog} />
+      <p className="chart-note">
+        {changeLog.previousRefreshedAt && changeLog.currentRefreshedAt
+          ? `Comparing ${changeLog.previousRefreshedAt} → ${changeLog.currentRefreshedAt}. `
+          : ""}
+        After each automated data refresh, this table is rewritten from the
+        live seed diff.
+      </p>
     </>
   );
 

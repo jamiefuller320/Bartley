@@ -10,6 +10,7 @@ export type MonitorChapterId =
 
 export type MonitorPanelId =
   | "summary-overview"
+  | "summary-history"
   | "summary-changes"
   | "summary-sip"
   | "findings-snapshot"
@@ -77,7 +78,12 @@ export const MONITOR_PANELS_BY_CHAPTER: Record<
   MonitorChapterId,
   MonitorPanelId[]
 > = {
-  summary: ["summary-overview", "summary-changes", "summary-sip"],
+  summary: [
+    "summary-overview",
+    "summary-history",
+    "summary-changes",
+    "summary-sip",
+  ],
   findings: ["findings-snapshot", "findings-list"],
   charts: ["charts-latest", "charts-history"],
   comparison: [
@@ -101,16 +107,22 @@ export const MONITOR_PANEL_META: Record<
     step: 1,
     lead: "Headline metrics, top risks, and questions to ask first.",
   },
+  "summary-history": {
+    label: "Performance history",
+    short: "History",
+    step: 2,
+    lead: "Latest year-on-year changes and long-run RWM performance trends.",
+  },
   "summary-changes": {
     label: "What changed",
     short: "Changes",
-    step: 2,
+    step: 3,
     lead: "Diff since the previous dataset refresh in this repo.",
   },
   "summary-sip": {
     label: "SIP priorities",
     short: "SIP",
-    step: 3,
+    step: 4,
     lead: "School improvement plan vision, priorities, and calendar.",
   },
   "findings-snapshot": {
@@ -194,6 +206,9 @@ export function monitorChapterPanels(
   const base = MONITOR_PANELS_BY_CHAPTER[chapter];
   if (chapter === "summary") {
     return base.filter((id) => {
+      if (id === "summary-history") {
+        return (pack.data.history?.length ?? 0) > 0;
+      }
       if (id === "summary-changes") return pack.changeLog.items.length > 0;
       if (id === "summary-sip") {
         return Boolean(
@@ -245,6 +260,10 @@ export function monitorPanelSummary(
   pack: SchoolMonitorPack,
 ): string | undefined {
   switch (panel) {
+    case "summary-history":
+      return pack.data.history?.length
+        ? "YoY changes and RWM trends"
+        : "No history loaded";
     case "summary-changes":
       return pack.changeLog.items.length
         ? `${pack.changeLog.items.length} row${
