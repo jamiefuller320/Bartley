@@ -16,7 +16,7 @@
     "refresh-all": "npm run refresh-csp-history && npm run refresh-data && npm run refresh-peers && npm run refresh-feeders"
   },
   "dependencies": {
-    "next": "^16.2.10",
+    "next": "^16.3.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "recharts": "^3.9.2"
