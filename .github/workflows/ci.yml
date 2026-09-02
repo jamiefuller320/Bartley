@@ -36,3 +36,14 @@ jobs:
 
       - name: Build
         run: npm run build
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: GHA secret hygiene
+        run: |
+          pip install pytest
+          python3 scripts/gha_secret_hygiene_cli.py check
+          python3 -m pytest -q scripts/test_gha_secret_hygiene.py
