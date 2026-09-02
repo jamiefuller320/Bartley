@@ -17,7 +17,7 @@
     "security:gha-hygiene": "python3 scripts/gha_secret_hygiene_cli.py check"
   },
   "dependencies": {
-    "next": "^16.2.10",
+    "next": "^16.3.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "recharts": "^3.9.2"
