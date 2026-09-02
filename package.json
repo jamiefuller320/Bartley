@@ -13,7 +13,8 @@
     "refresh-data": "npx --yes tsx scripts/refresh-seed.ts",
     "refresh-peers": "python3 scripts/refresh-peers.py",
     "refresh-feeders": "python3 scripts/extract-feeder-schools.py",
-    "refresh-all": "npm run refresh-csp-history && npm run refresh-data && npm run refresh-peers && npm run refresh-feeders"
+    "refresh-all": "npm run refresh-csp-history && npm run refresh-data && npm run refresh-peers && npm run refresh-feeders",
+    "security:gha-hygiene": "python3 scripts/gha_secret_hygiene_cli.py check"
   },
   "dependencies": {
     "next": "^16.2.10",
